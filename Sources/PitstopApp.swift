@@ -15,14 +15,21 @@ struct PitstopApp: App {
     let modelContainer: ModelContainer
 
     init() {
+        let schema = Schema([
+            Document.self,
+            Reminder.self,
+            Vehicle2.self,
+            Expense2.self,
+            Number.self,
+            FuelExpense.self,
+        ])
+
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+
         do {
-            modelContainer = try ModelContainer(for: Document.self,
-                                                Reminder.self,
-                                                Vehicle2.self,
-                                                Expense2.self,
-                                                Number.self)
+            modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
-            fatalError("Could not initialize ModelContainer")
+            fatalError("Could not find : \(error.localizedDescription)")
         }
     }
 

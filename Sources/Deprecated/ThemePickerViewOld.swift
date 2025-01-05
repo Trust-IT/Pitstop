@@ -1,5 +1,5 @@
 //
-//  ThemePickerView.swift
+//  ThemePickerViewOld.swift
 //  Hurricane
 //
 //  Created by Ivan Voloshchuk on 13/06/22.
@@ -10,7 +10,7 @@ import SwiftUI
 
 let pickOne = NSLocalizedString("Pick one", comment: "")
 let picked = NSLocalizedString("Picked", comment: "")
-struct ThemePickerView: View {
+struct ThemePickerViewOld: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var homeVM: HomeViewModel
 

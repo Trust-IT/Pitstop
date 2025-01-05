@@ -17,6 +17,12 @@ struct SettingsView: View {
     @Query
     var vehicles: [Vehicle2]
 
+    @State private var themePickerAlert: AlertConfig = .init(
+        enableBackgroundBlur: false,
+        disableOutsideTap: false,
+        transitionType: .slide
+    )
+
     var body: some View {
         NavigationView {
             VStack {
@@ -50,6 +56,17 @@ struct SettingsView: View {
                     .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
 
                     Section(header: Text("Other")) {
+                        Button(action: {
+                            themePickerAlert.present()
+                        }, label: {
+                            CategoryRow(input: .init(
+                                title: "Theme picker",
+                                icon: .maintenance,
+                                color: Palette.greyBackground
+                            ))
+                        })
+                        .buttonStyle(.plain)
+
                         NavigationLink(destination: AboutView()) {
                             CategoryRow(input: .init(
                                 title: "About us",
@@ -84,6 +101,9 @@ struct SettingsView: View {
                     .font(Typography.headerXL)
                     .padding(.top, 15)
             )
+            .alert(config: $themePickerAlert) {
+                ThemePickerView()
+            }
         }
     }
 

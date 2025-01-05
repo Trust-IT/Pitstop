@@ -12,7 +12,7 @@ struct AddReportView: View {
     @Environment(\.presentationMode) private var presentationMode
     @EnvironmentObject var vehicleManager: VehicleManager
 
-    @ObservedObject var utilityVM: UtilityViewModel
+    @EnvironmentObject var utilityVM: UtilityViewModel
 
     @State private var showOdometerAlert = false
 

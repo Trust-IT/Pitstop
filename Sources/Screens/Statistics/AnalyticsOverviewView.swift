@@ -11,7 +11,6 @@ struct AnalyticsOverviewView: View {
     @StateObject var statisticsVM = StatisticsViewModel()
     @ObservedObject var dataVM: DataViewModel
     @ObservedObject var categoryVM: CategoryViewModel
-    @ObservedObject var utilityVM: UtilityViewModel
 
     @State private var pickerTabs = [String(localized: "Overview"), String(localized: "Costs"), String(localized: "Fuel"), String(localized: "Odometer")]
     @State var pickedTab = ""
@@ -39,13 +38,13 @@ struct AnalyticsOverviewView: View {
                 .frame(height: 40)
 
             if categoryVM.currentPickerTab == String(localized: "Overview") {
-                OverviewView(dataVM: dataVM, categoryVM: categoryVM, utilityVM: utilityVM)
+                OverviewView(dataVM: dataVM, categoryVM: categoryVM)
             } else if categoryVM.currentPickerTab == String(localized: "Costs") {
-                AnalyticsCostView(categoryVM: categoryVM, dataVM: dataVM, utilityVM: utilityVM)
+                AnalyticsCostView(categoryVM: categoryVM, dataVM: dataVM)
             } else if categoryVM.currentPickerTab == String(localized: "Fuel") {
-                AnalyticsFuelView(categoryVM: categoryVM, utilityVM: utilityVM)
+                AnalyticsFuelView(categoryVM: categoryVM)
             } else {
-                AnalyticsOdometerView(categoryVM: categoryVM, dataVM: dataVM, utilityVM: utilityVM)
+                AnalyticsOdometerView(categoryVM: categoryVM, dataVM: dataVM)
             }
         }
         .background(Palette.greyBackground)
@@ -124,26 +123,19 @@ struct AnalyticsOverviewView: View {
 struct OverviewView: View {
     @ObservedObject var dataVM: DataViewModel
     @ObservedObject var categoryVM: CategoryViewModel
-    @ObservedObject var utilityVM: UtilityViewModel
-
-    init(dataVM: DataViewModel, categoryVM: CategoryViewModel, utilityVM: UtilityViewModel) {
-        self.dataVM = dataVM
-        self.categoryVM = categoryVM
-        self.utilityVM = utilityVM
-    }
 
     var body: some View {
         CustomList {
             Section {
-                CostsListView(utilityVM: utilityVM, categoryVM: categoryVM, dataVM: dataVM)
+                CostsListView(categoryVM: categoryVM, dataVM: dataVM)
             }
 
             Section {
-                FuelListView(categoryVM: categoryVM, utilityVM: utilityVM)
+                FuelListView(categoryVM: categoryVM)
                     .padding(2)
             }
             Section {
-                OdometerCostsView(categoryVM: categoryVM, dataVM: dataVM, utilityVM: utilityVM)
+                OdometerCostsView(categoryVM: categoryVM, dataVM: dataVM)
                     .padding(2)
             }
             Section {}
@@ -154,7 +146,7 @@ struct OverviewView: View {
 // MARK: Costs List Section
 
 struct CostsListView: View {
-    @ObservedObject var utilityVM: UtilityViewModel
+    @EnvironmentObject var utilityVM: UtilityViewModel
     @ObservedObject var categoryVM: CategoryViewModel
     @ObservedObject var dataVM: DataViewModel
 
@@ -190,7 +182,7 @@ struct CostsListView: View {
 
 struct FuelListView: View {
     @ObservedObject var categoryVM: CategoryViewModel
-    @ObservedObject var utilityVM: UtilityViewModel
+    @EnvironmentObject var utilityVM: UtilityViewModel
     var body: some View {
         HStack {
             Text("Fuel")
@@ -219,7 +211,7 @@ struct FuelListView: View {
 struct OdometerCostsView: View {
     @ObservedObject var categoryVM: CategoryViewModel
     @ObservedObject var dataVM: DataViewModel
-    @ObservedObject var utilityVM: UtilityViewModel
+    @EnvironmentObject var utilityVM: UtilityViewModel
     var body: some View {
         HStack {
             Text("Odometer")

@@ -46,7 +46,7 @@ struct HomeStyleView: View {
 
                     // BOTTOM CONTENT VIEW
                     ZStack {
-                        BottomContentView(homeVM: homeVM, dataVM: dataVM, utilityVM: utilityVM, categoryVM: categoryVM)
+                        BottomContentView(dataVM: dataVM, utilityVM: utilityVM, categoryVM: categoryVM)
                             .background(
                                 Palette.greyBackground,
                                 in: CustomCorner(corners: [.topLeft, .topRight], radius: getCornerRadius())

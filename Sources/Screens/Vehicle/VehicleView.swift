@@ -11,7 +11,6 @@ struct VehicleView: View {
     @StateObject var onboardingVM: OnboardingViewModel
     @ObservedObject var dataVM: DataViewModel
     @ObservedObject var homeVM: HomeViewModel
-    @ObservedObject var utilityVM: UtilityViewModel
     @ObservedObject var categoryVM: CategoryViewModel
 
     @Environment(\.modelContext) var modelContext
@@ -51,7 +50,7 @@ struct VehicleView: View {
         )
         .ignoresSafeArea(.keyboard)
         .sheet(isPresented: $showAddReport) {
-            AddReportView(utilityVM: utilityVM)
+            AddReportView()
         }
         .fullScreenCover(
             isPresented: $shouldShowOnboarding,
@@ -72,8 +71,11 @@ struct VehicleView: View {
 
 struct VehicleView_Previews: PreviewProvider {
     static var previews: some View {
-        VehicleView(onboardingVM: OnboardingViewModel(), dataVM: DataViewModel(),
-                    homeVM: HomeViewModel(), utilityVM: UtilityViewModel(),
-                    categoryVM: CategoryViewModel())
+        VehicleView(
+            onboardingVM: OnboardingViewModel(),
+            dataVM: DataViewModel(),
+            homeVM: HomeViewModel(),
+            categoryVM: CategoryViewModel()
+        )
     }
 }

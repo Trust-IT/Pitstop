@@ -61,7 +61,7 @@ struct SettingsView: View {
                         }, label: {
                             CategoryRow(input: .init(
                                 title: "Theme picker",
-                                icon: .maintenance,
+                                icon: .service,
                                 color: Palette.greyBackground
                             ))
                         })

@@ -12,7 +12,6 @@ import SwiftUI
 struct BottomContentView: View {
     @EnvironmentObject var vehicleManager: VehicleManager
     @Environment(\.modelContext) private var modelContext
-    @ObservedObject var homeVM: HomeViewModel
     @ObservedObject var dataVM: DataViewModel
     @ObservedObject var utilityVM: UtilityViewModel
     @ObservedObject var categoryVM: CategoryViewModel

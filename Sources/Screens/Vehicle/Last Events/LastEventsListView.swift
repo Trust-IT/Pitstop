@@ -71,7 +71,6 @@ struct LastEventsListView: View {
                                 ForEach(dataVM.expenseList.filter { $0.date.toString(dateFormat: "MMMM") == month }.reversed(), id: \.self) { expense in
                                     Button(action: {
                                         showEditExpense.toggle()
-                                        utilityVM.expenseToEdit = ExpenseState.fromExpenseViewModel(vm: expense)
                                     }, label: {
                                         CategoryComponent(
                                             category: Category(rawValue: Int(expense.category)) ?? .other,
@@ -83,7 +82,6 @@ struct LastEventsListView: View {
                                 ForEach(dataVM.expenseFilteredList.filter { $0.date.toString(dateFormat: "MMMM") == month }.reversed(), id: \.self) { expense in
                                     Button(action: {
                                         showEditExpense.toggle()
-                                        utilityVM.expenseToEdit = ExpenseState.fromExpenseViewModel(vm: expense)
                                     }, label: {
                                         CategoryComponent(
                                             category: Category(rawValue: Int(expense.category)) ?? .other,

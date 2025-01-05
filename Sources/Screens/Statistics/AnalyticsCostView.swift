@@ -10,17 +10,16 @@ import SwiftUI
 struct AnalyticsCostView: View {
     @ObservedObject var categoryVM: CategoryViewModel
     @ObservedObject var dataVM: DataViewModel
-    @ObservedObject var utilityVM: UtilityViewModel
     var body: some View {
         VStack {
             CustomList {
                 Section {
-                    CostGraphView(utilityVM: utilityVM, categoryVM: categoryVM, dataVM: dataVM)
+                    CostGraphView(categoryVM: categoryVM, dataVM: dataVM)
                         .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
                         .frame(height: 180)
                 }
                 Section {
-                    CostsListView(utilityVM: utilityVM, categoryVM: categoryVM, dataVM: dataVM)
+                    CostsListView(categoryVM: categoryVM, dataVM: dataVM)
                 }
                 Section {
                     // needed for scroll
@@ -32,7 +31,7 @@ struct AnalyticsCostView: View {
 }
 
 struct CostGraphView: View {
-    @ObservedObject var utilityVM: UtilityViewModel
+    @EnvironmentObject var utilityVM: UtilityViewModel
     @ObservedObject var categoryVM: CategoryViewModel
     @ObservedObject var dataVM: DataViewModel
     var value = "50%"
@@ -151,6 +150,6 @@ struct LineGraph: View {
 
 struct AnalyticsCostView_Previews: PreviewProvider {
     static var previews: some View {
-        AnalyticsCostView(categoryVM: CategoryViewModel(), dataVM: DataViewModel(), utilityVM: UtilityViewModel())
+        AnalyticsCostView(categoryVM: CategoryViewModel(), dataVM: DataViewModel())
     }
 }

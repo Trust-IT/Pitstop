@@ -13,10 +13,6 @@ class HomeViewModel: ObservableObject {
     @Published var topEdge: CGFloat = 0
     let maxHeight = UIScreen.main.bounds.height / 3.6
 
-    @Published var interactiveDismiss = false
-
-    private let userDefaults = UserDefaults.standard
-
     // MARK: FRONTEND FUNCS
 
     // Opacity to let appear items in the top bar

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AnalyticsFuelView: View {
     @ObservedObject var categoryVM: CategoryViewModel
-    @ObservedObject var utilityVM: UtilityViewModel
+    @EnvironmentObject var utilityVM: UtilityViewModel
     var body: some View {
         VStack {
             CustomList {
@@ -46,7 +46,7 @@ struct AnalyticsFuelView: View {
                 }
 
                 Section {
-                    FuelListView(categoryVM: categoryVM, utilityVM: utilityVM)
+                    FuelListView(categoryVM: categoryVM)
                         .padding(4)
                 }
             }
@@ -57,6 +57,6 @@ struct AnalyticsFuelView: View {
 
 struct AnalyticsFuelView_Previews: PreviewProvider {
     static var previews: some View {
-        AnalyticsFuelView(categoryVM: CategoryViewModel(), utilityVM: UtilityViewModel())
+        AnalyticsFuelView(categoryVM: CategoryViewModel())
     }
 }

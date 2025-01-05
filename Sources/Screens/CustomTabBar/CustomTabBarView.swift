@@ -30,7 +30,7 @@ struct CustomTabBarView: View {
         case .stats:
             AnalyticsOverviewView(dataVM: dataVM, categoryVM: categoryVM, utilityVM: utilityVM)
         case .settings:
-            SettingsView(homeVM: homeVM, onboardingVM: onboardingVM)
+            SettingsView(onboardingVM: onboardingVM)
         }
     }
 }

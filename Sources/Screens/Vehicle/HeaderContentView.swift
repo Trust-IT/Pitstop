@@ -12,10 +12,7 @@ struct HeaderContent: View {
     var maxHeight: CGFloat
 
     @EnvironmentObject var vehicleManager: VehicleManager
-    @ObservedObject var dataVM: DataViewModel
-    @ObservedObject var homeVM: HomeViewModel
-    @ObservedObject var utilityVM: UtilityViewModel
-    @ObservedObject var categoryVM: CategoryViewModel
+    @EnvironmentObject var utilityVM: UtilityViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -24,7 +21,7 @@ struct HeaderContent: View {
                     ZStack {
                         Rectangle()
                             .cornerRadius(16)
-                            .foregroundColor(homeVM.headerCardColor)
+                            .foregroundColor(utilityVM.currentTheme.colors.card)
                             .frame(width: UIScreen.main.bounds.width * 0.29, height: UIScreen.main.bounds.height * 0.09)
                         VStack(alignment: .center) {
                             Text("\(vehicleManager.currentVehicle.calculateTotalFuelExpenses()) \(utilityVM.currency)")
@@ -41,7 +38,7 @@ struct HeaderContent: View {
                     ZStack {
                         Rectangle()
                             .cornerRadius(16)
-                            .foregroundColor(homeVM.headerCardColor)
+                            .foregroundColor(utilityVM.currentTheme.colors.card)
                             .frame(width: UIScreen.main.bounds.width * 0.29, height: UIScreen.main.bounds.height * 0.09)
                         VStack(alignment: .center) {
                             Text(String("\(Int64(vehicleManager.currentVehicle.odometer)) \(utilityVM.unit)"))
@@ -59,7 +56,7 @@ struct HeaderContent: View {
                         ZStack {
                             Rectangle()
                                 .cornerRadius(16)
-                                .foregroundColor(homeVM.headerCardColor)
+                                .foregroundColor(utilityVM.currentTheme.colors.card)
                                 .frame(width: UIScreen.main.bounds.width * 0.29, height: UIScreen.main.bounds.height * 0.09)
                             VStack(alignment: .center) {
                                 let formattedEfficiency = String(format: "%.1f", efficiency)

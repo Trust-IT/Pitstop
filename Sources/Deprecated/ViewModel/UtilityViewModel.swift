@@ -15,6 +15,13 @@ class UtilityViewModel: ObservableObject {
 
     @Published var expenseToEdit = ExpenseState()
 
-    init() {}
+    @Published var currentTheme: ThemeColors
 
+    init() {
+        if let currentTheme = ThemeColors.retrieveFromUserDefaults() {
+            self.currentTheme = currentTheme
+        } else {
+            currentTheme = .amethystDrive
+        }
+    }
 }

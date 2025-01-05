@@ -9,14 +9,15 @@ import SwiftData
 import SwiftUI
 
 struct ThemePickerView: View {
+    @EnvironmentObject var utilityVM: UtilityViewModel
     @State private var sliderValue: Double = 0.0
-    @State private var selectedColor: ThemeColors = .amethystDrive
+    @State private var selectedTheme: ThemeColors = .amethystDrive
 
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
                 UnevenRoundedRectangle(topLeadingRadius: 20, topTrailingRadius: 20)
-                    .fill(selectedColor.colors.background)
+                    .fill(selectedTheme.colors.background)
                     .frame(height: UIScreen.main.bounds.height * 0.25)
                 VStack {
                     HStack {
@@ -28,26 +29,26 @@ struct ThemePickerView: View {
                         }
                         Spacer()
                         Circle()
-                            .fill(selectedColor.colors.card).frame(width: 30, height: 30)
+                            .fill(selectedTheme.colors.card).frame(width: 30, height: 30)
                     }
                     HStack {
                         Spacer()
                         ZStack {
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(selectedColor.colors.card).frame(width: 90, height: 70)
+                                .fill(selectedTheme.colors.card).frame(width: 90, height: 70)
                             Text("xxxxx")
                         }
                         Spacer()
                         ZStack {
                             RoundedRectangle(cornerRadius: 10, style: .circular)
-                                .fill(selectedColor.colors.card)
+                                .fill(selectedTheme.colors.card)
                                 .frame(width: 90, height: 70)
                             Text("xxxxx")
                         }
                         Spacer()
                         ZStack {
                             RoundedRectangle(cornerRadius: 10, style: .circular)
-                                .fill(selectedColor.colors.card)
+                                .fill(selectedTheme.colors.card)
                                 .frame(width: 90, height: 70)
                             Text("xxxxx")
                         }
@@ -59,7 +60,7 @@ struct ThemePickerView: View {
                 .redacted(reason: .placeholder)
             }
             Spacer()
-            Text(selectedColor.rawValue)
+            Text(selectedTheme.rawValue)
                 .font(Typography.headerL)
                 .foregroundColor(Palette.black)
             Slider(
@@ -78,11 +79,15 @@ struct ThemePickerView: View {
         }
         .padding(20)
         .onChange(of: sliderValue) {
-            selectedColor = currentColor()
+            selectedTheme = getCurrentTheme()
+            utilityVM.currentTheme = selectedTheme
+        }
+        .onDisappear {
+            ThemeColors.saveToUserDefaults(selectedTheme)
         }
     }
 
-    private func currentColor() -> ThemeColors {
+    private func getCurrentTheme() -> ThemeColors {
         switch sliderValue {
         case 0:
             ThemeColors.amethystDrive
@@ -120,5 +125,16 @@ enum ThemeColors: String, CaseIterable {
         case .aquaDrift:
             (Palette.colorBlue, Palette.colorMainBlue)
         }
+    }
+
+    private static let userDefaultsKey = "selectedThemeColor"
+
+    static func saveToUserDefaults(_ theme: ThemeColors) {
+        UserDefaults.standard.set(theme.rawValue, forKey: userDefaultsKey)
+    }
+
+    static func retrieveFromUserDefaults() -> ThemeColors? {
+        guard let rawValue = UserDefaults.standard.string(forKey: userDefaultsKey) else { return nil }
+        return ThemeColors(rawValue: rawValue)
     }
 }

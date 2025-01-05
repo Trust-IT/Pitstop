@@ -15,36 +15,7 @@ class HomeViewModel: ObservableObject {
 
     @Published var interactiveDismiss = false
 
-    @Published var headerBackgroundColor = Palette.colorViolet
-    @Published var headerCardColor = Palette.colorMainViolet
-
-    @Published var COLOR_KEY = "COLOR_KEY"
-    @Published var COLOR_KEY_CARD = "COLOR_KEY_CARD"
-
     private let userDefaults = UserDefaults.standard
-
-    func saveColor(color: Color, key: String) {
-        let color = UIColor(color).cgColor
-
-        if let components = color.components {
-            userDefaults.set(components, forKey: key)
-            print(components)
-            print("Color saved")
-        }
-    }
-
-    func loadColor(key: String) -> Color {
-        guard let array = userDefaults.object(forKey: key) as? [CGFloat] else {
-            if key == COLOR_KEY {
-                return Palette.colorViolet
-            } else { return Palette.colorMainViolet }
-        }
-        let color = Color(.sRGB, red: array[0], green: array[1], blue: array[2], opacity: array[3])
-
-        print(color)
-        print("Color loaded")
-        return color
-    }
 
     // MARK: FRONTEND FUNCS
 

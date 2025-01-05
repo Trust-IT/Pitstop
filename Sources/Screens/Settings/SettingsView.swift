@@ -9,9 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct SettingsView: View {
+    @EnvironmentObject var utilityVM: UtilityViewModel
     @EnvironmentObject var vehicleManager: VehicleManager
     @Environment(\.modelContext) private var modelContext
-    @ObservedObject var homeVM: HomeViewModel
     @StateObject var onboardingVM: OnboardingViewModel
 
     @Query
@@ -103,6 +103,7 @@ struct SettingsView: View {
             )
             .alert(config: $themePickerAlert) {
                 ThemePickerView()
+                    .environmentObject(utilityVM)
             }
         }
     }
@@ -124,8 +125,7 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(homeVM: HomeViewModel(),
-                     onboardingVM: OnboardingViewModel())
+        SettingsView(onboardingVM: OnboardingViewModel())
     }
 }
 

@@ -13,7 +13,7 @@ struct HomeStyleView: View {
     @ObservedObject var homeVM: HomeViewModel
     @ObservedObject var categoryVM: CategoryViewModel
 
-    @StateObject var utilityVM = UtilityViewModel()
+    @EnvironmentObject var utilityVM: UtilityViewModel
     // Scroll animation vars
     @State var offset: CGFloat = 0
     @State var topEdge: CGFloat
@@ -25,12 +25,12 @@ struct HomeStyleView: View {
                 VStack(spacing: 15) {
                     GeometryReader { _ in
                         // HEADER CONTENT
-                        HeaderContent(offset: $offset, maxHeight: maxHeight, dataVM: dataVM, homeVM: homeVM, utilityVM: utilityVM, categoryVM: categoryVM)
+                        HeaderContent(offset: $offset, maxHeight: maxHeight)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .opacity(fadeOutOpacity()) // Directly apply opacity
                             .frame(height: getHeaderHeight(), alignment: .bottom)
-                            .background(homeVM.headerBackgroundColor)
+                            .background(utilityVM.currentTheme.colors.background)
                             .overlay(
                                 // TOP NAV BAR
                                 TopNav(offset: offset, maxHeight: maxHeight, topEdge: topEdge)
@@ -47,9 +47,12 @@ struct HomeStyleView: View {
                     // BOTTOM CONTENT VIEW
                     ZStack {
                         BottomContentView(homeVM: homeVM, dataVM: dataVM, utilityVM: utilityVM, categoryVM: categoryVM)
-                            .background(Palette.greyBackground, in: CustomCorner(corners: [.topLeft, .topRight], radius: getCornerRadius()))
+                            .background(
+                                Palette.greyBackground,
+                                in: CustomCorner(corners: [.topLeft, .topRight], radius: getCornerRadius())
+                            )
                     }
-                    .background(homeVM.headerBackgroundColor)
+                    .background(utilityVM.currentTheme.colors.background)
                     .padding(.top, -15)
                     .zIndex(0)
                 }

@@ -12,6 +12,7 @@ import SwiftUI
 struct PitstopApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject var vehicleManager = VehicleManager()
+    @StateObject var utilityVM = UtilityViewModel()
     let modelContainer: ModelContainer
 
     init() {
@@ -38,6 +39,7 @@ struct PitstopApp: App {
             CustomTabBarView()
                 .modelContainer(modelContainer)
                 .environmentObject(vehicleManager)
+                .environmentObject(utilityVM)
 //            ContentView()
 //            AnalyticsOverviewView()
         }

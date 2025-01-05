@@ -63,8 +63,6 @@ struct VehicleView: View {
             }
         )
         .onAppear {
-            homeVM.headerBackgroundColor = homeVM.loadColor(key: homeVM.COLOR_KEY)
-            homeVM.headerCardColor = homeVM.loadColor(key: homeVM.COLOR_KEY_CARD)
             if !shouldShowOnboarding {
                 vehicleManager.loadCurrentVehicle(modelContext: modelContext)
             }

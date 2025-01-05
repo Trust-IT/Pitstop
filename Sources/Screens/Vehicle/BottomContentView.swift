@@ -64,8 +64,6 @@ struct BottomContentView: View {
             } else {
                 ForEach(vehicleManager.currentVehicle.fuelExpenses.reversed().prefix(3), id: \.id) { fuelExpense in
                     Button(action: {
-//                        utilityVM.expenseToEdit = ExpenseState.fromExpenseViewModel(vm: expense)
-                        // TODO: Fix edit event
                         selectedFuelExpense = fuelExpense
                         showEventEdit.toggle()
                     }, label: {

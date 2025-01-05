@@ -103,8 +103,8 @@ private extension AddNumberView {
             telephone: numberPhone,
             vehicle: vehicleManager.currentVehicle
         )
-        vehicleManager.currentVehicle.numbers.append(number)
         number.insert(context: modelContext)
+        vehicleManager.currentVehicle.numbers.append(number)
     }
 }
 

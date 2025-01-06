@@ -12,9 +12,6 @@ import SwiftUI
 struct BottomContentView: View {
     @EnvironmentObject var vehicleManager: VehicleManager
     @Environment(\.modelContext) private var modelContext
-    @ObservedObject var dataVM: DataViewModel
-    @ObservedObject var utilityVM: UtilityViewModel
-    @ObservedObject var categoryVM: CategoryViewModel
 
     @State private var viewAllNumbers = false
     @State private var viewAllEvents = false
@@ -304,7 +301,7 @@ struct CategoryComponent: View {
     var date: Date
     var cost: String
 
-    @ObservedObject var utilityVM = UtilityViewModel()
+    @EnvironmentObject var utilityVM: UtilityViewModel
 
     var body: some View {
         HStack {

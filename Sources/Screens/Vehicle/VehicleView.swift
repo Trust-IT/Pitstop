@@ -9,9 +9,6 @@ import SwiftUI
 
 struct VehicleView: View {
     @StateObject var onboardingVM: OnboardingViewModel
-    @ObservedObject var dataVM: DataViewModel
-    @ObservedObject var homeVM: HomeViewModel
-    @ObservedObject var categoryVM: CategoryViewModel
 
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject var vehicleManager: VehicleManager
@@ -23,7 +20,7 @@ struct VehicleView: View {
     var body: some View {
         GeometryReader { proxy in
             let topEdge = proxy.safeAreaInsets.top
-            HomeStyleView(dataVM: dataVM, homeVM: homeVM, categoryVM: categoryVM, topEdge: topEdge)
+            HomeStyleView(topEdge: topEdge)
                 .ignoresSafeArea(.all, edges: .top)
         }
         .overlay(
@@ -72,10 +69,7 @@ struct VehicleView: View {
 struct VehicleView_Previews: PreviewProvider {
     static var previews: some View {
         VehicleView(
-            onboardingVM: OnboardingViewModel(),
-            dataVM: DataViewModel(),
-            homeVM: HomeViewModel(),
-            categoryVM: CategoryViewModel()
+            onboardingVM: OnboardingViewModel()
         )
     }
 }

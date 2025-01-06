@@ -10,7 +10,6 @@ import SwiftUI
 struct CustomTabBarView: View {
     @State var selectedIndex: Int = 0
     @StateObject var dataVM = DataViewModel()
-    @StateObject var homeVM = HomeViewModel()
     @StateObject var categoryVM = CategoryViewModel()
     @StateObject var onboardingVM = OnboardingViewModel()
 
@@ -25,7 +24,7 @@ struct CustomTabBarView: View {
     func getTabView(type: TabType) -> some View {
         switch type {
         case .home:
-            VehicleView(onboardingVM: onboardingVM, dataVM: dataVM, homeVM: homeVM, categoryVM: categoryVM)
+            VehicleView(onboardingVM: onboardingVM)
         case .stats:
             AnalyticsOverviewView(dataVM: dataVM, categoryVM: categoryVM)
         case .settings:

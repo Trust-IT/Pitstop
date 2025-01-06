@@ -9,10 +9,6 @@ import Foundation
 import SwiftUI
 
 struct HomeStyleView: View {
-    @ObservedObject var dataVM: DataViewModel
-    @ObservedObject var homeVM: HomeViewModel
-    @ObservedObject var categoryVM: CategoryViewModel
-
     @EnvironmentObject var utilityVM: UtilityViewModel
     // Scroll animation vars
     @State var offset: CGFloat = 0
@@ -46,7 +42,7 @@ struct HomeStyleView: View {
 
                     // BOTTOM CONTENT VIEW
                     ZStack {
-                        BottomContentView(dataVM: dataVM, utilityVM: utilityVM, categoryVM: categoryVM)
+                        BottomContentView()
                             .background(
                                 Palette.greyBackground,
                                 in: CustomCorner(corners: [.topLeft, .topRight], radius: getCornerRadius())

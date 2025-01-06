@@ -41,32 +41,12 @@ class CoreDataManager {
         }
     }
 
-    func getVehicleById(id: NSManagedObjectID) -> Vehicle? {
-        do {
-            return try context.existingObject(with: id) as? Vehicle
-        } catch {
-            print(error)
-            return nil
-        }
-    }
-
     func getExpenseById(id: NSManagedObjectID) -> Expense? {
         do {
             return try context.existingObject(with: id) as? Expense
         } catch {
             print(error)
             return nil
-        }
-    }
-
-    func deleteVehicle(_ vehicle: Vehicle) {
-        context.delete(vehicle)
-
-        do {
-            try context.save()
-        } catch {
-            context.rollback()
-            print("Failed to delete vehicle \(error)")
         }
     }
 

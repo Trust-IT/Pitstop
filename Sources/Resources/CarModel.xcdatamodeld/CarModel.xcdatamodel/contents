@@ -9,18 +9,5 @@
         <attribute name="odometer" attributeType="Float" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="price" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="priceLiter" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <relationship name="vehicle" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Vehicle" inverseName="expenses" inverseEntity="Vehicle"/>
-    </entity>
-    <entity name="Vehicle" representedClassName="Vehicle" syncable="YES">
-        <attribute name="brand" optional="YES" attributeType="String"/>
-        <attribute name="current" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO"/>
-        <attribute name="fuelTypeOne" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="fuelTypeTwo" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="model" optional="YES" attributeType="String"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="odometer" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="plate" optional="YES" attributeType="String"/>
-        <attribute name="year" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="expenses" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Expense" inverseName="vehicle" inverseEntity="Expense"/>
     </entity>
 </model>

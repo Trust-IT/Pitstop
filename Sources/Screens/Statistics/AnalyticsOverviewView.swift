@@ -217,7 +217,8 @@ struct OdometerCostsView: View {
             Text("Odometer")
                 .font(Typography.headerL)
             Spacer()
-            Text("\(String(Int(dataVM.currentVehicle.first?.odometer ?? 0))) km")
+//            Text("\(String(Int(dataVM.currentVehicle.first?.odometer ?? 0))) km")
+            Text("0 km")
                 .fontWeight(.semibold)
                 .font(Typography.headerM)
         }
@@ -284,7 +285,6 @@ struct AnalyticsHeaderView: View {
                             }
                             .onChange(of: selectedTimeFrame) { tag in
                                 categoryVM.setSelectedTimeFrame(timeFrame: tag)
-                                categoryVM.retrieveAndUpdate(vehicleID: dataVM.currentVehicle.first!.vehicleID)
                                 print("tag is  \(tag)")
                             }
 

@@ -38,8 +38,6 @@ class CategoryViewModel: ObservableObject {
 
     let manager = CoreDataManager.instance
     @Published var filter: NSPredicate?
-    @Published var vehicleList: [VehicleViewModel] = []
-    @Published var currentVehicle: [VehicleViewModel] = []
     @Published var expenseList: [ExpenseViewModel] = []
     @Published var totalExpense: Float = 0.0
 
@@ -71,7 +69,6 @@ class CategoryViewModel: ObservableObject {
 
     init() {
         print("categoryVM recreating")
-        getCurrentVehicle()
     }
 
     var defaultCategory: Category {
@@ -356,47 +353,6 @@ class CategoryViewModel: ObservableObject {
         })
     }
 
-    func getCurrentVehicle() {
-        let request = NSFetchRequest<Vehicle>(entityName: "Vehicle")
-        let vehicle: [Vehicle]
-
-        let filter = NSPredicate(format: "current == %@", "1")
-        request.predicate = filter
-
-        do {
-            vehicle = try manager.context.fetch(request)
-            DispatchQueue.main.async {
-                self.currentVehicle = vehicle.map(VehicleViewModel.init)
-                if !self.currentVehicle.isEmpty {
-                    self.retrieveAndUpdate(vehicleID: self.currentVehicle.first!.vehicleID)
-                }
-            }
-            print("CURRENT VEHICLE LIST ", vehicleList)
-
-        } catch {
-            print("🚓 Error fetching current vehicle: \(error.localizedDescription)")
-        }
-    }
-
-    func getVehiclesCoreData(filter: NSPredicate?, storage: @escaping ([VehicleViewModel]) -> Void) {
-        let request = NSFetchRequest<Vehicle>(entityName: "Vehicle")
-        let vehicle: [Vehicle]
-
-        let sort = NSSortDescriptor(keyPath: \Vehicle.objectID, ascending: true)
-        request.sortDescriptors = [sort]
-        request.predicate = filter
-
-        do {
-            vehicle = try manager.context.fetch(request)
-            DispatchQueue.main.async {
-                storage(vehicle.map(VehicleViewModel.init))
-            }
-
-        } catch {
-            print("🚓 Error fetching vehicles: \(error.localizedDescription)")
-        }
-    }
-
     func getExpensesCoreData(filter: NSPredicate?, storage: @escaping ([ExpenseViewModel]) -> Void) {
         let request = NSFetchRequest<Expense>(entityName: "Expense")
         let expense: [Expense]
@@ -414,11 +370,6 @@ class CategoryViewModel: ObservableObject {
         } catch {
             print("💰 Error fetching expenses: \(error.localizedDescription)")
         }
-    }
-
-    func getVehicle(vehicleID: NSManagedObjectID) -> Vehicle? {
-        let vehicle = manager.getVehicleById(id: vehicleID)
-        return vehicle
     }
 }
 

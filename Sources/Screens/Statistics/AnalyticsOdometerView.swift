@@ -19,7 +19,8 @@ struct AnalyticsOdometerView: View {
                             HStack {
                                 VStack(alignment: .leading) {
                                     Spacer()
-                                    Text("\(String(Int(dataVM.currentVehicle.first?.odometer ?? 0))) km")
+//                                    Text("\(String(Int(dataVM.currentVehicle.first?.odometer ?? 0))) km")
+                                    Text("0 km")
                                         .font(Typography.headerL)
                                         .padding(1)
                                     Text(String(localized: "Odometer"))

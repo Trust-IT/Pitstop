@@ -22,7 +22,6 @@ public extension Expense {
     @NSManaged var fuelType: Int16
     @NSManaged var liters: Float
     @NSManaged var priceLiter: Float
-    @NSManaged var vehicle: Vehicle?
 }
 
 extension Expense: Identifiable {}

@@ -10,11 +10,6 @@ import SwiftUI
 import UserNotifications
 
 class OnboardingViewModel: ObservableObject {
-    @Published var vehicle: VehicleState = .init()
-
-//    let fuelCategories = ["Gasoline","Diesel", "Electric","LPG (Propane)","CNG (Methane)","Ethanol","Hydrogen"]
-//    @Published var selectedFuel = "Fuel Type"
-
     @Published var destination: Pages = .page1
 
     @Published var skipNotification = false /// Skip notiification page when adding another car

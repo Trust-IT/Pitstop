@@ -32,6 +32,10 @@ final class Vehicle2: Identifiable {
     @Relationship(deleteRule: .cascade, inverse: \FuelExpense.vehicle)
     var fuelExpenses: [FuelExpense] = []
 
+    var sortedFuelExpenses: [FuelExpense] {
+        fuelExpenses.sorted { $0.date > $1.date }
+    }
+
     init(
         uuid: UUID = UUID(),
         name: String,

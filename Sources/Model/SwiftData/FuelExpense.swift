@@ -28,7 +28,7 @@ class FuelExpense: Identifiable {
         odometer: Float,
         fuelType: FuelType,
         date: Date,
-        vehicle: Vehicle2
+        vehicle: Vehicle2?
     ) {
         self.uuid = uuid
         self.totalPrice = totalPrice
@@ -40,10 +40,10 @@ class FuelExpense: Identifiable {
         self.vehicle = vehicle
     }
 
-    var vehicle: Vehicle2
+    var vehicle: Vehicle2?
 
     static func mock() -> FuelExpense {
-        .init(totalPrice: 0, quantity: 0, pricePerUnit: 0, odometer: 0, fuelType: .diesel, date: .now, vehicle: .mock())
+        .init(totalPrice: 0, quantity: 0, pricePerUnit: 0, odometer: 0, fuelType: .diesel, date: .now, vehicle: nil)
     }
 
     // MARK: CRUD
@@ -56,9 +56,9 @@ class FuelExpense: Identifiable {
     func save(context: ModelContext) {
         do {
             try context.save()
-            print("Fuel Expense \(totalPrice) for \(String(describing: vehicle.name)) saved successfully!")
+            print("Fuel Expense \(totalPrice) for \(String(describing: vehicle?.name)) saved successfully!")
         } catch {
-            print("Error saving fuel \(totalPrice) for \(String(describing: vehicle.name)): \(error)")
+            print("Error saving fuel \(totalPrice) for \(String(describing: vehicle?.name)): \(error)")
         }
     }
 

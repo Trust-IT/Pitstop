@@ -61,7 +61,7 @@ struct BottomContentView: View {
                 }
                 .padding()
             } else {
-                ForEach(vehicleManager.currentVehicle.fuelExpenses.reversed().prefix(3), id: \.id) { fuelExpense in
+                ForEach(vehicleManager.currentVehicle.sortedFuelExpenses.prefix(3), id: \.id) { fuelExpense in
                     Button(action: {
                         selectedFuelExpense = fuelExpense
                         showEventEdit.toggle()

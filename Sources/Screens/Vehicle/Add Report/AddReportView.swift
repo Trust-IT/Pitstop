@@ -103,11 +103,7 @@ struct AddReportView: View {
                             showOdometerAlert.toggle()
                         } else {
                             vehicleManager.currentVehicle.odometer = fuelExpense.odometer
-                            do {
-                                try vehicleManager.currentVehicle.saveToModelContext(context: modelContext)
-                            } catch {
-                                print("error saving current vehicle odometer \(error)")
-                            }
+                            vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
                             fuelExpense.insert(context: modelContext)
                             presentationMode.wrappedValue.dismiss()
                         }
@@ -159,7 +155,7 @@ struct AddReportView: View {
             odometer: currentVehicle.odometer,
             fuelType: currentVehicle.mainFuelType,
             date: Date(),
-            vehicle: currentVehicle
+            vehicle: nil
         )
 
         fuelCategories.append(currentVehicle.mainFuelType)

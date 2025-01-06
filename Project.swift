@@ -12,6 +12,7 @@ let project = Project(
             product: .app, // [!code ++] // or .staticFramework, .staticLibrary...
             bundleId: "com.academy.pitstopD",
             deploymentTargets: .iOS("17.0"),
+            infoPlist: .file(path: "Sources/Pitstop-APP-Info.plist"),
             sources: ["Sources/**"],
             resources: [
                 "Sources/Resources/**",

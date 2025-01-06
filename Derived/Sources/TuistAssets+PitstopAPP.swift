@@ -63,6 +63,7 @@ public enum PitstopAPPAsset: Sendable {
     public static let deleteIcon = PitstopAPPImages(name: "deleteIcon")
     public static let download = PitstopAPPImages(name: "download")
     public static let ics = PitstopAPPImages(name: "ics")
+    public static let logo = PitstopAPPImages(name: "logo")
     public static let paperclip = PitstopAPPImages(name: "paperclip")
     public static let premium = PitstopAPPImages(name: "premium")
     public static let service = PitstopAPPImages(name: "service")
@@ -247,6 +248,7 @@ extension PitstopAPPImages {
   static let assets_deleteIcon = PitstopAPPAsset.Assets.deleteIcon
   static let assets_download = PitstopAPPAsset.Assets.download
   static let assets_ics = PitstopAPPAsset.Assets.ics
+  static let assets_logo = PitstopAPPAsset.Assets.logo
   static let assets_paperclip = PitstopAPPAsset.Assets.paperclip
   static let assets_premium = PitstopAPPAsset.Assets.premium
   static let assets_service = PitstopAPPAsset.Assets.service

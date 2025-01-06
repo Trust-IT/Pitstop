@@ -9,12 +9,20 @@ import SwiftUI
 
 struct Primary: ButtonStyle {
     @Environment(\.isEnabled) var isEnabled
+    let height: CGFloat
+    let cornerRadius: CGFloat
+
+    init(height: CGFloat = 48, cornerRadius: CGFloat = 43) {
+        self.height = height
+        self.cornerRadius = cornerRadius
+    }
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .frame(maxWidth: .infinity, minHeight: 48)
-            .frame(height: 48)
+            .frame(maxWidth: .infinity, minHeight: height)
+            .frame(height: height)
             .background(isEnabled ? Palette.black : Palette.greyInput)
-            .cornerRadius(43)
+            .cornerRadius(cornerRadius)
             .font(Typography.ControlS)
             .foregroundColor(Palette.white)
             .padding(.horizontal, 16)
@@ -43,6 +51,9 @@ struct ButtonStyle_Previews: PreviewProvider {
             Spacer()
             Button("Primary") {}
                 .buttonStyle(Primary())
+                .disabled(false)
+            Button("Primary custom") {}
+                .buttonStyle(Primary(height: 58, cornerRadius: 13))
                 .disabled(false)
             Button("Secondary") {}
                 .buttonStyle(Secondary())

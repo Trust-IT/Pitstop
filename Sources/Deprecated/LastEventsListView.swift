@@ -7,133 +7,125 @@
 import SwiftUI
 
 // TODO: Need huge refactoring
-struct LastEventsListView: View {
-    @ObservedObject var dataVM: DataViewModel
-    @ObservedObject var categoryVM = CategoryViewModel()
-    @State private var pickerTabs = [String(localized: "Overview"), String(localized: "Costs"), String(localized: "Fuel"), String(localized: "Odometer")]
-
-    @State private var showEditExpense = false
-    @Environment(\.presentationMode) private var presentationMode
-
-    @ObservedObject var utilityVM: UtilityViewModel
-
-    @State var isfilterSelected = 0 // If  == 0 no filters selected
-
-    var body: some View {
-        NavigationView {
-            ZStack {
-                Palette.greyBackground
-                    .ignoresSafeArea()
-                VStack {
-                    // MARK: CATEGORIES FILTER
-
-                    FiltersRow(dataVM: dataVM, isFilterSelected: $isfilterSelected)
-                    ScrollView(.vertical, showsIndicators: false) {
-                        if dataVM.expenseList.isEmpty {
-                            HStack {
-                                Text(String(localized: "There are no events to show"))
-                                    .font(Typography.TextM)
-                                    .foregroundColor(Palette.greyMiddle)
-                                Spacer()
-                            }
-                            .padding()
-                        }
-
-                        ForEach(dataVM.monthsAmount.sorted(by: <), id: \.self) { month in
-
-                            // MARK: MONTHS
-
-                            ZStack {
-                                Rectangle()
-                                    .frame(height: UIScreen.main.bounds.height * 0.035)
-                                    .foregroundColor(Palette.greyLight)
-                                HStack {
-                                    Text(month.capitalized)
-                                        .foregroundColor(Palette.black)
-                                        .font(Typography.ControlS)
-                                    Spacer()
-                                    if isfilterSelected == 0 {
-                                        Text(String(format: "%2.f", dataVM.getMonthsExpense(expenses: dataVM.expenseList, month: month)) + String(utilityVM.currency))
-                                            .foregroundColor(Palette.black)
-                                            .font(Typography.ControlS)
-                                    } else {
-                                        Text(String(format: "%2.f", dataVM.getMonthsExpense(expenses: dataVM.expenseFilteredList, month: month)) + String(utilityVM.currency))
-                                            .foregroundColor(Palette.black)
-                                            .font(Typography.ControlS)
-                                    }
-                                }
-                                .padding()
-                            }
-
-                            // MARK: LIST
-
-                            if isfilterSelected == 0 {
-                                ForEach(dataVM.expenseList.filter { $0.date.toString(dateFormat: "MMMM") == month }.reversed(), id: \.self) { expense in
-                                    Button(action: {
-                                        showEditExpense.toggle()
-                                    }, label: {
-                                        CategoryComponent(
-                                            category: Category(rawValue: Int(expense.category)) ?? .other,
-                                            date: expense.date, cost: String(expense.price)
-                                        )
-                                    })
-                                }
-                            } else {
-                                ForEach(dataVM.expenseFilteredList.filter { $0.date.toString(dateFormat: "MMMM") == month }.reversed(), id: \.self) { expense in
-                                    Button(action: {
-                                        showEditExpense.toggle()
-                                    }, label: {
-                                        CategoryComponent(
-                                            category: Category(rawValue: Int(expense.category)) ?? .other,
-                                            date: expense.date, cost: String(expense.price)
-                                        )
-                                    })
-                                }
-                            }
-                            NavigationLink(destination:
-                                EditEventView(utilityVM: utilityVM,
-                                              fuelExpense: .constant(.mock()))
-                                    .navigationBarBackButtonHidden(true)
-                                    .navigationBarHidden(true),
-                                isActive: $showEditExpense) {}
-                        }
-                        Spacer()
-                    }
-                }
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(
-                leading:
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }, label: {
-                    Text("Cancel")
-                        .font(Typography.headerM)
-                })
-                .accentColor(Palette.greyHard)
-            )
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("Last Events")
-                        .font(Typography.headerM)
-                        .foregroundColor(Palette.black)
-                }
-            }
-            .onAppear {
-                dataVM.getExpensesCoreData(filter: nil, storage: { storage in
-                    dataVM.expenseFilteredList = storage
-                })
-                dataVM.getTotalExpense(expenses: dataVM.expenseList)
-                dataVM.getMonths(expenses: dataVM.expenseList)
-                //                print("appeared")
-            }
-        }
-    }
-}
-
-// struct LastEventsListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        LastEventsListView()
+// struct LastEventsListView: View {
+//    @ObservedObject var dataVM: DataViewModel
+//
+//    @State private var showEditExpense = false
+//    @Environment(\.presentationMode) private var presentationMode
+//
+//    @ObservedObject var utilityVM: UtilityViewModel
+//
+//    @State var isfilterSelected = 0 // If  == 0 no filters selected
+//
+//    var body: some View {
+//        NavigationView {
+//            ZStack {
+//                Palette.greyBackground
+//                    .ignoresSafeArea()
+//                VStack {
+//                    // MARK: CATEGORIES FILTER
+//
+//                    FiltersRow(dataVM: dataVM, isFilterSelected: $isfilterSelected)
+//                    ScrollView(.vertical, showsIndicators: false) {
+//                        if dataVM.expenseList.isEmpty {
+//                            HStack {
+//                                Text(String(localized: "There are no events to show"))
+//                                    .font(Typography.TextM)
+//                                    .foregroundColor(Palette.greyMiddle)
+//                                Spacer()
+//                            }
+//                            .padding()
+//                        }
+//
+//                        ForEach(dataVM.monthsAmount.sorted(by: <), id: \.self) { month in
+//
+//                            // MARK: MONTHS
+//
+//                            ZStack {
+//                                Rectangle()
+//                                    .frame(height: UIScreen.main.bounds.height * 0.035)
+//                                    .foregroundColor(Palette.greyLight)
+//                                HStack {
+//                                    Text(month.capitalized)
+//                                        .foregroundColor(Palette.black)
+//                                        .font(Typography.ControlS)
+//                                    Spacer()
+//                                    if isfilterSelected == 0 {
+//                                        Text(String(format: "%2.f", dataVM.getMonthsExpense(expenses: dataVM.expenseList, month: month)) + String(utilityVM.currency))
+//                                            .foregroundColor(Palette.black)
+//                                            .font(Typography.ControlS)
+//                                    } else {
+//                                        Text(String(format: "%2.f", dataVM.getMonthsExpense(expenses: dataVM.expenseFilteredList, month: month)) + String(utilityVM.currency))
+//                                            .foregroundColor(Palette.black)
+//                                            .font(Typography.ControlS)
+//                                    }
+//                                }
+//                                .padding()
+//                            }
+//
+//                            // MARK: LIST
+//
+//                            if isfilterSelected == 0 {
+//                                ForEach(dataVM.expenseList.filter { $0.date.toString(dateFormat: "MMMM") == month }.reversed(), id: \.self) { expense in
+//                                    Button(action: {
+//                                        showEditExpense.toggle()
+//                                    }, label: {
+//                                        CategoryComponent(
+//                                            category: Category(rawValue: Int(expense.category)) ?? .other,
+//                                            date: expense.date, cost: String(expense.price)
+//                                        )
+//                                    })
+//                                }
+//                            } else {
+//                                ForEach(dataVM.expenseFilteredList.filter { $0.date.toString(dateFormat: "MMMM") == month }.reversed(), id: \.self) { expense in
+//                                    Button(action: {
+//                                        showEditExpense.toggle()
+//                                    }, label: {
+//                                        CategoryComponent(
+//                                            category: Category(rawValue: Int(expense.category)) ?? .other,
+//                                            date: expense.date, cost: String(expense.price)
+//                                        )
+//                                    })
+//                                }
+//                            }
+//                            NavigationLink(destination:
+//                                EditEventView(utilityVM: utilityVM,
+//                                              fuelExpense: .constant(.mock()))
+//                                    .navigationBarBackButtonHidden(true)
+//                                    .navigationBarHidden(true),
+//                                isActive: $showEditExpense) {}
+//                        }
+//                        Spacer()
+//                    }
+//                }
+//            }
+//            .navigationBarTitleDisplayMode(.inline)
+//            .navigationBarItems(
+//                leading:
+//                Button(action: {
+//                    presentationMode.wrappedValue.dismiss()
+//                }, label: {
+//                    Text("Cancel")
+//                        .font(Typography.headerM)
+//                })
+//                .accentColor(Palette.greyHard)
+//            )
+//            .toolbar {
+//                ToolbarItem(placement: .principal) {
+//                    Text("Last Events")
+//                        .font(Typography.headerM)
+//                        .foregroundColor(Palette.black)
+//                }
+//            }
+//            .onAppear {
+//                dataVM.getExpensesCoreData(filter: nil, storage: { storage in
+//                    dataVM.expenseFilteredList = storage
+//                })
+//                dataVM.getTotalExpense(expenses: dataVM.expenseList)
+//                dataVM.getMonths(expenses: dataVM.expenseList)
+//                //                print("appeared")
+//            }
+//        }
 //    }
 // }
 

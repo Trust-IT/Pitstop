@@ -50,7 +50,7 @@ struct BottomContentView: View {
             .padding()
             .padding(.top, 10)
             .padding(.bottom, -10)
-            .sheet(isPresented: $viewAllEvents) { LastEventsListView(dataVM: dataVM, categoryVM: categoryVM, utilityVM: utilityVM) }
+            .sheet(isPresented: $viewAllEvents) { LastEventsView() }
 
             if vehicleManager.currentVehicle.fuelExpenses.isEmpty {
                 HStack {
@@ -167,7 +167,7 @@ struct BottomContentView: View {
             Spacer()
         }
         .sheet(isPresented: $showEventEdit) {
-            EditEventView(utilityVM: utilityVM, fuelExpense: $selectedFuelExpense)
+            EditEventView(fuelExpense: $selectedFuelExpense)
         }
         .sheet(isPresented: $viewAllNumbers) {
             ImportantNumbersView()

@@ -11,7 +11,8 @@ import SwiftUI
 struct EditEventView: View {
     @Environment(\.presentationMode) private var presentationMode
     @Environment(\.modelContext) private var modelContext
-    @ObservedObject var utilityVM: UtilityViewModel
+    @EnvironmentObject var vehicleManager: VehicleManager
+    @EnvironmentObject var utilityVM: UtilityViewModel
     @State var showDeleteAlert = false
 
     @Binding var fuelExpense: FuelExpense
@@ -50,6 +51,7 @@ struct EditEventView: View {
                     message: Text(String(localized: "This action cannot be undone")),
                     primaryButton: .destructive(Text(String(localized: "Delete"))) {
                         fuelExpense.delete(context: modelContext)
+                        vehicleManager.currentVehicle.fuelExpenses.removeAll { $0.id == fuelExpense.id }
                         presentationMode.wrappedValue.dismiss()
                     },
                     secondaryButton: .cancel()

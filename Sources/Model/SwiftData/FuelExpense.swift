@@ -64,6 +64,5 @@ class FuelExpense: Identifiable {
 
     func delete(context: ModelContext) {
         context.delete(self)
-        save(context: context)
     }
 }

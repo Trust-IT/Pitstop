@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ThemePickerView: View {
     @EnvironmentObject var utilityVM: UtilityViewModel
+    @Binding var alert: AlertConfig
     @State private var sliderValue: Double = 0.0
     @State private var selectedTheme: ThemeColors = .amethystDrive
 
@@ -70,6 +71,14 @@ struct ThemePickerView: View {
             )
             .accentColor(Palette.black)
             .padding()
+            .padding(.bottom, 10)
+
+            Button("Confirm") {
+                utilityVM.currentTheme = selectedTheme
+                ThemeColors.saveToUserDefaults(selectedTheme)
+                alert.dismiss()
+            }
+            .buttonStyle(Primary())
             .padding(.bottom, 20)
         }
         .frame(maxWidth: .infinity, maxHeight: UIScreen.main.bounds.height * 0.55)
@@ -80,10 +89,6 @@ struct ThemePickerView: View {
         .padding(20)
         .onChange(of: sliderValue) {
             selectedTheme = getCurrentTheme()
-            utilityVM.currentTheme = selectedTheme
-        }
-        .onDisappear {
-            ThemeColors.saveToUserDefaults(selectedTheme)
         }
     }
 
@@ -104,7 +109,10 @@ struct ThemePickerView: View {
 }
 
 #Preview {
-    ThemePickerView()
+    let previewModel = Preview()
+    previewModel.addVehicle(.mock())
+    return ThemePickerView(alert: .constant(.init()))
+        .modelContainer(previewModel.modelContainer)
         .background(Palette.black)
 }
 

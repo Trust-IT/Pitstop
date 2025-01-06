@@ -18,8 +18,8 @@ struct SettingsView: View {
     var vehicles: [Vehicle2]
 
     @State private var themePickerAlert: AlertConfig = .init(
-        enableBackgroundBlur: false,
-        disableOutsideTap: false,
+        enableBackgroundBlur: true,
+        disableOutsideTap: true,
         transitionType: .slide
     )
 
@@ -102,7 +102,7 @@ struct SettingsView: View {
                     .padding(.top, 15)
             )
             .alert(config: $themePickerAlert) {
-                ThemePickerView()
+                ThemePickerView(alert: $themePickerAlert)
                     .environmentObject(utilityVM)
             }
         }

@@ -9,13 +9,13 @@ import Foundation
 import SwiftData
 
 class VehicleManager: ObservableObject {
-    @Published private(set) var currentVehicle: Vehicle2 = .mock()
+    @Published private(set) var currentVehicle: Vehicle = .mock()
 
     private let userDefaultsKey = "currentVehicleUUID"
 
-    func fetchVehicleByUUID(uuid: UUID, modelContext: ModelContext) -> Vehicle2? {
+    func fetchVehicleByUUID(uuid: UUID, modelContext: ModelContext) -> Vehicle? {
         do {
-            let descriptor = FetchDescriptor<Vehicle2>(
+            let descriptor = FetchDescriptor<Vehicle>(
                 predicate: #Predicate { vehicle in
                     vehicle.uuid == uuid
                 }
@@ -38,12 +38,12 @@ class VehicleManager: ObservableObject {
         }
     }
 
-    func setCurrentVehicle(_ vehicle: Vehicle2) {
+    func setCurrentVehicle(_ vehicle: Vehicle) {
         currentVehicle = vehicle
         saveUUIDToUserDefaults(vehicle: vehicle)
     }
 
-    private func saveUUIDToUserDefaults(vehicle: Vehicle2) {
+    private func saveUUIDToUserDefaults(vehicle: Vehicle) {
         UserDefaults.standard.set(vehicle.uuid.uuidString, forKey: userDefaultsKey)
     }
 }

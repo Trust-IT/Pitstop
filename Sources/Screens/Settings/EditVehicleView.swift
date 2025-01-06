@@ -21,7 +21,7 @@ struct EditVehicleView: View {
         name.isEmpty || brand.isEmpty || model.isEmpty || mainFuelType == .none || mainFuelType == secondaryFuelType
     }
 
-    var vehicle2: Vehicle2
+    var vehicle2: Vehicle
 
     @State private var name: String
     @State private var brand: String
@@ -30,7 +30,7 @@ struct EditVehicleView: View {
     @State private var mainFuelType: FuelType
     @State private var secondaryFuelType: FuelType
 
-    init(vehicle2: Vehicle2) {
+    init(vehicle2: Vehicle) {
         self.vehicle2 = vehicle2
         _name = State(initialValue: vehicle2.name)
         _brand = State(initialValue: vehicle2.brand)
@@ -208,7 +208,7 @@ struct EditVehicleView: View {
         }
     }
 
-    private func updateVehicle(_ vehicle: Vehicle2) {
+    private func updateVehicle(_ vehicle: Vehicle) {
         vehicle.name = name
         vehicle.brand = brand
         vehicle.model = model

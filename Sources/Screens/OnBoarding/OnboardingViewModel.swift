@@ -21,7 +21,7 @@ class OnboardingViewModel: ObservableObject {
 enum Pages {
     case page1
     case page2
-    case page3(Binding<Vehicle2>)
+    case page3(Binding<Vehicle>)
     case page4
     case page5
 }

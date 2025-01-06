@@ -1,5 +1,5 @@
 //
-//  Vehicle2.swift
+//  Vehicle.swift
 //  Pitstop-APP
 //
 //  Created by Ivan Voloshchuk on 27/12/24.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class Vehicle2: Identifiable {
+final class Vehicle: Identifiable {
     @Attribute(.unique)
     var uuid: UUID
 
@@ -78,12 +78,12 @@ final class Vehicle2: Identifiable {
         print("Vehicle \(name) saved successfully!")
     }
 
-    static func mock() -> Vehicle2 {
-        Vehicle2(name: "Default car", brand: "Brand", model: "XYZ", odometer: 0.0)
+    static func mock() -> Vehicle {
+        Vehicle(name: "Default car", brand: "Brand", model: "XYZ", odometer: 0.0)
     }
 }
 
-extension Vehicle2 {
+extension Vehicle {
     func calculateTotalFuelExpenses() -> String {
         let total = fuelExpenses.reduce(0.0) { $0 + $1.totalPrice }
         return String(format: "%.2f", total)
@@ -120,7 +120,7 @@ extension Vehicle2 {
     }
 }
 
-extension Vehicle2: Codable {
+extension Vehicle: Codable {
     enum CodingKeys: String, CodingKey {
         case uuid, name, brand, model, mainFuelType, secondaryFuelType, odometer, plate, year, expenses, numbers
     }
@@ -146,9 +146,9 @@ final class Expense2: Identifiable {
     @Attribute(.unique)
     var uuid: UUID
 
-    var vehicle: Vehicle2?
+    var vehicle: Vehicle?
 
-    init(uuid: UUID, vehicle: Vehicle2? = nil) {
+    init(uuid: UUID, vehicle: Vehicle? = nil) {
         self.uuid = uuid
         self.vehicle = vehicle
     }

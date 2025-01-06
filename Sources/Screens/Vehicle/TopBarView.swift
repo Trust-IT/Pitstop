@@ -23,7 +23,7 @@ struct TopNav: View {
     }
 
     @Query
-    var vehicles: [Vehicle2]
+    var vehicles: [Vehicle]
 
     var body: some View {
         VStack(alignment: .leading) {

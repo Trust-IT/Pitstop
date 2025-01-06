@@ -15,7 +15,7 @@ struct SettingsView: View {
     @StateObject var onboardingVM: OnboardingViewModel
 
     @Query
-    var vehicles: [Vehicle2]
+    var vehicles: [Vehicle]
 
     @State private var themePickerAlert: AlertConfig = .init(
         enableBackgroundBlur: true,

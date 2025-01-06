@@ -19,7 +19,7 @@ struct PitstopApp: App {
         let schema = Schema([
             Document.self,
             Reminder.self,
-            Vehicle2.self,
+            Vehicle.self,
             Expense2.self,
             Number.self,
             FuelExpense.self

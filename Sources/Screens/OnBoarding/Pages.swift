@@ -62,7 +62,7 @@ struct Page2: View {
     @State private var isTapped = false
     @State private var showMainFuelSelection = false
 
-    @State var vehicle: Vehicle2 = .mock()
+    @State var vehicle: Vehicle = .mock()
 
     var body: some View {
         VStack {
@@ -222,7 +222,7 @@ struct Page3: View {
     @State private var showOdometerSelection: Bool = false
     @State private var showOverlay: Bool = false
 
-    @Binding var vehicle: Vehicle2
+    @Binding var vehicle: Vehicle
 
     var body: some View {
         ZStack {

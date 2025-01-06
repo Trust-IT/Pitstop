@@ -13,13 +13,13 @@ struct Preview {
     init() {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         do {
-            modelContainer = try ModelContainer(for: Vehicle2.self, configurations: config)
+            modelContainer = try ModelContainer(for: Vehicle.self, configurations: config)
         } catch {
             fatalError("Could not initialize ModelContainer")
         }
     }
 
-    func addVehicle(_ vehicle: Vehicle2) {
+    func addVehicle(_ vehicle: Vehicle) {
         Task { @MainActor in
             modelContainer.mainContext.insert(vehicle)
         }

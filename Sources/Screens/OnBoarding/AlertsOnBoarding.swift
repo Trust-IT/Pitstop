@@ -15,7 +15,7 @@ enum FocusFieldAlertOB: Hashable {
 struct AlertOdometerOB: View {
     @FocusState var focusedField: FocusFieldAlertOB?
 
-    @Binding var vehicle: Vehicle2
+    @Binding var vehicle: Vehicle
     @Binding var isPresented: Bool
     @Binding var showOverlay: Bool
 
@@ -85,7 +85,7 @@ struct AlertPlateOB: View {
     @FocusState var focusedField: FocusFieldAlertOB?
 
     @State private var plateNumber: String = ""
-    @Binding var vehicle: Vehicle2
+    @Binding var vehicle: Vehicle
     @Binding var isPresented: Bool
     @Binding var showOverlay: Bool
 

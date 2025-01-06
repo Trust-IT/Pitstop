@@ -28,7 +28,7 @@ class FuelExpense: Identifiable {
         odometer: Float,
         fuelType: FuelType,
         date: Date,
-        vehicle: Vehicle2?
+        vehicle: Vehicle?
     ) {
         self.uuid = uuid
         self.totalPrice = totalPrice
@@ -40,7 +40,7 @@ class FuelExpense: Identifiable {
         self.vehicle = vehicle
     }
 
-    var vehicle: Vehicle2?
+    var vehicle: Vehicle?
 
     static func mock() -> FuelExpense {
         .init(totalPrice: 0, quantity: 0, pricePerUnit: 0, odometer: 0, fuelType: .diesel, date: .now, vehicle: nil)

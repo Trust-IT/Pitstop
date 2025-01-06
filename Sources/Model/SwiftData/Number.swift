@@ -16,13 +16,13 @@ final class Number: Identifiable {
     var title: String
     var telephone: String
 
-    var vehicle: Vehicle2?
+    var vehicle: Vehicle?
 
     init(
         uuid: UUID = UUID(),
         title: String,
         telephone: String,
-        vehicle: Vehicle2? = nil
+        vehicle: Vehicle? = nil
     ) {
         self.uuid = uuid
         self.title = title

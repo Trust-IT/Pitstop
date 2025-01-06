@@ -22,10 +22,10 @@ struct PitstopApp: App {
             Vehicle2.self,
             Expense2.self,
             Number.self,
-            FuelExpense.self,
+            FuelExpense.self
         ])
 
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
             modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])

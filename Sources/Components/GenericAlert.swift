@@ -91,6 +91,8 @@ struct AlertView<Content: View>: View {
 }
 
 extension View {
+    /// Present an alert with the given configuration.
+    /// - Note: This modifier doesn't carry the current context of the view. Which means that you need to explicitly pass the context to the alert view.
     @ViewBuilder
     func alert<Content: View>(
         config: Binding<AlertConfig>,

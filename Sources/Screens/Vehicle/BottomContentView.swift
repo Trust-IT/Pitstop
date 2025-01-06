@@ -178,6 +178,7 @@ struct BottomContentView: View {
         }
         .alert(config: $newNumberAlert) {
             AddNumberView(alert: $newNumberAlert)
+                .environment(\.modelContext, modelContext)
                 .environmentObject(vehicleManager)
         }
     }

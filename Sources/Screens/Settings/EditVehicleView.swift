@@ -12,8 +12,16 @@ struct EditVehicleView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
-    @State private var defaultFuelPicker = false
-    @State private var secondaryFuelPicker = false
+    @State private var defaultFuelPicker: AlertConfig = .init(
+        enableBackgroundBlur: false,
+        disableOutsideTap: false,
+        transitionType: .slide
+    )
+    @State private var secondaryFuelPicker: AlertConfig = .init(
+        enableBackgroundBlur: false,
+        disableOutsideTap: false,
+        transitionType: .slide
+    )
     @State private var isTapped = false
     @State private var isTapped2 = false
 
@@ -119,7 +127,7 @@ struct EditVehicleView: View {
                 // MARK: DEFAULT FUEL TYPE
 
                 Button(action: {
-                    defaultFuelPicker.toggle()
+                    defaultFuelPicker.present()
                     isTapped.toggle()
                 }, label: {
                     ZStack {
@@ -136,19 +144,25 @@ struct EditVehicleView: View {
                     }
                     .accentColor(Palette.black)
                 })
-                .confirmationDialog(String(localized: "Select a default fuel type"), isPresented: $defaultFuelPicker, titleVisibility: .visible) {
-                    ForEach(FuelType.allCases) { fuel in
-                        Button(fuel.rawValue) {
+                .alert(config: $defaultFuelPicker) {
+                    ConfirmationDialog(
+                        items: FuelType.allCases,
+                        message: "Select a default fuel type",
+                        onTap: { fuel in
                             isTapped = false
                             mainFuelType = fuel
+                            defaultFuelPicker.dismiss()
+                        },
+                        onCancel: {
+                            defaultFuelPicker.dismiss()
                         }
-                    }
+                    )
                 }
 
                 // MARK: SECONDARY FUEL TYPE
 
                 Button(action: {
-                    secondaryFuelPicker.toggle()
+                    secondaryFuelPicker.present()
                     isTapped2.toggle()
                 }, label: {
                     ZStack {
@@ -165,15 +179,20 @@ struct EditVehicleView: View {
                     }
                     .accentColor(Palette.black)
                 })
-                .confirmationDialog(String(localized: "Select a second fuel type"), isPresented: $secondaryFuelPicker, titleVisibility: .visible) {
-                    ForEach(FuelType.allCases.filter { $0 != mainFuelType }) { fuel in
-                        Button(fuel.rawValue) {
+                .alert(config: $secondaryFuelPicker) {
+                    ConfirmationDialog(
+                        items: FuelType.allCases,
+                        message: "Select a second fuel type",
+                        onTap: { fuel in
                             isTapped2 = false
                             secondaryFuelType = fuel
+                            secondaryFuelPicker.dismiss()
+                        },
+                        onCancel: {
+                            secondaryFuelPicker.dismiss()
                         }
-                    }
+                    )
                 }
-
                 Spacer()
             }
             .padding(.vertical, 30)

@@ -60,7 +60,12 @@ struct Page2: View {
     @FocusState var focusedField: FocusFieldBoarding?
 
     @State private var isTapped = false
-    @State private var showMainFuelSelection = false
+
+    @State private var showMainFuelSelection: AlertConfig = .init(
+        enableBackgroundBlur: false,
+        disableOutsideTap: false,
+        transitionType: .slide
+    )
 
     @State var vehicle: Vehicle = .mock()
 
@@ -155,7 +160,7 @@ struct Page2: View {
                 // MARK: PRIMARY FUEL
 
                 Button(action: {
-                    showMainFuelSelection.toggle()
+                    showMainFuelSelection.present()
                     isTapped.toggle()
                 }, label: {
                     ZStack {
@@ -172,18 +177,22 @@ struct Page2: View {
                     }
                     .accentColor(Palette.black)
                 })
-                .confirmationDialog(
-                    String(localized: "Select a fuel type"),
-                    isPresented: $showMainFuelSelection,
-                    titleVisibility: .visible
-                ) {
-                    ForEach(FuelType.allCases, id: \.id) { fuel in
-                        Button(fuel.rawValue) {
+                .alert(config: $showMainFuelSelection) {
+                    ConfirmationDialog(
+                        items: FuelType.allCases,
+                        message: "Select a fuel type",
+                        onTap: { fuel in
                             vehicle.mainFuelType = fuel
                             isTapped.toggle()
                             focusedField = nil
+                            showMainFuelSelection.dismiss()
+                        },
+                        onCancel: {
+                            isTapped.toggle()
+                            focusedField = nil
+                            showMainFuelSelection.dismiss()
                         }
-                    }
+                    )
                 }
             }
             .padding(.vertical, 40)
@@ -217,7 +226,11 @@ struct Page3: View {
     @Environment(\.modelContext) private var modelContext
     @ObservedObject var onboardingVM: OnboardingViewModel
 
-    @State private var showSecondaryFuelSelection: Bool = false
+    @State private var showSecondaryFuelSelection: AlertConfig = .init(
+        enableBackgroundBlur: false,
+        disableOutsideTap: false,
+        transitionType: .slide
+    )
     @State private var showPlateSelection: Bool = false
     @State private var showOdometerSelection: Bool = false
     @State private var showOverlay: Bool = false
@@ -308,20 +321,22 @@ struct Page3: View {
                         // MARK: SECOND FUEL TYPE
 
                         Button(action: {
-                            showSecondaryFuelSelection.toggle()
+                            showSecondaryFuelSelection.present()
                         }, label: {
                             OnBoardingCard(text: "Second fuel type", bgColor: Palette.colorYellow, iconName: .fuel)
                         })
-                        .confirmationDialog(
-                            String(localized: "Select a fuel type"),
-                            isPresented: $showSecondaryFuelSelection,
-                            titleVisibility: .visible
-                        ) {
-                            ForEach(FuelType.allCases.filter { $0 != vehicle.mainFuelType }, id: \.id) { fuel in
-                                Button(fuel.rawValue) {
+                        .alert(config: $showSecondaryFuelSelection) {
+                            ConfirmationDialog(
+                                items: FuelType.allCases,
+                                message: "Select a fuel type",
+                                onTap: { fuel in
                                     vehicle.secondaryFuelType = fuel
+                                    showSecondaryFuelSelection.dismiss()
+                                },
+                                onCancel: {
+                                    showSecondaryFuelSelection.dismiss()
                                 }
-                            }
+                            )
                         }
                         if let secondaryFuel = vehicle.secondaryFuelType {
                             ZStack {
@@ -337,7 +352,11 @@ struct Page3: View {
                                 }
                                 .padding()
                             }
-                            .frame(width: UIScreen.main.bounds.size.width * 0.90, height: UIScreen.main.bounds.size.height * 0.075, alignment: .center)
+                            .frame(
+                                width: UIScreen.main.bounds.size.width * 0.90,
+                                height: UIScreen.main.bounds.size.height * 0.075,
+                                alignment: .center
+                            )
                         }
 
                     }.padding(.vertical, 40)

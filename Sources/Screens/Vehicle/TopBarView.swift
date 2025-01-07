@@ -52,24 +52,6 @@ struct TopNav: View {
                     ForEach(vehicles, id: \.uuid) { vehicle in
                         Button(vehicle.name) {
                             vehicleManager.setCurrentVehicle(vehicle)
-//                            do {
-//                                if vehicleS.vehicleID != nil {
-//                                    try dataVM.updateVehicle(vehicleS)
-//                                    print("updato to current")
-//                                    dataVM.currentVehicle.removeAll()
-//                                    dataVM.currentVehicle.append(vehicle)
-//                                    let filterCurrentExpense = NSPredicate(format: "vehicle = %@", (dataVM.currentVehicle.first?.vehicleID)!)
-//                                    dataVM.getExpensesCoreData(filter: filterCurrentExpense) { storage in
-//                                        dataVM.expenseList = storage
-//                                        dataVM.getTotalExpense(expenses: storage)
-//                                        categoryVM.retrieveAndUpdate(vehicleID: dataVM.currentVehicle.first!.vehicleID)
-//                                    }
-//                                } else {
-//                                    print("error")
-//                                }
-//                            } catch {
-//                                print(error)
-//                            }
                         }
                     }
                     Button("Cancel", role: .cancel) {}

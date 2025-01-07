@@ -93,6 +93,7 @@ struct ConfirmationDialog<T>: View where
         items: FuelType.allCases,
         message: "Select fuel type",
         onTap: { _ in },
-        onCancel: {})
-        .background(.gray)
+        onCancel: {}
+    )
+    .background(.gray)
 }

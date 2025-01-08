@@ -99,7 +99,6 @@ struct SettingsView: View {
                 Text("Settings")
                     .foregroundColor(Palette.black)
                     .font(Typography.headerXL)
-                    .padding(.top, 15)
             )
             .alert(config: $themePickerAlert) {
                 ThemePickerView(alert: $themePickerAlert)

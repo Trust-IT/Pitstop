@@ -33,9 +33,9 @@ struct AnalyticsOverviewView: View {
             }
         }
         VStack {
-            AnalyticsHeaderView(statisticsVM: statisticsVM, categoryVM: categoryVM, dataVM: dataVM)
-                .padding(10)
-                .frame(height: 40)
+//            AnalyticsHeaderView()
+//                .padding(10)
+//                .frame(height: 40)
 
             if categoryVM.currentPickerTab == String(localized: "Overview") {
                 OverviewView(dataVM: dataVM, categoryVM: categoryVM)
@@ -251,81 +251,8 @@ struct ListCostsAttributes: View {
     }
 }
 
+
 // MARK: Analytics Header
-
-struct AnalyticsHeaderView: View {
-    @ObservedObject var statisticsVM: StatisticsViewModel
-    @ObservedObject var categoryVM: CategoryViewModel
-    @ObservedObject var dataVM: DataViewModel
-    @State private var selectedTimeFrame = String(localized: "Per month")
-    var body: some View {
-        HStack {
-            HStack {
-                Text("Analytics")
-                    .font(Typography.headerXL)
-                    .padding(.leading, 5)
-            }
-            .frame(alignment: .topLeading)
-
-            Spacer()
-
-            HStack {
-                ZStack {
-                    Rectangle()
-                        .foregroundColor(Palette.white)
-                        .cornerRadius(37)
-                        .frame(width: 125, height: UIScreen.main.bounds.height * 0.04)
-                        .shadowGrey()
-                    HStack {
-                        Menu {
-                            Picker(selection: $categoryVM.selectedTimeFrame, label: Text("Time")) {
-                                ForEach(categoryVM.timeFrames, id: \.self) { time in
-                                    Text(time).tag(time)
-                                }
-                            }
-                            .onChange(of: selectedTimeFrame) { tag in
-                                categoryVM.setSelectedTimeFrame(timeFrame: tag)
-                                print("tag is  \(tag)")
-                            }
-
-                        } label: {
-                            HStack {
-                                Text(categoryVM.selectedTimeFrame)
-                                    .foregroundColor(Palette.black)
-                                    .font(Typography.ControlS)
-                                Image("arrowDown")
-                                    .foregroundColor(Palette.black)
-                            }
-                        }
-                        .padding()
-                    }
-                }
-
-                //               MARK: - DOWNLOAD DATA BUTTON
-
-                //                ZStack{
-                //                    Button(action: {
-                //
-                //
-                //                    }, label: {
-                //                        ZStack{
-                //                            Circle()
-                //                                .foregroundColor(Palette.white)
-                //                                .frame(width: UIScreen.main.bounds.width * 0.09, height: UIScreen.main.bounds.height * 0.04)
-                //                                .shadowGrey()
-                //                            Image("download")
-                //                                .frame(alignment: .center)
-                //                                .padding()
-                //                        }
-                //                    })
-                //                }
-                //                .padding()
-            }
-            .padding(.top, 2)
-        }
-        .padding(.top)
-    }
-}
 
 //
 // struct StatsView_Previews: PreviewProvider {

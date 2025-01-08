@@ -40,9 +40,7 @@ struct TopNav: View {
                             .resizable()
                             .foregroundColor(Palette.blackHeader)
                             .frame(width: 10, height: 14)
-                            .rotationEffect(Angle(degrees: 270))
-                            .padding(.top, 3)
-                            .padding(.leading, -3)
+                            .rotationEffect(showingAllCars ? Angle(degrees: 180) : Angle(degrees: 270))
                     }
                     .padding(.leading, -1)
                     .opacity(fadeOutOpacity())

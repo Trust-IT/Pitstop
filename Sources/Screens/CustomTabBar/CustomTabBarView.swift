@@ -9,8 +9,6 @@ import SwiftUI
 
 struct CustomTabBarView: View {
     @State var selectedIndex: Int = 0
-    @StateObject var dataVM = DataViewModel()
-    @StateObject var categoryVM = CategoryViewModel()
     @StateObject var onboardingVM = OnboardingViewModel()
 
     var body: some View {
@@ -26,7 +24,7 @@ struct CustomTabBarView: View {
         case .home:
             VehicleView(onboardingVM: onboardingVM)
         case .stats:
-            AnalyticsOverviewView(dataVM: dataVM, categoryVM: categoryVM)
+            AnalyticsView()
         case .settings:
             SettingsView(onboardingVM: onboardingVM)
         }

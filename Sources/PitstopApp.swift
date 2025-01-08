@@ -40,8 +40,6 @@ struct PitstopApp: App {
                 .modelContainer(modelContainer)
                 .environmentObject(vehicleManager)
                 .environmentObject(utilityVM)
-//            ContentView()
-//            AnalyticsOverviewView()
         }
     }
 }

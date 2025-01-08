@@ -251,7 +251,6 @@ struct ListCostsAttributes: View {
     }
 }
 
-
 // MARK: Analytics Header
 
 //

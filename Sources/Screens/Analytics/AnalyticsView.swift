@@ -10,11 +10,23 @@ import SwiftUI
 
 struct AnalyticsView: View {
     @State private var selectedTimeFrame: AnalyticsTimeFrame = .month
+    @State private var selectedTab: AnalyticsTabs = .overview
 
     var body: some View {
         NavigationView {
             VStack {
-                Text("Lorem")
+                ScrollView {
+                    Spacer()
+                    Text("You’re also provided with a table showing the exchanges that are supported by the market. No other exchanges besides those listed are possible. For example, you can exchange 100 random stones for 1 crocodile egg, 5 mysterious boxes, or 40 unfunny jokes. Exchanging random stones for superb capes is forbidden—what a pity! Note that exchanging different quantities is allowed only as long as the input item quantity is a multiple of that shown in the table.")
+                    Spacer()
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Palette.greyBackground)
+            .overlay(alignment: .bottom) {
+                SegmentedPicker(currentTab: $selectedTab, onTap: {})
+                    .padding(10)
+                    .background(.ultraThinMaterial)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -38,9 +50,6 @@ struct AnalyticsView: View {
                     .buttonStyle(.plain)
                 }
             }
-
-            .background(Palette.greyBackground)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }
@@ -75,9 +84,21 @@ private struct TimeFrameSelector: View {
     }
 }
 
+#Preview {
+    AnalyticsView()
+}
+
 enum AnalyticsTimeFrame: String, CaseIterable, Identifiable {
     case month = "Per month"
     case year = "Yearly"
+
+    var id: Self { self }
+}
+
+enum AnalyticsTabs: String, CaseIterable, Identifiable {
+    case overview = "Overview"
+    case fuel = "Fuel"
+    case odometer = "Odometer"
 
     var id: Self { self }
 }

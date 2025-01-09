@@ -36,7 +36,8 @@ enum Palette {
     static let greenHighlight = Color(rgb: 0x37E391)
     static let blueLine = Color(rgb: 0x4761FE)
 
-    static let testDarkmode = Color(lightRGB: 0xFF0000, darkRGB: 0x00FF00)
+    // Chart:
+    static let chartGreen = Color(rgb: 0xA1DEC0)
 }
 
 extension View {

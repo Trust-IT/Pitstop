@@ -9,7 +9,39 @@ import SwiftUI
 
 struct FuelAnalyticsView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            HStack {
+                Text("8.71 L/100 km")
+                    .font(Typography.headerXL)
+                    .foregroundStyle(Palette.black)
+                Spacer()
+                HStack {
+                    Image("arrow")
+                    Text("12 %")
+                }
+            }
+            CustomList {
+                fuelAnalyticsRow(category: "Test", amount: "$ 84")
+                fuelAnalyticsRow(category: "Test", amount: "$ 84")
+                fuelAnalyticsRow(category: "Test", amount: "$ 84")
+                fuelAnalyticsRow(category: "Test", amount: "$ 84")
+            }
+            Spacer()
+        }
+        .background(Palette.greyBackground)
+    }
+
+    @ViewBuilder
+    func fuelAnalyticsRow(category: String, amount: String) -> some View {
+        HStack {
+            Text(category)
+                .font(Typography.headerM)
+                .foregroundStyle(Palette.black)
+            Spacer()
+            Text(amount)
+                .font(Typography.headerM)
+                .foregroundStyle(Palette.greyHard)
+        }
     }
 }
 

@@ -17,14 +17,21 @@ struct AnalyticsView: View {
             VStack {
                 ScrollView {
                     Spacer()
-                    Text("You’re also provided with a table showing the exchanges that are supported by the market. No other exchanges besides those listed are possible. For example, you can exchange 100 random stones for 1 crocodile egg, 5 mysterious boxes, or 40 unfunny jokes. Exchanging random stones for superb capes is forbidden—what a pity! Note that exchanging different quantities is allowed only as long as the input item quantity is a multiple of that shown in the table.")
+                    switch selectedTab {
+                    case .overview:
+                        Text("Overview")
+                    case .fuel:
+                        FuelAnalyticsView()
+                    case .odometer:
+                        Text("Odometer")
+                    }
                     Spacer()
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Palette.greyBackground)
             .overlay(alignment: .bottom) {
-                SegmentedPicker(currentTab: $selectedTab, onTap: {})
+                SegmentedPicker(currentTab: $selectedTab, style: .black)
                     .padding(10)
                     .background(.ultraThinMaterial)
             }

@@ -12,7 +12,18 @@ struct SegmentedPicker<T>: View where
     T.RawValue == String {
     @Namespace var animation
     @Binding var currentTab: T
-    var onTap: () -> Void
+    let style: SegmentedPickerStyle
+    let onTap: () -> Void
+
+    init(
+        currentTab: Binding<T>,
+        style: SegmentedPickerStyle = .defaultStyle,
+        onTap: @escaping () -> Void = {}
+    ) {
+        _currentTab = currentTab
+        self.style = style
+        self.onTap = onTap
+    }
 
     var body: some View {
         HStack(spacing: 10) {
@@ -28,11 +39,11 @@ struct SegmentedPicker<T>: View where
             .frame(maxWidth: .infinity)
             .padding(10)
             .font(Typography.headerS)
-            .foregroundColor(currentTab == tab ? Palette.black : Palette.black.opacity(0.7))
+            .foregroundColor(currentTab == tab ? style.selectedColor : style.unselectedColor)
             .background {
                 if currentTab == tab {
                     Capsule()
-                        .fill(Palette.greyLight)
+                        .fill(style.capsuleBackground)
                         .matchedGeometryEffect(id: "pickerTab", in: animation)
                 }
             }
@@ -46,6 +57,24 @@ struct SegmentedPicker<T>: View where
                 onTap()
             }
     }
+}
+
+struct SegmentedPickerStyle {
+    let capsuleBackground: Color
+    let selectedColor: Color
+    let unselectedColor: Color
+
+    static let defaultStyle = SegmentedPickerStyle(
+        capsuleBackground: Palette.greyLight,
+        selectedColor: Palette.black,
+        unselectedColor: Palette.black.opacity(0.7)
+    )
+
+    static let black = SegmentedPickerStyle(
+        capsuleBackground: Palette.black,
+        selectedColor: Palette.white,
+        unselectedColor: Palette.black
+    )
 }
 
 #Preview {

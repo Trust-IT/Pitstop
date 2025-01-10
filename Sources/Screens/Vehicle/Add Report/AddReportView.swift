@@ -86,32 +86,37 @@ struct AddReportView: View {
                 })
                 .accentColor(Palette.greyHard),
                 trailing:
-                Button(action: {
-                    switch currentPickerTab {
-                    case .reminder:
-                        NotificationManager.shared.requestAuthNotifications()
-                        do {
-                            try reminder.saveToModelContext(context: modelContext)
-                        } catch {
-                            // TODO: Implement error handling
-                            print("error \(error)")
-                        }
-                        NotificationManager.shared.createNotification(for: reminder)
-                        presentationMode.wrappedValue.dismiss()
-                    case .fuel:
-                        if fuelExpense.odometer < vehicleManager.currentVehicle.odometer {
-                            showOdometerAlert.toggle()
-                        } else {
-                            vehicleManager.currentVehicle.odometer = fuelExpense.odometer
-                            vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
-                            fuelExpense.insert(context: modelContext)
+                Button(
+                    action: {
+                        switch currentPickerTab {
+                        case .reminder:
+                            NotificationManager.shared.requestAuthNotifications()
+                            do {
+                                try reminder.saveToModelContext(context: modelContext)
+                            } catch {
+                                // TODO: Implement error handling
+                                print("error \(error)")
+                            }
+                            NotificationManager.shared.createNotification(for: reminder)
                             presentationMode.wrappedValue.dismiss()
+                        case .fuel:
+                            if fuelExpense.isValidOdometer(for: vehicleManager.currentVehicle) {
+                                if fuelExpense.odometer > vehicleManager.currentVehicle.odometer {
+                                    vehicleManager.currentVehicle.odometer = fuelExpense.odometer
+                                }
+                                vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
+                                fuelExpense.insert(context: modelContext)
+                                presentationMode.wrappedValue.dismiss()
+                            } else {
+                                showOdometerAlert.toggle()
+                            }
                         }
+                    },
+                    label: {
+                        Text(String(localized: "Save"))
+                            .font(Typography.headerM)
                     }
-                }, label: {
-                    Text(String(localized: "Save"))
-                        .font(Typography.headerM)
-                })
+                )
                 .disabled(reminder.title.isEmpty && (fuelExpense.totalPrice.isZero || fuelExpense.quantity.isZero))
                 .opacity(reminder.title.isEmpty && (fuelExpense.totalPrice.isZero || fuelExpense.quantity.isZero) ? 0.6 : 1)
             )
@@ -137,7 +142,7 @@ struct AddReportView: View {
             .alert(isPresented: $showOdometerAlert) {
                 Alert(
                     title: Text("Attention"),
-                    message: Text("Can't set lower odometer value than current value")
+                    message: Text("Can't set this odometer value for the specific timerframe, make sure it's correct")
                 )
             }
         }
@@ -161,17 +166,6 @@ struct AddReportView: View {
         fuelCategories.append(currentVehicle.mainFuelType)
         guard let secondaryFuelType = currentVehicle.secondaryFuelType else { return }
         fuelCategories.append(secondaryFuelType)
-    }
-
-    // FIXME: The logic is broken
-    private func updateFuelExpense() {
-        if fuelExpense.pricePerUnit > 0, fuelExpense.quantity > 0 {
-            fuelExpense.totalPrice = (fuelExpense.pricePerUnit * fuelExpense.quantity).rounded(toPlaces: 2)
-        } else if fuelExpense.pricePerUnit > 0, fuelExpense.totalPrice > 0 {
-            fuelExpense.quantity = (fuelExpense.totalPrice / fuelExpense.pricePerUnit).rounded(toPlaces: 2)
-        } else if fuelExpense.quantity > 0, fuelExpense.totalPrice > 0 {
-            fuelExpense.pricePerUnit = (fuelExpense.totalPrice / fuelExpense.quantity).rounded(toPlaces: 2)
-        }
     }
 }
 

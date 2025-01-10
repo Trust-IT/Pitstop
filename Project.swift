@@ -2,17 +2,30 @@ import ProjectDescription
 
 let project = Project(
     name: "Pitstop",
-    settings: .settings(configurations: [
-        .debug(name: "Debug", xcconfig: "./xcconfigs/Debug.xcconfig"),
-    ]),
+    settings:
+    .settings(
+        configurations: [
+            .debug(
+                name: "Debug",
+                xcconfig: "./xcconfigs/Debug.xcconfig"
+            ),
+        ]
+    ),
     targets: [
         .target(
             name: "Pitstop-APP",
             destinations: .iOS,
-            product: .app, // [!code ++] // or .staticFramework, .staticLibrary...
+            product: .app,
+            // [!code ++] // or .staticFramework, .staticLibrary...
             bundleId: "com.academy.pitstopD",
-            deploymentTargets: .iOS("17.0"),
-            infoPlist: .file(path: "Sources/Pitstop-APP-Info.plist"),
+            deploymentTargets:
+            .iOS(
+                "17.0"
+            ),
+            infoPlist:
+            .file(
+                path: "Sources/Pitstop-APP-Info.plist"
+            ),
             sources: ["Sources/**"],
             resources: [
                 "Sources/Resources/**",
@@ -36,9 +49,28 @@ let project = Project(
                 /** .external(name: "Kingfisher") **/
                 /** .target(name: "OtherProjectTarget") **/
             ],
-            settings: .settings(configurations: [
-                .debug(name: "Debug", xcconfig: "./xcconfigs/Debug.xcconfig"),
-            ])
+            settings:
+            .settings(
+                configurations: [
+                    .debug(
+                        name: "Debug",
+                        xcconfig: "./xcconfigs/Debug.xcconfig"
+                    ),
+                ]
+            )
+        ),
+        .target(
+            name: "UnitTests",
+            destinations: .iOS,
+            product: .unitTests,
+            bundleId: "com.academy.pitstopD",
+            infoPlist: .default,
+            sources: ["Tests/UnitTests/**"],
+            dependencies: [
+                .target(
+                    name: "Pitstop-APP"
+                )
+            ]
         ),
     ]
 )

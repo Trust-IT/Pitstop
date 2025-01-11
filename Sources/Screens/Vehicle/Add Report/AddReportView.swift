@@ -20,6 +20,8 @@ struct AddReportView: View {
     @State var fuelExpense: FuelExpense = .mock()
     @State var fuelCategories: [FuelType] = []
 
+    @State private var fuelTotal: Float = 0.0
+
     // FIXME: Focus keyboard
     @FocusState var focusedField: FocusField?
 
@@ -44,7 +46,7 @@ struct AddReportView: View {
                 case .fuel:
                     HStack {
                         Spacer()
-                        TextField("0.0", value: $fuelExpense.totalPrice, formatter: NumberFormatter.twoDecimalPlaces)
+                        TextField("", value: $fuelTotal, formatter: NumberFormatter.twoDecimalPlaces)
                             .keyboardType(.decimalPad)
                             .font(Typography.headerXXL)
                             .foregroundColor(Palette.black)
@@ -104,6 +106,7 @@ struct AddReportView: View {
                                 if fuelExpense.odometer > vehicleManager.currentVehicle.odometer {
                                     vehicleManager.currentVehicle.odometer = fuelExpense.odometer
                                 }
+                                fuelExpense.totalPrice = fuelTotal
                                 vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
                                 fuelExpense.insert(context: modelContext)
                                 presentationMode.wrappedValue.dismiss()

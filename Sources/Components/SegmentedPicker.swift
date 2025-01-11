@@ -51,9 +51,9 @@ struct SegmentedPicker<T>: View where
             .onTapGesture {
                 withAnimation(.easeInOut) {
                     currentTab = tab
-                    let haptic = UIImpactFeedbackGenerator(style: .soft)
-                    haptic.impactOccurred()
                 }
+                let haptic = UIImpactFeedbackGenerator(style: .soft)
+                haptic.impactOccurred()
                 onTap()
             }
     }

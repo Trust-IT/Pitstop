@@ -36,7 +36,7 @@ struct PitstopApp: App {
 
     var body: some Scene {
         WindowGroup {
-            CustomTabBarView()
+            EntryPointView()
                 .modelContainer(modelContainer)
                 .environmentObject(vehicleManager)
                 .environmentObject(utilityVM)

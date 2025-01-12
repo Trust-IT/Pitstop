@@ -44,7 +44,6 @@ class VehicleManager: ObservableObject {
         saveUUIDToUserDefaults(vehicle: vehicle)
     }
 
-
     func getMonthlyFuelEfficency() {
         guard currentVehicle.fuelExpenses.count > 1 else {
             return
@@ -88,6 +87,7 @@ class VehicleManager: ObservableObject {
     }
 }
 
+// TODO: Implement
 struct MonthlyFuelData {
     var totalCost: Float
     var averageCost: Float

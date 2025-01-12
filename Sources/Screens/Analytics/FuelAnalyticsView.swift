@@ -9,20 +9,8 @@ import Charts
 import SwiftUI
 
 struct FuelAnalyticsView: View {
-    let data: [(month: String, value: Double)] = [
-        ("Jan", 10),
-        ("Feb", 20),
-        ("Mar", 30),
-        ("Apr", 25),
-        ("May", 40),
-        ("Jun", 35),
-        ("Jul", 50),
-        ("Aug", 45),
-        ("Sep", 60),
-        ("Oct", 55),
-        ("Nov", 65),
-        ("Dec", 90)
-    ]
+    @EnvironmentObject var vehicleManager: VehicleManager
+    @State private var animatedData: [(month: String, value: Float)] = []
 
     var body: some View {
         VStack(spacing: 16) {
@@ -43,7 +31,7 @@ struct FuelAnalyticsView: View {
                     }
                 }
                 Chart {
-                    ForEach(data, id: \.month) { item in
+                    ForEach(animatedData, id: \.month) { item in
                         LineMark(
                             x: .value("Month", item.month),
                             y: .value("Value", item.value)
@@ -77,6 +65,7 @@ struct FuelAnalyticsView: View {
                 }
                 .frame(height: 300)
             }
+
             .padding(16)
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .background(RoundedRectangle(cornerRadius: 12, style: .continuous)
@@ -105,6 +94,19 @@ struct FuelAnalyticsView: View {
             Spacer()
         }
         .background(Palette.greyBackground)
+        .onAppear {
+            animateChart()
+            vehicleManager.getMonthlyFuelEfficency()
+        }
+    }
+
+    private func animateChart() {
+        animatedData = [] // Start with no data
+        for (index, value) in vehicleManager.monthlyFuelEfficency.enumerated() {
+            withAnimation(.interactiveSpring(duration: 0.3).delay(Double(index) * 0.1)) {
+                animatedData.append((month: value.key, value: value.value))
+            }
+        }
     }
 
     @ViewBuilder

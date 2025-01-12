@@ -10,6 +10,7 @@ import SwiftData
 
 class VehicleManager: ObservableObject {
     @Published private(set) var currentVehicle: Vehicle = .mock()
+    @Published var monthlyFuelEfficency: [String: Float] = [:]
 
     private let userDefaultsKey = "currentVehicleUUID"
 
@@ -43,7 +44,53 @@ class VehicleManager: ObservableObject {
         saveUUIDToUserDefaults(vehicle: vehicle)
     }
 
+
+    func getMonthlyFuelEfficency() {
+        guard currentVehicle.fuelExpenses.count > 1 else {
+            return
+        }
+
+        // Group fuel expenses by month and year
+        let groupedByMonth = Dictionary(grouping: currentVehicle.fuelExpenses) { expense -> String in
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM"
+            return formatter.string(from: expense.date)
+        }
+
+        for (month, expenses) in groupedByMonth {
+            let sortedExpenses = expenses.sorted { $0.odometer < $1.odometer }
+
+            var totalFuelConsumed: Float = 0
+            var totalDistanceTraveled: Float = 0
+
+            for i in 1 ..< sortedExpenses.count {
+                let previousExpense = sortedExpenses[i - 1]
+                let currentExpense = sortedExpenses[i]
+
+                // Calculate the distance traveled
+                let distance = currentExpense.odometer - previousExpense.odometer
+                if distance > 0 {
+                    totalDistanceTraveled += distance
+                    totalFuelConsumed += currentExpense.quantity
+                }
+            }
+
+            // Check if we can calculate efficiency for this month
+            guard totalDistanceTraveled > 0 else { continue }
+
+            let efficiency = (totalFuelConsumed / totalDistanceTraveled) * 100
+            monthlyFuelEfficency[month] = efficiency
+        }
+    }
+
     private func saveUUIDToUserDefaults(vehicle: Vehicle) {
         UserDefaults.standard.set(vehicle.uuid.uuidString, forKey: userDefaultsKey)
     }
+}
+
+struct MonthlyFuelData {
+    var totalCost: Float
+    var averageCost: Float
+    var refuelsAmount: Int
+    var daysFromLastRefuel: Int
 }

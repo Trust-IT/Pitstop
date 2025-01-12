@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ReminderInputView: View {
     @State private var selectedType: Reminder.Typology = .date
-    @Binding var reminder: Reminder
+    @Bindable var reminder: Reminder
 
     var reminderInputFocus: FocusState<ReminderInputFocusField?>.Binding
 

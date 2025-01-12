@@ -11,7 +11,7 @@ import SwiftUI
 struct FuelExpenseInputView: View {
     let vehicleFuels: [FuelType]
     var fuelInputFocus: FocusState<FuelInputFocusField?>.Binding
-    @Binding var fuelExpense: FuelExpense
+    @Bindable var fuelExpense: FuelExpense
 
     var body: some View {
         CustomList {
@@ -26,7 +26,8 @@ struct FuelExpenseInputView: View {
                     unit: "km",
                     placeholder: "0",
                     keyboardType: .numberPad,
-                    focusType: FuelInputFocusField.odometer
+                    focusType: FuelInputFocusField.odometer,
+                    focusState: fuelInputFocus
                 )
             )
             NavigationLink(
@@ -63,7 +64,8 @@ struct FuelExpenseInputView: View {
                     unit: "L",
                     placeholder: "0",
                     keyboardType: .decimalPad,
-                    focusType: FuelInputFocusField.quantity
+                    focusType: FuelInputFocusField.quantity,
+                    focusState: fuelInputFocus
                 )
             )
             CategoryInputView(
@@ -77,60 +79,27 @@ struct FuelExpenseInputView: View {
                     unit: "€",
                     placeholder: "0",
                     keyboardType: .decimalPad,
-                    focusType: FuelInputFocusField.pricePerUnit
+                    focusType: FuelInputFocusField.pricePerUnit,
+                    focusState: fuelInputFocus
                 )
             )
         }
     }
 }
 
-// struct CategoryInputView: View {
-//    let categoryInfo: CategoryRow.Input
-//    let type: InputType
-//
-//    var body: some View {
-//        HStack {
-//            switch type {
-//            case let .field(value, unit, placeholder, keyboardType):
-//                    CategoryRow(input: categoryInfo)
-//                    Spacer()
-//                    TextField(placeholder, value: value, formatter: NumberFormatter.twoDecimalPlaces)
-//                        .font(Typography.headerM)
-//                        .foregroundColor(Palette.black)
-//                        .keyboardType(keyboardType)
-//                        .fixedSize(horizontal: true, vertical: true)
-//                    Text(unit)
-//                        .font(Typography.headerM)
-//                        .foregroundColor(Palette.black)
-//            case let .date(value):
-//                DatePicker(selection: value, in: ...Date(), displayedComponents: [.date]) {
-//                    CategoryRow(input: categoryInfo)
-//                }
-//            }
-//        }
-//    }
-//
-//    enum InputType {
-//        case field(value: Binding<Float>, unit: String, placeholder: String, keyboardType: UIKeyboardType)
-//        case date(value: Binding<Date>)
-//    }
-// }
-
 struct CategoryInputView<T>: View where T: Hashable {
-    @FocusState private var focusedField: T?
-
     let categoryInfo: CategoryRow.Input
     let type: InputType
 
     var body: some View {
         HStack {
             switch type {
-            case let .field(value, unit, placeholder, keyboardType, focus):
+            case let .field(value, unit, placeholder, keyboardType, focus, focusState):
                 Group {
                     CategoryRow(input: categoryInfo)
                     Spacer()
                     TextField(placeholder, value: value, formatter: NumberFormatter.twoDecimalPlaces)
-                        .focused($focusedField, equals: focus)
+                        .focused(focusState, equals: focus)
                         .font(Typography.headerM)
                         .foregroundColor(Palette.black)
                         .keyboardType(keyboardType)
@@ -140,7 +109,7 @@ struct CategoryInputView<T>: View where T: Hashable {
                         .foregroundColor(Palette.black)
                 }
                 .onTapGesture {
-                    focusedField = focus
+                    focusState.wrappedValue = focus
                 }
             case let .date(value):
                 DatePicker(selection: value, in: ...Date(), displayedComponents: [.date]) {
@@ -156,7 +125,8 @@ struct CategoryInputView<T>: View where T: Hashable {
             unit: String,
             placeholder: String,
             keyboardType: UIKeyboardType,
-            focusType: T
+            focusType: T,
+            focusState: FocusState<T?>.Binding
         )
         case date(value: Binding<Date>)
     }

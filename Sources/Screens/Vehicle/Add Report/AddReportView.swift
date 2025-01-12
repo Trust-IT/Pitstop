@@ -32,6 +32,7 @@ struct AddReportView: View {
         NavigationView {
             VStack {
                 // MARK: Input fields
+
                 switch currentPickerTab {
                 case .reminder:
                     HStack {
@@ -67,14 +68,16 @@ struct AddReportView: View {
 
                 switch currentPickerTab {
                 case .reminder:
-                    ReminderInputView(reminder: $reminder, reminderInputFocus: $reminderInputFocus)
+                    ReminderInputView(reminder: reminder, reminderInputFocus: $reminderInputFocus)
+
                 case .fuel:
                     FuelExpenseInputView(
                         vehicleFuels: fuelCategories,
                         fuelInputFocus: $fuelInputFocus,
-                        fuelExpense: $fuelExpense
+                        fuelExpense: fuelExpense
                     )
                     .onAppear {
+                        fuelInputFocus = .totalPrice
                         // Reset the reminder when switching tabs
                         reminder = .mock()
                     }
@@ -125,8 +128,8 @@ struct AddReportView: View {
                             .font(Typography.headerM)
                     }
                 )
-                .disabled(reminder.title.isEmpty && (fuelExpense.totalPrice.isZero || fuelExpense.quantity.isZero))
-                .opacity(reminder.title.isEmpty && (fuelExpense.totalPrice.isZero || fuelExpense.quantity.isZero) ? 0.6 : 1)
+                .disabled(reminder.title.isEmpty && (fuelTotal.isZero || fuelExpense.quantity.isZero))
+                .opacity(reminder.title.isEmpty && (fuelTotal.isZero || fuelExpense.quantity.isZero) ? 0.6 : 1)
             )
             .toolbar {
                 /// Keyboard focus
@@ -190,6 +193,7 @@ enum NewReportTab: String, CaseIterable, Identifiable {
 }
 
 // MARK: - Focus fields
+
 enum ReminderInputFocusField: Hashable {
     case reminderTitle
     case note

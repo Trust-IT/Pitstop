@@ -12,7 +12,7 @@ struct ReminderInputView: View {
     @State private var selectedType: Reminder.Typology = .date
     @Binding var reminder: Reminder
 
-    var focusedField: FocusState<FocusField?>.Binding
+    var reminderInputFocus: FocusState<ReminderInputFocusField?>.Binding
 
     var body: some View {
         CustomList {
@@ -114,19 +114,14 @@ struct ReminderInputView: View {
                 }
                 TextField(String(localized: "Note"), text: $reminder.note)
                     .disableAutocorrection(true)
-                    .focused(focusedField, equals: .note)
+                    .focused(reminderInputFocus, equals: .note)
                     .font(Typography.headerM)
             }
         }
         .padding(.top, -10)
-        // TODO: Check what this does
         .onAppear {
             /// Setting the keyboard focus on the price when opening the modal
-            if reminder.title.isEmpty {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { /// Anything over 0.5 delay seems to work
-                    focusedField.wrappedValue = .reminderTab
-                }
-            }
+            reminderInputFocus.wrappedValue = .reminderTitle
         }
     }
 }

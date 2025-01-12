@@ -23,57 +23,61 @@ struct AddReportView: View {
     @State private var fuelTotal: Float = 0.0
 
     // FIXME: Focus keyboard
-    @FocusState var focusedField: FocusField?
+    @FocusState var reminderInputFocus: ReminderInputFocusField?
+    @FocusState var fuelInputFocus: FuelInputFocusField?
 
-    @State private var currentPickerTab: AddReportTabs = .fuel
+    @State private var currentPickerTab: NewReportTab = .fuel
 
     var body: some View {
         NavigationView {
             VStack {
-                // MARK: Text field
-
+                // MARK: Input fields
                 switch currentPickerTab {
                 case .reminder:
-                    TextFieldComponent(
-                        submitField: $reminder.title,
-                        placeholder: "-",
-                        attribute: "ㅤ",
-                        keyboardType: .default,
-                        focusedField: $focusedField,
-                        defaultFocus: .reminderTab
-                    )
-                    .padding(.top, 15)
+                    HStack {
+                        Spacer()
+                        TextField("-", text: $reminder.title)
+                            .focused($reminderInputFocus, equals: .reminderTitle)
+                            .textFieldStyle(InputTextFieldStyle())
+                            .fixedSize(horizontal: true, vertical: true)
+                        Spacer()
+                    }
+                    .padding(.top, 26)
                 case .fuel:
                     HStack {
                         Spacer()
-                        TextField("", value: $fuelTotal, formatter: NumberFormatter.twoDecimalPlaces)
+                        TextField("0,0", value: $fuelTotal, formatter: NumberFormatter.twoDecimalPlaces)
                             .keyboardType(.decimalPad)
-                            .font(Typography.headerXXL)
-                            .foregroundColor(Palette.black)
+                            .focused($fuelInputFocus, equals: .totalPrice)
+                            .textFieldStyle(InputTextFieldStyle())
                             .fixedSize(horizontal: true, vertical: true)
                         Text(utilityVM.currency)
                             .font(Typography.headerXXL)
                             .foregroundColor(Palette.black)
                         Spacer()
                     }
-                    .padding(.top, 15)
+                    .padding(.top, 26)
                 }
 
                 SegmentedPicker(currentTab: $currentPickerTab, onTap: {})
                     .padding(.horizontal, 32)
-                    .padding(.top, -10.0)
+                    .padding(.top, 24)
 
                 // MARK: List
 
                 switch currentPickerTab {
                 case .reminder:
-                    ReminderInputView(reminder: $reminder, focusedField: $focusedField)
+                    ReminderInputView(reminder: $reminder, reminderInputFocus: $reminderInputFocus)
                 case .fuel:
-                    FuelExpenseInputView(vehicleFuels: fuelCategories, fuelExpense: $fuelExpense)
-                        .onAppear {
-                            // Reset the reminder when switching tabs
-                            reminder = .mock()
-                        }
+                    FuelExpenseInputView(
+                        vehicleFuels: fuelCategories,
+                        fuelInputFocus: $fuelInputFocus,
+                        fuelExpense: $fuelExpense
+                    )
+                    .onAppear {
+                        // Reset the reminder when switching tabs
+                        reminder = .mock()
+                    }
                 }
             }
             .background(Palette.greyBackground)
@@ -106,6 +110,7 @@ struct AddReportView: View {
                                 if fuelExpense.odometer > vehicleManager.currentVehicle.odometer {
                                     vehicleManager.currentVehicle.odometer = fuelExpense.odometer
                                 }
+
                                 fuelExpense.totalPrice = fuelTotal
                                 vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
                                 fuelExpense.insert(context: modelContext)
@@ -128,7 +133,12 @@ struct AddReportView: View {
                 ToolbarItem(placement: .keyboard) {
                     HStack {
                         Button(action: {
-                            focusedField = nil
+                            switch currentPickerTab {
+                            case .reminder:
+                                reminderInputFocus = nil
+                            case .fuel:
+                                fuelInputFocus = nil
+                            }
                         }, label: {
                             Image(systemName: "keyboard.chevron.compact.down")
                                 .resizable()
@@ -172,46 +182,22 @@ struct AddReportView: View {
     }
 }
 
-struct TextFieldComponent: View {
-    @Binding var submitField: String
-    var placeholder: String
-    var attribute: String
-    var keyboardType: UIKeyboardType
-
-    var focusedField: FocusState<FocusField?>.Binding
-    var defaultFocus: FocusField
-
-    var body: some View {
-        HStack {
-            Spacer()
-            TextField(placeholder, text: $submitField)
-                .focused(focusedField, equals: defaultFocus)
-                .font(Typography.headerXXL)
-                .foregroundColor(Palette.black)
-                .keyboardType(keyboardType)
-                .fixedSize(horizontal: true, vertical: true)
-
-            Text(attribute)
-                .font(Typography.headerXXL)
-                .foregroundColor(Palette.black)
-            Spacer()
-        }
-    }
-}
-
-enum FocusField: Hashable {
-    case odometerTab
-    case reminderTab
-    case fuelTab
-    case odometer
-    case liter
-    case priceLiter
-    case note
-}
-
-enum AddReportTabs: String, CaseIterable, Identifiable {
+enum NewReportTab: String, CaseIterable, Identifiable {
     case fuel
     case reminder
 
     var id: Self { self }
+}
+
+// MARK: - Focus fields
+enum ReminderInputFocusField: Hashable {
+    case reminderTitle
+    case note
+}
+
+enum FuelInputFocusField: Hashable {
+    case totalPrice
+    case odometer
+    case quantity
+    case pricePerUnit
 }

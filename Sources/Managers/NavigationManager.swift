@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class NavigationManager : ObservableObject {
+class NavigationManager: ObservableObject {
     @Published var routes = [Route]()
     @Published var modalRoutes = [Route]()
     @Published var presentedRoute: Route?
@@ -21,13 +21,13 @@ class NavigationManager : ObservableObject {
             routes.append(route)
         }
     }
-    
+
     func present(_ route: Route) {
-           isPresented = true
+        isPresented = true
         presentedRoute = route
-           modalRoutes = [] 
+        modalRoutes = []
     }
-    
+
     func popAll() {
         if isPresented {
             modalRoutes = []

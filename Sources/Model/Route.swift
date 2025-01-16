@@ -14,7 +14,7 @@ enum Route {
     case onboardingMoreInfo
     case onboardingNotification
     case onboardingReady
-    
+
     // Vehicle
     case addNewReport
 }

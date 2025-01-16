@@ -11,7 +11,7 @@ enum Route {
     // Onboarding
     case onboardingWelcome
     case onboardingRegistration
-    case onboardingMoreInfo
+    case onboardingMoreInfo(input: OnbVehicleInputData)
     case onboardingNotification
     case onboardingReady
 
@@ -25,6 +25,27 @@ extension Route: Hashable {
     }
 }
 
+extension Route: Equatable {
+    static func == (lhs: Route, rhs: Route) -> Bool {
+        switch (lhs, rhs) {
+        case (.onboardingWelcome, .onboardingWelcome):
+            true
+        case (.onboardingRegistration, .onboardingRegistration):
+            true
+        case let (.onboardingMoreInfo(leftData), .onboardingMoreInfo(rightData)):
+            leftData == rightData
+        case (.onboardingNotification, .onboardingNotification):
+            true
+        case (.onboardingReady, .onboardingReady):
+            true
+        case (.addNewReport, .addNewReport):
+            true
+        default:
+            false
+        }
+    }
+}
+
 extension Route: View {
     var body: some View {
         switch self {
@@ -32,6 +53,8 @@ extension Route: View {
             OnbWelcomeView()
         case .onboardingRegistration:
             OnbRegistrationView()
+        case let .onboardingMoreInfo(vehicleData):
+            OnbMoreInfoView(input: vehicleData)
         case .addNewReport:
             AddReportView()
         default:

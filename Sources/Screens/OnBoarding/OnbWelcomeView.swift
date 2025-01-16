@@ -12,7 +12,7 @@ struct OnbWelcomeView: View {
 
     var body: some View {
         VStack(alignment: .center) {
-            Spacer()
+            Spacer(minLength: 60)
             VStack(spacing: 12) {
                 Text("Warm up your engine")
                     .font(Typography.headerXL)
@@ -25,16 +25,14 @@ struct OnbWelcomeView: View {
             Spacer()
             Image(.page1)
             Spacer()
-            VStack(spacing: 16) {
-                Button(action: {
-                    withAnimation(.easeInOut) {
-                        navManager.push(.onboardingRegistration)
-                    }
-                }, label: {
-                    Text("Add a new vehicle")
-                })
-                .buttonStyle(Primary())
-            }
+            Button(action: {
+                withAnimation(.easeInOut) {
+                    navManager.push(.onboardingRegistration)
+                }
+            }, label: {
+                Text("Add a new vehicle")
+            })
+            .buttonStyle(Primary())
             .padding(.bottom, 32)
         }
         .background(Palette.greyBackground)

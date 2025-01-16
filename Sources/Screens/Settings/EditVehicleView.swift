@@ -54,16 +54,16 @@ struct EditVehicleView: View {
             VStack(spacing: 20) {
                 TextField(String(localized: "Vehicle name"), text: $name)
                     .disableAutocorrection(true)
-                    .focused($focusedField, equals: .carName)
+                    .focused($focusedField, equals: .vehicleName)
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
                     .frame(width: UIScreen.main.bounds.size.width * 0.90, height: UIScreen.main.bounds.size.height * 0.055)
-                    .background(focusedField == .carName ? Palette.greyLight : Palette.greyBackground)
+                    .background(focusedField == .vehicleName ? Palette.greyLight : Palette.greyBackground)
                     .font(Typography.TextM)
                     .foregroundColor(Palette.black)
                     .cornerRadius(36)
                     .overlay(
                         RoundedRectangle(cornerRadius: 36)
-                            .stroke(focusedField == .carName ? Palette.black : Palette.greyInput, lineWidth: 1)
+                            .stroke(focusedField == .vehicleName ? Palette.black : Palette.greyInput, lineWidth: 1)
                     )
                     .modifier(ClearButton(text: $name))
                     .onSubmit {

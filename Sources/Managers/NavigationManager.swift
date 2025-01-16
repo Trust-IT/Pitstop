@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class NavigationManager: ObservableObject {
+class NavigationManager : ObservableObject {
     @Published var routes = [Route]()
     @Published var modalRoutes = [Route]()
     @Published var presentedRoute: Route?
@@ -21,13 +21,13 @@ class NavigationManager: ObservableObject {
             routes.append(route)
         }
     }
-
+    
     func present(_ route: Route) {
-        isPresented = true
+           isPresented = true
         presentedRoute = route
-        modalRoutes = []
+           modalRoutes = [] 
     }
-
+    
     func popAll() {
         if isPresented {
             modalRoutes = []
@@ -46,6 +46,22 @@ class NavigationManager: ObservableObject {
             presentedRoute = nil
         } else {
             _ = routes.popLast()
+        }
+    }
+}
+
+struct ModalNavigationContainerView: View {
+    @EnvironmentObject var navManager: NavigationManager
+    let route: Route
+
+    var body: some View {
+        NavigationStack(path: $navManager.modalRoutes) {
+            VStack {
+                route.body
+            }
+            .navigationDestination(for: Route.self) { route in
+                route.body
+            }
         }
     }
 }

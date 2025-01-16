@@ -11,20 +11,37 @@ struct OnbWelcomeView: View {
     @EnvironmentObject private var navManager: NavigationManager
 
     var body: some View {
-        VStack {
-            Button("Push") {
-                navManager.push(.onboardingWelcome)
+        VStack(alignment: .center) {
+            Spacer()
+            VStack(spacing: 12) {
+                Text("Warm up your engine")
+                    .font(Typography.headerXL)
+                    .foregroundColor(Palette.black)
+                Text("Gear up for a simple way of managing your \nvehicle and cutting costs")
+                    .font(Typography.TextM)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Palette.black)
             }
-            Button("Pop") {
-                navManager.pop()
+            Spacer()
+            Image(.page1)
+            Spacer()
+            VStack(spacing: 16) {
+                Button(action: {
+                    withAnimation(.easeInOut) {
+                        navManager.push(.onboardingRegistration)
+                    }
+                }, label: {
+                    Text("Add a new vehicle")
+                })
+                .buttonStyle(Primary())
             }
-            Button("PopALL") {
-                navManager.popAll()
-            }
+            .padding(.bottom, 32)
         }
+        .background(Palette.greyBackground)
     }
 }
 
 #Preview {
     OnbWelcomeView()
+        .environmentObject(NavigationManager())
 }

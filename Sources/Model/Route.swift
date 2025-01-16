@@ -14,7 +14,7 @@ enum Route {
     case onboardingMoreInfo
     case onboardingNotification
     case onboardingReady
-
+    
     // Vehicle
     case addNewReport
 }
@@ -30,6 +30,8 @@ extension Route: View {
         switch self {
         case .onboardingWelcome:
             OnbWelcomeView()
+        case .onboardingRegistration:
+            OnbRegistrationView()
         case .addNewReport:
             AddReportView()
         default:

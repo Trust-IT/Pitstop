@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EditVehicleView: View {
-    @FocusState var focusedField: FocusFieldBoarding?
+    @FocusState var focusedField: FocusFieldOnboarding?
     @Environment(\.modelContext) private var modelContext
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum FocusFieldBoarding: Hashable {
+enum FocusFieldOnboarding: Hashable {
     case carName
     case brand
     case model
@@ -57,7 +57,7 @@ struct Page2: View {
     @Environment(\.modelContext) private var modelContext
     @StateObject var onboardingVM: OnboardingViewModel
 
-    @FocusState var focusedField: FocusFieldBoarding?
+    @FocusState var focusedField: FocusFieldOnboarding?
 
     @State private var isTapped = false
 

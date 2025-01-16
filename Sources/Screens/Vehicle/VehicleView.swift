@@ -12,6 +12,7 @@ struct VehicleView: View {
 
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject var vehicleManager: VehicleManager
+    @EnvironmentObject private var navManager: NavigationManager
 
     @AppStorage("shouldShowOnboardings") var shouldShowOnboarding: Bool = true
 //    @State var shouldShowOnboarding : Bool = true //FOR TESTING
@@ -49,17 +50,15 @@ struct VehicleView: View {
         .sheet(isPresented: $showAddReport) {
             AddReportView()
         }
-        .fullScreenCover(
-            isPresented: $shouldShowOnboarding,
-            content: {
-                OnboardingView(
-                    onboardingVM: onboardingVM,
-                    shouldShowOnboarding: $shouldShowOnboarding
-                )
+        .fullScreenCover(isPresented: $navManager.isPresented) {
+            if let presentedRoute = navManager.presentedRoute {
+                ModalNavigationContainerView(route: presentedRoute)
             }
-        )
+        }
         .onAppear {
-            if !shouldShowOnboarding {
+            if shouldShowOnboarding {
+                navManager.present(.onboardingWelcome)
+            } else {
                 vehicleManager.loadCurrentVehicle(modelContext: modelContext)
             }
         }

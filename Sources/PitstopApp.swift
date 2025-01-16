@@ -13,6 +13,7 @@ struct PitstopApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject var vehicleManager = VehicleManager()
     @StateObject var utilityVM = UtilityViewModel()
+    @StateObject var navigationManager = NavigationManager()
     let modelContainer: ModelContainer
 
     init() {
@@ -38,6 +39,7 @@ struct PitstopApp: App {
         WindowGroup {
             EntryPointView()
                 .modelContainer(modelContainer)
+                .environmentObject(navigationManager)
                 .environmentObject(vehicleManager)
                 .environmentObject(utilityVM)
         }

@@ -1,6 +1,5 @@
-# Pitstop
-
-PitStop is an iOS App to track your car's expenses. This project has been developed in team with [Ivan Voloshchuk](https://github.com/IV0000), [Francesco Puzone](https://github.com/morbuen) and [Anna Antonova](https://github.com/Oneanya21).
+## Disclaimer
+The project is currently in the process of a gradual refactoring. We are transitioning from `CoreData` to `SwiftData` due to numerous issues in the previous implementation. Additionally, improvements to the navigation system (utilizing the latest `NavigationStack`) and various UI-related fixes are underway. As a result, some of the information below may not accurately reflect the current state of the application. The `README` will be updated to align with the latest changes once the refactoring reaches a stable and consistent state.
 
 ## Overview
 The first time you download the app, you are invited through the on-boarding to insert your car's data such as brand, model and fuel type.
@@ -28,3 +27,7 @@ The design pattern we adopted is **MVVM** with different view models for handlin
 
 ## Tuist
 To be able to generate the .xcodeproj , install [Tuist](https://docs.tuist.dev/en/guides/quick-start/install-tuist) and run tuist generate in the CLI
+
+## Special thanks & Contributions
+This project has been developed during the Apple Developer Academy 2021 in team with [Asya Tealdi](https://github.com/AsyaTea), [Ivan Voloshchuk](https://github.com/IV0000), [Francesco Puzone](https://github.com/morbuen) and [Anna Antonova](https://github.com/Oneanya21). <br>
+If you want to contribute to the project, feel free to open issues and PRs.

@@ -57,6 +57,8 @@ extension Route: View {
             OnbMoreInfoView(input: vehicleData)
         case .onboardingNotification:
             OnbNotificationView()
+        case .onboardingReady:
+            OnbReadyView()
         case .addNewReport:
             AddReportView()
         default:

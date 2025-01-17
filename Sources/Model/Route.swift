@@ -55,6 +55,8 @@ extension Route: View {
             OnbRegistrationView()
         case let .onboardingMoreInfo(vehicleData):
             OnbMoreInfoView(input: vehicleData)
+        case .onboardingNotification:
+            OnbNotificationView()
         case .addNewReport:
             AddReportView()
         default:

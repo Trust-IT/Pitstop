@@ -295,4 +295,5 @@ private extension OnbMoreInfoView {
 #Preview {
     OnbMoreInfoView(input: OnbVehicleInputData())
         .environmentObject(NavigationManager())
+        .environmentObject(VehicleManager())
 }

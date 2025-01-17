@@ -508,6 +508,12 @@ struct Page5: View {
 }
 
 struct OnBoardingCard: View {
+    init(text: LocalizedStringKey, bgColor: Color, iconName: ImageResource) {
+        self.text = text
+        self.bgColor = bgColor
+        self.iconName = iconName
+    }
+
     var text: LocalizedStringKey
     var bgColor: Color
     var iconName: ImageResource
@@ -515,7 +521,7 @@ struct OnBoardingCard: View {
     var body: some View {
         ZStack {
             Rectangle()
-                .frame(width: UIScreen.main.bounds.size.width * 0.90, height: UIScreen.main.bounds.size.height * 0.075, alignment: .center)
+                .frame(height: 68, alignment: .center)
                 .cornerRadius(12)
                 .foregroundColor(Palette.white)
                 .shadowGrey()
@@ -528,12 +534,14 @@ struct OnBoardingCard: View {
                         .resizable()
                         .foregroundColor(Color(rgb: 0x9A7EFF))
                         .frame(width: 16, height: 16)
-                }.padding(.horizontal, 8)
+                }
+                .padding(.horizontal, 8)
                 Text(text)
                     .foregroundColor(Palette.black)
                     .font(Typography.headerM)
                 Spacer()
-            }.padding(.horizontal, 30)
+            }
+            .padding(.horizontal, 30)
         }
     }
 }

@@ -20,7 +20,6 @@ final class Vehicle: Identifiable {
     var secondaryFuelType: FuelType?
     var odometer: Float
     var plate: String?
-    var year: Int?
 
     // Relationships
     @Relationship(deleteRule: .cascade, inverse: \Expense2.vehicle)
@@ -44,8 +43,7 @@ final class Vehicle: Identifiable {
         mainFuelType: FuelType = .gasoline,
         secondaryFuelType: FuelType? = nil,
         odometer: Float,
-        plate: String? = nil,
-        year: Int? = nil
+        plate: String? = nil
     ) {
         self.uuid = uuid
         self.name = name
@@ -55,7 +53,6 @@ final class Vehicle: Identifiable {
         self.secondaryFuelType = secondaryFuelType
         self.odometer = odometer
         self.plate = plate
-        self.year = year
     }
 
     // Custom decode method to handle relationships
@@ -69,7 +66,6 @@ final class Vehicle: Identifiable {
         secondaryFuelType = try container.decodeIfPresent(FuelType.self, forKey: .secondaryFuelType)
         odometer = try container.decode(Float.self, forKey: .odometer)
         plate = try container.decodeIfPresent(String.self, forKey: .plate)
-        year = try container.decodeIfPresent(Int.self, forKey: .year)
     }
 
     func saveToModelContext(context: ModelContext) throws {
@@ -135,7 +131,6 @@ extension Vehicle: Codable {
         try container.encode(secondaryFuelType, forKey: .secondaryFuelType)
         try container.encode(odometer, forKey: .odometer)
         try container.encode(plate, forKey: .plate)
-        try container.encode(year, forKey: .year)
     }
 }
 

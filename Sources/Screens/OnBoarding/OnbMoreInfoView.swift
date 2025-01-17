@@ -10,16 +10,18 @@ import SwiftUI
 
 struct OnbMoreInfoView: View {
     @EnvironmentObject private var navManager: NavigationManager
+    @EnvironmentObject var vehicleManager: VehicleManager
     @Environment(\.modelContext) private var modelContext
+    @FocusState fileprivate var focusedField: FocusFieldAlertOB?
 
     @State private var showPlateInput: AlertConfig = .init(
-        enableBackgroundBlur: false,
+        enableBackgroundBlur: true,
         disableOutsideTap: false,
         transitionType: .slide
     )
 
     @State private var showOdometerInput: AlertConfig = .init(
-        enableBackgroundBlur: false,
+        enableBackgroundBlur: true,
         disableOutsideTap: false,
         transitionType: .slide
     )
@@ -30,11 +32,12 @@ struct OnbMoreInfoView: View {
         transitionType: .slide
     )
 
-    let input: OnbVehicleInputData
     @State private var secondaryFuelType: FuelType?
-    @State private var odometer: String?
-    @State private var plate: String?
-    
+    @State private var odometer: Float = 0.0
+    @State private var plate: String = ""
+
+    let input: OnbVehicleInputData
+
     var body: some View {
         VStack {
             Spacer(minLength: 60)
@@ -55,7 +58,7 @@ struct OnbMoreInfoView: View {
                                  bgColor: Palette.colorOrange,
                                  iconName: .basedOn)
                 })
-                if let plate {
+                if !plate.isEmpty {
                     cardInput(value: plate)
                 }
                 Button(action: {
@@ -65,8 +68,8 @@ struct OnbMoreInfoView: View {
                                  bgColor: Palette.colorBlue,
                                  iconName: .odometer)
                 })
-                if let odometer {
-                    cardInput(value: odometer)
+                if odometer != 0.0 {
+                    cardInput(value: String(odometer))
                 }
                 Button(action: {
                     showSecondaryFuelSelection.present()
@@ -79,15 +82,13 @@ struct OnbMoreInfoView: View {
                     cardInput(value: secondaryFuelType.rawValue)
                 }
             }
-            .padding(.top, 56)
             .padding(.horizontal, 16)
+            .padding(.top, 56)
             .alert(config: $showPlateInput) {
-                // TODO: Implement plate input
-                Text("WIP")
+                PlateInputAlert(plateNumber: $plate, showPlateInput: $showPlateInput)
             }
             .alert(config: $showOdometerInput) {
-                // TODO: Implement Odometer input
-                Text("WIP")
+                OdometerInputAlert(odometer: $odometer, showOdometerInput: $showOdometerInput)
             }
             .alert(config: $showSecondaryFuelSelection) {
                 ConfirmationDialog(
@@ -104,11 +105,42 @@ struct OnbMoreInfoView: View {
             }
 
             Spacer()
+
+            Button(action: {
+                addVehicle()
+            }, label: {
+                Text("Add vehicle")
+            })
+            .buttonStyle(Primary())
+            .padding(.bottom, 32)
         }
+        .background(Palette.greyBackground)
+    }
+
+    private func addVehicle() {
+        let vehicle = Vehicle(
+            name: input.name,
+            brand: input.brand,
+            model: input.model,
+            mainFuelType: input.fuelType,
+            secondaryFuelType: secondaryFuelType,
+            odometer: odometer,
+            plate: plate
+        )
+        do {
+            try vehicle.saveToModelContext(context: modelContext)
+        } catch {
+            print("[Debug] Onboarding add vehicle: \(error)")
+        }
+        vehicleManager.setCurrentVehicle(vehicle)
+        navManager.push(.onboardingNotification)
     }
 }
 
+// MARK: Additional Views
+
 private extension OnbMoreInfoView {
+    @ViewBuilder
     func moreInfoCard(
         text: String,
         bgColor: Color,
@@ -138,22 +170,125 @@ private extension OnbMoreInfoView {
             .padding(.horizontal, 15)
         }
     }
-    
+
+    @ViewBuilder
     func cardInput(value: String) -> some View {
-        return ZStack {
+        ZStack {
             Rectangle()
                 .foregroundColor(Palette.greyLight)
                 .cornerRadius(12)
-            
+
             HStack {
                 Text(value)
                     .font(Typography.ControlS)
                     .foregroundColor(Palette.black)
                 Spacer()
             }
-            .padding(.horizontal,15)
+            .padding(.horizontal, 15)
         }
         .frame(height: 64)
+    }
+}
+
+private extension OnbMoreInfoView {
+    struct PlateInputAlert: View {
+        @Binding var plateNumber: String
+        @Binding var showPlateInput: AlertConfig
+        @FocusState private var focusedField: FocusFieldAlertOB?
+
+        var body: some View {
+            VStack(spacing: 16) {
+                HStack {
+                    Spacer()
+                    Text("Write the plate number")
+                        .foregroundColor(Palette.black)
+                        .font(Typography.headerM)
+                        .padding(.leading, 40)
+                    Spacer()
+                    Button(action: {
+                        showPlateInput.dismiss()
+                    }, label: {
+                        ZStack {
+                            Circle()
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(Palette.greyLight)
+                            Image(.ics)
+                        }
+                        .foregroundColor(Palette.black)
+                        .padding(.trailing, 20)
+                    })
+                }
+                VStack(spacing: 12) {
+                    TextField("DX390XX", text: $plateNumber)
+                        .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .plate))
+                        .padding(.horizontal, 16)
+                    Button("Save") {
+                        showPlateInput.dismiss()
+                    }
+                    .buttonStyle(Primary())
+                    .disabled(plateNumber.isEmpty)
+                }
+            }
+            .padding(.vertical, 16)
+            .background(Rectangle()
+                .cornerRadius(18)
+                .foregroundColor(Palette.white)
+            )
+            .padding(.horizontal, 6)
+        }
+    }
+
+    struct OdometerInputAlert: View {
+        @Binding var odometer: Float
+        @Binding var showOdometerInput: AlertConfig
+        @FocusState private var focusedField: FocusFieldAlertOB?
+
+        var body: some View {
+            VStack(spacing: 16) {
+                HStack {
+                    Spacer()
+                    Text("Write the odometer")
+                        .foregroundColor(Palette.black)
+                        .font(Typography.headerM)
+                        .padding(.leading, 40)
+                    Spacer()
+                    Button(action: {
+                        showOdometerInput.dismiss()
+                    }, label: {
+                        ZStack {
+                            Circle()
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(Palette.greyLight)
+                            Image(.ics)
+                        }
+                        .foregroundColor(Palette.black)
+                        .padding(.trailing, 20)
+                    })
+                }
+                VStack(spacing: 12) {
+                    TextField("Previously 0 km", value: $odometer, formatter: NumberFormatter())
+                        .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .odometer))
+                        .keyboardType(.decimalPad)
+                        .padding(.horizontal, 16)
+                    Button("Save") {
+                        showOdometerInput.dismiss()
+                    }
+                    .buttonStyle(Primary())
+                    .disabled(odometer <= 0)
+                }
+            }
+            .padding(.vertical, 16)
+            .background(Rectangle()
+                .cornerRadius(18)
+                .foregroundColor(Palette.white)
+            )
+            .padding(.horizontal, 6)
+        }
+    }
+
+    enum FocusFieldAlertOB: Hashable {
+        case odometer
+        case plate
     }
 }
 

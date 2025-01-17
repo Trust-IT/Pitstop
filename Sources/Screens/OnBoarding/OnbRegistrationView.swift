@@ -12,7 +12,7 @@ struct OnbRegistrationView: View {
     @FocusState var focusedField: FocusFieldOnboarding?
 
     @State private var showMainFuelSelection: AlertConfig = .init(
-        enableBackgroundBlur: false,
+        enableBackgroundBlur: true,
         disableOutsideTap: false,
         transitionType: .slide
     )
@@ -51,6 +51,7 @@ struct OnbRegistrationView: View {
                     .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .fuelType))
                     .disabled(true)
                     .onTapGesture {
+                        focusedField = nil
                         showMainFuelSelection.present()
                     }
                     .alert(config: $showMainFuelSelection) {
@@ -91,7 +92,9 @@ struct OnbRegistrationView: View {
             focusedField = nil
         }
         .onAppear {
-            focusedField = .vehicleName
+            if inputData.name.isEmpty {
+                focusedField = .vehicleName
+            }
         }
     }
 

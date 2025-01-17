@@ -409,16 +409,6 @@ struct Page3: View {
                 .ignoresSafeArea()
             )
             .ignoresSafeArea(.keyboard)
-
-            // MARK: ALL ALERTS
-
-            if showPlateSelection {
-                AlertPlateOB(vehicle: $vehicle, isPresented: $showPlateSelection, showOverlay: $showOverlay)
-            }
-
-            if showOdometerSelection {
-                AlertOdometerOB(vehicle: $vehicle, isPresented: $showOdometerSelection, showOverlay: $showOverlay)
-            }
         }
     }
 }

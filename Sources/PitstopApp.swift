@@ -12,7 +12,7 @@ import SwiftUI
 struct PitstopApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject var vehicleManager = VehicleManager()
-    @StateObject var utilityVM = UtilityViewModel()
+    @State var appState = AppState()
     @StateObject var navigationManager = NavigationManager()
     let modelContainer: ModelContainer
 

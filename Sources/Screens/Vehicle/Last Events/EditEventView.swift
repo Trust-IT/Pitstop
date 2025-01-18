@@ -12,7 +12,7 @@ struct EditEventView: View {
     @Environment(\.presentationMode) private var presentationMode
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var vehicleManager: VehicleManager
-    @EnvironmentObject var utilityVM: UtilityViewModel
+    @Environment(AppState.self) var appState: AppState
     @State var showDeleteAlert = false
 
     @Binding var fuelExpense: FuelExpense
@@ -94,7 +94,7 @@ struct EditEventView: View {
                     )
                 )
                 Spacer()
-                Text("\(fuelExpense.totalPrice) " + utilityVM.currency)
+                Text("\(fuelExpense.totalPrice) " + appState.currency)
                     .font(Typography.headerM)
                     .foregroundColor(Palette.black)
             }
@@ -130,7 +130,7 @@ struct EditEventView: View {
                     )
                 )
                 Spacer()
-                Text("\(fuelExpense.odometer) " + utilityVM.unit)
+                Text("\(fuelExpense.odometer) " + appState.unit)
                     .font(Typography.headerM)
                     .foregroundColor(Palette.black)
             }
@@ -165,7 +165,7 @@ struct EditEventView: View {
                     )
                 )
                 Spacer()
-                Text("\(fuelExpense.pricePerUnit) " + utilityVM.currency)
+                Text("\(fuelExpense.pricePerUnit) " + appState.currency)
                     .font(Typography.headerM)
                     .foregroundColor(Palette.black)
             }
@@ -183,7 +183,7 @@ struct EditEventView: View {
                     )
                 )
                 Spacer()
-                Text("\(fuelExpense.quantity) " + utilityVM.unit)
+                Text("\(fuelExpense.quantity) " + appState.unit)
                     .font(Typography.headerM)
                     .foregroundColor(Palette.black)
             }

@@ -12,7 +12,7 @@ struct AddReportView: View {
     @Environment(\.presentationMode) private var presentationMode
     @EnvironmentObject var vehicleManager: VehicleManager
 
-    @EnvironmentObject var utilityVM: UtilityViewModel
+    @Environment(AppState.self) var appState: AppState
 
     @State private var showOdometerAlert = false
 
@@ -52,7 +52,7 @@ struct AddReportView: View {
                             .focused($fuelInputFocus, equals: .totalPrice)
                             .textFieldStyle(InputTextFieldStyle())
                             .fixedSize(horizontal: true, vertical: true)
-                        Text(utilityVM.currency)
+                        Text(appState.currency)
                             .font(Typography.headerXXL)
                             .foregroundColor(Palette.black)
                         Spacer()

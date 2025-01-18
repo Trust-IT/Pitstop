@@ -31,7 +31,7 @@ struct AnalyticsCostView: View {
 }
 
 struct CostGraphView: View {
-    @EnvironmentObject var utilityVM: UtilityViewModel
+    @Environment(AppState.self) var appState: AppState
     @ObservedObject var categoryVM: CategoryViewModel
     @ObservedObject var dataVM: DataViewModel
     var value = "50%"
@@ -40,7 +40,7 @@ struct CostGraphView: View {
             HStack {
                 VStack(alignment: .leading) {
                     let formattedCost = String(format: "%.0f", dataVM.totalExpense)
-                    Text("\(formattedCost) \(utilityVM.currency)")
+                    Text("\(formattedCost) \(appState.currency)")
                         .font(Typography.headerL)
                         .padding(1)
                     Text("Cost structure")

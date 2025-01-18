@@ -301,7 +301,7 @@ struct CategoryComponent: View {
     var date: Date
     var cost: String
 
-    @EnvironmentObject var utilityVM: UtilityViewModel
+    @Environment(AppState.self) var appState: AppState
 
     var body: some View {
         HStack {
@@ -319,7 +319,7 @@ struct CategoryComponent: View {
                         .foregroundColor(Palette.black)
                         .font(Typography.headerS)
                     Spacer()
-                    Text("-\(cost) \(utilityVM.currency)")
+                    Text("-\(cost) \(appState.currency)")
                         .foregroundColor(Palette.greyHard)
                         .font(Typography.headerS)
                         .padding(.trailing, -10)

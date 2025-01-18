@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AnalyticsFuelView: View {
     @ObservedObject var categoryVM: CategoryViewModel
-    @EnvironmentObject var utilityVM: UtilityViewModel
+    @Environment(AppState.self) var appState: AppState
     var body: some View {
         VStack {
             CustomList {
@@ -20,7 +20,7 @@ struct AnalyticsFuelView: View {
                                 VStack(alignment: .leading) {
                                     Spacer()
                                     let formattedCost = String(format: "%.2f", categoryVM.fuelEff)
-                                    Text("\(formattedCost) L/100 \(utilityVM.unit)")
+                                    Text("\(formattedCost) L/100 \(appState.unit)")
                                         .font(Typography.headerL)
                                         .padding(1)
                                     Text(String(localized: "Efficiency"))

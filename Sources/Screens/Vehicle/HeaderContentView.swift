@@ -12,7 +12,7 @@ struct HeaderContent: View {
     var maxHeight: CGFloat
 
     @EnvironmentObject var vehicleManager: VehicleManager
-    @EnvironmentObject var utilityVM: UtilityViewModel
+    @Environment(AppState.self) var appState: AppState
 
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -21,10 +21,10 @@ struct HeaderContent: View {
                     ZStack {
                         Rectangle()
                             .cornerRadius(16)
-                            .foregroundColor(utilityVM.currentTheme.colors.card)
+                            .foregroundColor(appState.currentTheme.colors.card)
                             .frame(width: UIScreen.main.bounds.width * 0.29, height: UIScreen.main.bounds.height * 0.09)
                         VStack(alignment: .center) {
-                            Text("\(vehicleManager.currentVehicle.calculateTotalFuelExpenses()) \(utilityVM.currency)")
+                            Text("\(vehicleManager.currentVehicle.calculateTotalFuelExpenses()) \(appState.currency)")
                                 .foregroundColor(Palette.blackHeader)
                                 .font(Typography.headerLM)
                             Text("All costs")
@@ -38,10 +38,10 @@ struct HeaderContent: View {
                     ZStack {
                         Rectangle()
                             .cornerRadius(16)
-                            .foregroundColor(utilityVM.currentTheme.colors.card)
+                            .foregroundColor(appState.currentTheme.colors.card)
                             .frame(width: UIScreen.main.bounds.width * 0.29, height: UIScreen.main.bounds.height * 0.09)
                         VStack(alignment: .center) {
-                            Text(String("\(Int64(vehicleManager.currentVehicle.odometer)) \(utilityVM.unit)"))
+                            Text(String("\(Int64(vehicleManager.currentVehicle.odometer)) \(appState.unit)"))
                                 .foregroundColor(Palette.blackHeader)
                                 .font(Typography.headerLM)
                             Text("Odometer")
@@ -56,14 +56,14 @@ struct HeaderContent: View {
                         ZStack {
                             Rectangle()
                                 .cornerRadius(16)
-                                .foregroundColor(utilityVM.currentTheme.colors.card)
+                                .foregroundColor(appState.currentTheme.colors.card)
                                 .frame(width: UIScreen.main.bounds.width * 0.29, height: UIScreen.main.bounds.height * 0.09)
                             VStack(alignment: .center) {
                                 let formattedEfficiency = String(format: "%.1f", efficiency)
                                 Text("\(formattedEfficiency) / 100")
                                     .foregroundColor(Palette.blackHeader)
                                     .font(Typography.headerLM)
-                                Text(String(localized: "Efficiency") + " (L/\(utilityVM.unit))")
+                                Text(String(localized: "Efficiency") + " (L/\(appState.unit))")
                                     .foregroundColor(Palette.blackHeader)
                                     .font(Typography.TextM)
                             }

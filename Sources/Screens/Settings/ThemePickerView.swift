@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct ThemePickerView: View {
-    @EnvironmentObject var utilityVM: UtilityViewModel
+    @Environment(AppState.self) var appState: AppState
     @Binding var alert: AlertConfig
     @State private var sliderValue: Double = 0.0
     @State private var selectedTheme: ThemeColors = .amethystDrive
@@ -74,8 +74,7 @@ struct ThemePickerView: View {
             .padding(.bottom, 10)
 
             Button("Confirm") {
-                utilityVM.currentTheme = selectedTheme
-                ThemeColors.saveToUserDefaults(selectedTheme)
+                appState.setCurrentTheme(selectedTheme)
                 alert.dismiss()
             }
             .buttonStyle(Primary())

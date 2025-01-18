@@ -9,7 +9,8 @@ import SwiftData
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject var utilityVM: UtilityViewModel
+    @EnvironmentObject private var navManager: NavigationManager
+    @Environment(AppState.self) var appState: AppState
     @EnvironmentObject var vehicleManager: VehicleManager
     @Environment(\.modelContext) private var modelContext
     @StateObject var onboardingVM: OnboardingViewModel
@@ -104,6 +105,7 @@ struct SettingsView: View {
                 ThemePickerView(alert: $themePickerAlert)
                     .environmentObject(utilityVM)
             }
+                .environment(appState)
         }
     }
 

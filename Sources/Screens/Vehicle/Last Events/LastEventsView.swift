@@ -12,7 +12,7 @@ import SwiftUI
 // Watch LastEventsListView for reference
 struct LastEventsView: View {
     @EnvironmentObject var vehicleManager: VehicleManager
-    @EnvironmentObject var utilityVM: UtilityViewModel
+    @Environment(AppState.self) var appState: AppState
     @Environment(\.presentationMode) private var presentationMode
 
     @State private var isFuelFilter: Bool = true

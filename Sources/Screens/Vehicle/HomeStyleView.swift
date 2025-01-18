@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct HomeStyleView: View {
-    @EnvironmentObject var utilityVM: UtilityViewModel
+    @Environment(AppState.self) var appState: AppState
     // Scroll animation vars
     @State var offset: CGFloat = 0
     @State var topEdge: CGFloat
@@ -26,7 +26,7 @@ struct HomeStyleView: View {
                             .frame(maxWidth: .infinity)
                             .opacity(fadeOutOpacity()) // Directly apply opacity
                             .frame(height: getHeaderHeight(), alignment: .bottom)
-                            .background(utilityVM.currentTheme.colors.background)
+                            .background(appState.currentTheme.colors.background)
                             .overlay(
                                 // TOP NAV BAR
                                 TopNav(offset: offset, maxHeight: maxHeight, topEdge: topEdge)
@@ -48,7 +48,7 @@ struct HomeStyleView: View {
                                 in: CustomCorner(corners: [.topLeft, .topRight], radius: getCornerRadius())
                             )
                     }
-                    .background(utilityVM.currentTheme.colors.background)
+                    .background(appState.currentTheme.colors.background)
                     .padding(.top, -15)
                     .zIndex(0)
                 }

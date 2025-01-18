@@ -146,7 +146,7 @@ struct OverviewView: View {
 // MARK: Costs List Section
 
 struct CostsListView: View {
-    @EnvironmentObject var utilityVM: UtilityViewModel
+    @Environment(AppState.self) var appState: AppState
     @ObservedObject var categoryVM: CategoryViewModel
     @ObservedObject var dataVM: DataViewModel
 
@@ -157,7 +157,7 @@ struct CostsListView: View {
                     .font(Typography.headerL)
                 Spacer()
                 let formattedCost = String(format: "%.0f", dataVM.totalExpense)
-                Text("\(formattedCost) \(utilityVM.currency)")
+                Text("\(formattedCost) \(appState.currency)")
                     .fontWeight(.semibold)
             }
             .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
@@ -182,14 +182,14 @@ struct CostsListView: View {
 
 struct FuelListView: View {
     @ObservedObject var categoryVM: CategoryViewModel
-    @EnvironmentObject var utilityVM: UtilityViewModel
+    @Environment(AppState.self) var appState: AppState
     var body: some View {
         HStack {
             Text("Fuel")
                 .font(Typography.headerL)
             Spacer()
             let formattedCost = String(format: "%.2f", categoryVM.fuelEff)
-            Text("\(formattedCost) L/100 \(utilityVM.unit)")
+            Text("\(formattedCost) L/100 \(appState.unit)")
                 .fontWeight(.semibold)
                 .font(Typography.headerM)
         }
@@ -197,7 +197,7 @@ struct FuelListView: View {
 
         ListCostsAttributes(title: "Expense", value: String(categoryVM.fuelTotal))
             .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
-        ListCostsAttributes(title: "Average price", value: "\(String(categoryVM.avgPrice)) \(utilityVM.currency)/L")
+        ListCostsAttributes(title: "Average price", value: "\(String(categoryVM.avgPrice)) \(appState.currency)/L")
             .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
         ListCostsAttributes(title: "Refuels", value: String(categoryVM.refuelsPerTime))
             .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
@@ -211,7 +211,7 @@ struct FuelListView: View {
 struct OdometerCostsView: View {
     @ObservedObject var categoryVM: CategoryViewModel
     @ObservedObject var dataVM: DataViewModel
-    @EnvironmentObject var utilityVM: UtilityViewModel
+    @Environment(AppState.self) var appState: AppState
     var body: some View {
         HStack {
             Text("Odometer")
@@ -225,12 +225,12 @@ struct OdometerCostsView: View {
         .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
 
         let formattedAvgOdo = String(format: "%.0f", categoryVM.avgOdometer)
-        ListCostsAttributes(title: "Average", value: " \(formattedAvgOdo) \(utilityVM.unit)" + NSLocalizedString("/day", comment: ""))
+        ListCostsAttributes(title: "Average", value: " \(formattedAvgOdo) \(appState.unit)" + NSLocalizedString("/day", comment: ""))
             .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
         ListCostsAttributes(title: "Month Total", value: String(categoryVM.odometerTotal))
             .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
         let formattedEstimatedOdo = String(format: "%.0f", categoryVM.estimatedOdometerPerYear)
-        ListCostsAttributes(title: "Estimated km/year", value: "\(formattedEstimatedOdo) \(utilityVM.unit)")
+        ListCostsAttributes(title: "Estimated km/year", value: "\(formattedEstimatedOdo) \(appState.unit)")
             .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
     }
 }
@@ -256,6 +256,6 @@ struct ListCostsAttributes: View {
 //
 // struct StatsView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        AnalyticsOverviewView(dataVM: DataViewModel(), utilityVM: UtilityViewModel())
+//        AnalyticsOverviewView(dataVM: DataViewModel(), appState: UtilityViewModel())
 //    }
 // }

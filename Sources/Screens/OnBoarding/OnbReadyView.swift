@@ -26,12 +26,13 @@ struct OnbReadyView: View {
             }
             Spacer()
             Button(action: {
-                navManager.pop()
+                navManager.popAll()
             }, label: {
                 Text("Okayyyy let's go")
             })
             .buttonStyle(Primary())
             .padding(.bottom, 32)
+            .navigationBarBackButtonHidden()
         }
         .background(Palette.greyBackground)
     }

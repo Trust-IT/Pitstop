@@ -12,6 +12,7 @@ struct OnbMoreInfoView: View {
     @EnvironmentObject private var navManager: NavigationManager
     @EnvironmentObject var vehicleManager: VehicleManager
     @Environment(\.modelContext) private var modelContext
+    @Environment(AppState.self) private var appState
     @FocusState fileprivate var focusedField: FocusFieldAlertOB?
 
     @State private var showPlateInput: AlertConfig = .init(
@@ -84,30 +85,14 @@ struct OnbMoreInfoView: View {
             }
             .padding(.horizontal, 16)
             .padding(.top, 56)
-            .alert(config: $showPlateInput) {
-                PlateInputAlert(plateNumber: $plate, showPlateInput: $showPlateInput)
-            }
-            .alert(config: $showOdometerInput) {
-                OdometerInputAlert(odometer: $odometer, showOdometerInput: $showOdometerInput)
-            }
-            .alert(config: $showSecondaryFuelSelection) {
-                ConfirmationDialog(
-                    items: FuelType.allCases,
-                    message: "Select a fuel type",
-                    onTap: { value in
-                        secondaryFuelType = value
-                        showSecondaryFuelSelection.dismiss()
-                    },
-                    onCancel: {
-                        showSecondaryFuelSelection.dismiss()
-                    }
-                )
-            }
-
             Spacer()
-
             Button(action: {
                 addVehicle()
+                if appState.isAddingNewVehicle {
+                    navManager.push(.onboardingReady)
+                } else {
+                    navManager.push(.onboardingNotification)
+                }
             }, label: {
                 Text("Add vehicle")
             })
@@ -115,6 +100,25 @@ struct OnbMoreInfoView: View {
             .padding(.bottom, 32)
         }
         .background(Palette.greyBackground)
+        .alert(config: $showPlateInput) {
+            PlateInputAlert(plateNumber: $plate, showPlateInput: $showPlateInput)
+        }
+        .alert(config: $showOdometerInput) {
+            OdometerInputAlert(odometer: $odometer, showOdometerInput: $showOdometerInput)
+        }
+        .alert(config: $showSecondaryFuelSelection) {
+            ConfirmationDialog(
+                items: FuelType.allCases,
+                message: "Select a fuel type",
+                onTap: { value in
+                    secondaryFuelType = value
+                    showSecondaryFuelSelection.dismiss()
+                },
+                onCancel: {
+                    showSecondaryFuelSelection.dismiss()
+                }
+            )
+        }
     }
 
     private func addVehicle() {
@@ -133,7 +137,6 @@ struct OnbMoreInfoView: View {
             print("[Debug] Onboarding add vehicle: \(error)")
         }
         vehicleManager.setCurrentVehicle(vehicle)
-        navManager.push(.onboardingNotification)
     }
 }
 
@@ -296,4 +299,5 @@ private extension OnbMoreInfoView {
     OnbMoreInfoView(input: OnbVehicleInputData())
         .environmentObject(NavigationManager())
         .environmentObject(VehicleManager())
+        .environment(AppState())
 }

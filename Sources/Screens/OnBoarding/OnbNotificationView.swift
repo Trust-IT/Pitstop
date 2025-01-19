@@ -30,25 +30,21 @@ struct OnbNotificationView: View {
             Spacer()
             VStack(spacing: 16) {
                 Button(action: {
-                    withAnimation(.easeInOut) {
-                        NotificationManager.shared.requestAuthNotifications()
-                        navManager.set(.onboardingReady)
-                    }
+                    NotificationManager.shared.requestAuthNotifications()
+                    navManager.push(.onboardingReady)
                 }, label: {
                     Text("Activate notifications")
                 })
                 .buttonStyle(Primary())
                 Button(action: {
-                    withAnimation(.easeInOut) {
-                        navManager.set(.onboardingReady)
-                    }
+                    navManager.push(.onboardingReady)
                 }, label: {
                     Text("Later")
                 })
                 .buttonStyle(Secondary())
             }
-
-        }.background(Palette.greyBackground)
+        }
+        .background(Palette.greyBackground)
     }
 }
 

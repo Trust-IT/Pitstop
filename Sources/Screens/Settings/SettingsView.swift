@@ -25,86 +25,77 @@ struct SettingsView: View {
     )
 
     var body: some View {
-        NavigationView {
-            VStack {
-                Text("") // FIX: Workaround to not overlap  list on navigation title
-                CustomList {
-                    Section(header: Text("Vehicles")) {
-                        ForEach(vehicles, id: \.uuid) { vehicle in
-                            let destination = EditVehicleView(vehicle2: vehicle)
-                            NavigationLink(destination: destination) {
-                                CategoryRow(input: .init(
-                                    title: vehicle.name,
-                                    icon: .carSettings,
-                                    color: Palette.colorViolet
-                                ))
-                            }
-                        }
-                        .onDelete(perform: deleteVehicle)
-
-                        Button(action: {
-                            onboardingVM.addNewVehicle = true
-                            onboardingVM.destination = .page2
-                        }, label: {
+        VStack {
+            CustomList {
+                Section(header: Text("Vehicles")) {
+                    ForEach(vehicles, id: \.uuid) { vehicle in
+                        let destination = EditVehicleView(vehicle2: vehicle)
+                        NavigationLink(destination: destination) {
                             CategoryRow(input: .init(
-                                title: "Add vehicle",
-                                icon: .plus,
-                                color: Palette.greyBackground
-                            ))
-                        })
-                        .buttonStyle(.plain)
-                    }
-                    .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
-
-                    Section(header: Text("Other")) {
-                        Button(action: {
-                            themePickerAlert.present()
-                        }, label: {
-                            CategoryRow(input: .init(
-                                title: "Theme picker",
-                                icon: .service,
-                                color: Palette.greyBackground
-                            ))
-                        })
-                        .buttonStyle(.plain)
-
-                        NavigationLink(destination: AboutView()) {
-                            CategoryRow(input: .init(
-                                title: "About us",
-                                icon: .paperclip,
-                                color: Palette.greyBackground
-                            ))
-                        }
-
-                        NavigationLink(destination: ToSView()) {
-                            CategoryRow(input: .init(
-                                title: "Terms of service",
-                                icon: .paperclip,
-                                color: Palette.greyBackground
+                                title: vehicle.name,
+                                icon: .carSettings,
+                                color: Palette.colorViolet
                             ))
                         }
                     }
-                    .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
+                    .onDelete(perform: deleteVehicle)
+
+                    Button(action: {
+                        navManager.push(.onboardingRegistration)
+                        appState.setAddingNewVehicle(true)
+                    }, label: {
+                        CategoryRow(input: .init(
+                            title: "Add vehicle",
+                            icon: .plus,
+                            color: Palette.greyBackground
+                        ))
+                    })
+                    .buttonStyle(.plain)
                 }
-                .listStyle(.insetGrouped)
-                Spacer()
+                .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
+
+                Section(header: Text("Other")) {
+                    Button(action: {
+                        themePickerAlert.present()
+                    }, label: {
+                        CategoryRow(input: .init(
+                            title: "Theme picker",
+                            icon: .service,
+                            color: Palette.greyBackground
+                        ))
+                    })
+                    .buttonStyle(.plain)
+
+                    NavigationLink(destination: AboutView()) {
+                        CategoryRow(input: .init(
+                            title: "About us",
+                            icon: .paperclip,
+                            color: Palette.greyBackground
+                        ))
+                    }
+
+                    NavigationLink(destination: ToSView()) {
+                        CategoryRow(input: .init(
+                            title: "Terms of service",
+                            icon: .paperclip,
+                            color: Palette.greyBackground
+                        ))
+                    }
+                }
+                .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
             }
-            .fullScreenCover(isPresented: $onboardingVM.addNewVehicle) {
-                OnboardingView(onboardingVM: onboardingVM,
-                               shouldShowOnboarding: $onboardingVM.addNewVehicle)
-            }
-            .background(Palette.greyBackground)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(
-                leading:
-                Text("Settings")
-                    .foregroundColor(Palette.black)
-                    .font(Typography.headerXL)
-            )
-            .alert(config: $themePickerAlert) {
-                ThemePickerView(alert: $themePickerAlert)
-                    .environmentObject(utilityVM)
-            }
+            .listStyle(.insetGrouped)
+            Spacer()
+        }
+        .background(Palette.greyBackground)
+        .navigationBarItems(
+            leading:
+            Text("Settings")
+                .foregroundColor(Palette.black)
+                .font(Typography.headerXL)
+        )
+        .alert(config: $themePickerAlert) {
+            ThemePickerView(alert: $themePickerAlert)
                 .environment(appState)
         }
     }

@@ -34,13 +34,16 @@ struct EntryPointView: View {
                     }
                     .tag(2)
             }
-            .tint(Palette.black)
             .onAppear {
                 UITabBar.appearance().unselectedItemTintColor = Palette.greyEBEBEB.uiColor
                 UITabBarItem.appearance().badgeColor = Palette.black.uiColor
                 UITabBar.appearance().backgroundColor = Palette.white.uiColor
             }
+            .navigationDestination(for: Route.self) {
+                $0
+            }
         }
+        .tint(Palette.black)
     }
 }
 

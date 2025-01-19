@@ -9,14 +9,12 @@ import SwiftUI
 
 struct EntryPointView: View {
     @EnvironmentObject private var navManager: NavigationManager
-
     @State var selectedIndex: Int = 0
-    @StateObject var onboardingVM = OnboardingViewModel()
 
     var body: some View {
         NavigationStack(path: $navManager.routes) {
             TabView(selection: $selectedIndex) {
-                VehicleView(onboardingVM: onboardingVM)
+                VehicleView()
                     .tabItem {
                         Label("Vehicle", image: .carIcon)
                     }
@@ -28,7 +26,7 @@ struct EntryPointView: View {
                     }
                     .tag(1)
 
-                SettingsView(onboardingVM: onboardingVM)
+                SettingsView()
                     .tabItem {
                         Label("Settings", image: .settingsIcon)
                     }

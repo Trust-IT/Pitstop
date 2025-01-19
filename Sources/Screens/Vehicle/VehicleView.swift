@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct VehicleView: View {
-    @StateObject var onboardingVM: OnboardingViewModel
-
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject var vehicleManager: VehicleManager
     @EnvironmentObject private var navManager: NavigationManager
@@ -67,8 +65,6 @@ struct VehicleView: View {
 
 struct VehicleView_Previews: PreviewProvider {
     static var previews: some View {
-        VehicleView(
-            onboardingVM: OnboardingViewModel()
-        )
+        VehicleView()
     }
 }

@@ -45,7 +45,6 @@ struct EditNumberView: View {
                         RoundedRectangle(cornerRadius: 36)
                             .stroke(focusedField == .numberTitle ? Palette.black : Palette.greyInput, lineWidth: 1)
                     )
-                    .modifier(ClearButton(text: $title))
                     .onSubmit {
                         focusedField = .number
                     }
@@ -63,7 +62,6 @@ struct EditNumberView: View {
                         RoundedRectangle(cornerRadius: 36)
                             .stroke(focusedField == .number ? Palette.black : Palette.greyInput, lineWidth: 1)
                     )
-                    .modifier(ClearButton(text: $telephone))
                     .onSubmit {
                         focusedField = nil
                     }

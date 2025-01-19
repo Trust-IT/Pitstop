@@ -43,3 +43,11 @@ struct OnbWelcomeView: View {
     OnbWelcomeView()
         .environmentObject(NavigationManager())
 }
+
+enum VehicleInfoFocusField: Hashable {
+    case vehicleName
+    case brand
+    case model
+    case fuelType
+    case plate
+}

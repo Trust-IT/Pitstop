@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OnbRegistrationView: View {
     @EnvironmentObject private var navManager: NavigationManager
-    @FocusState var focusedField: FocusFieldOnboarding?
+    @FocusState var focusedField: VehicleInfoFocusField?
 
     @State private var showMainFuelSelection: AlertConfig = .init(
         enableBackgroundBlur: true,

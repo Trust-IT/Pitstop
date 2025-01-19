@@ -13,7 +13,6 @@ struct SettingsView: View {
     @Environment(AppState.self) var appState: AppState
     @EnvironmentObject var vehicleManager: VehicleManager
     @Environment(\.modelContext) private var modelContext
-    @StateObject var onboardingVM: OnboardingViewModel
 
     @Query
     var vehicles: [Vehicle]
@@ -117,7 +116,7 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(onboardingVM: OnboardingViewModel())
+        SettingsView()
     }
 }
 

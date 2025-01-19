@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EditVehicleView: View {
-    @FocusState var focusedField: FocusFieldOnboarding?
+    @FocusState var focusedField: VehicleInfoFocusField?
     @Environment(\.modelContext) private var modelContext
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
@@ -65,7 +65,6 @@ struct EditVehicleView: View {
                         RoundedRectangle(cornerRadius: 36)
                             .stroke(focusedField == .vehicleName ? Palette.black : Palette.greyInput, lineWidth: 1)
                     )
-                    .modifier(ClearButton(text: $name))
                     .onSubmit {
                         focusedField = .brand
                     }
@@ -83,7 +82,6 @@ struct EditVehicleView: View {
                         RoundedRectangle(cornerRadius: 36)
                             .stroke(focusedField == .brand ? Palette.black : Palette.greyInput, lineWidth: 1)
                     )
-                    .modifier(ClearButton(text: $brand))
                     .onSubmit {
                         focusedField = .model
                     }
@@ -101,7 +99,6 @@ struct EditVehicleView: View {
                         RoundedRectangle(cornerRadius: 36)
                             .stroke(focusedField == .model ? Palette.black : Palette.greyInput, lineWidth: 1)
                     )
-                    .modifier(ClearButton(text: $model))
                     .onSubmit {
                         focusedField = .plate
                     }
@@ -119,7 +116,6 @@ struct EditVehicleView: View {
                         RoundedRectangle(cornerRadius: 36)
                             .stroke(focusedField == .plate ? Palette.black : Palette.greyInput, lineWidth: 1)
                     )
-                    .modifier(ClearButton(text: $plate))
                     .onSubmit {
                         focusedField = nil
                     }

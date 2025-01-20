@@ -19,12 +19,16 @@ struct GifView: UIViewRepresentable {
 
     func makeUIView(context _: Context) -> UIImageView {
         let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
         imageView.frame = CGRect(origin: .zero, size: size)
         loadGif(into: imageView)
         return imageView
     }
 
     func updateUIView(_ uiView: UIImageView, context _: Context) {
+        uiView.contentMode = .scaleAspectFit
+        uiView.clipsToBounds = true
         uiView.frame = CGRect(origin: .zero, size: size)
         loadGif(into: uiView)
     }
@@ -37,10 +41,12 @@ struct GifView: UIViewRepresentable {
                     var images = [UIImage]()
                     var duration: TimeInterval = 0
 
-                    // Extract all the frames from the GIF
                     for index in 0 ..< count {
                         if let cgImage = CGImageSourceCreateImageAtIndex(source, index, nil) {
-                            images.append(UIImage(cgImage: cgImage))
+                            var frameImage = UIImage(cgImage: cgImage)
+                            frameImage = resizeImage(image: frameImage, targetSize: size) // Resize each frame
+                            images.append(frameImage)
+
                             if let properties = CGImageSourceCopyPropertiesAtIndex(source, index, nil) as? [String: Any],
                                let gifProperties = properties[kCGImagePropertyGIFDictionary as String] as? [String: Any],
                                let frameDuration = gifProperties[kCGImagePropertyGIFUnclampedDelayTime as String] as? TimeInterval {
@@ -57,6 +63,13 @@ struct GifView: UIViewRepresentable {
                     }
                 }
             }
+        }
+    }
+
+    private func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: targetSize)
+        return renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: targetSize))
         }
     }
 }

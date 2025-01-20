@@ -57,7 +57,7 @@ struct EditVehicleView: View {
     }
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 16) {
             ScrollView {
                 VStack(spacing: 20) {
                     TextField(String(localized: "Vehicle name"), text: $name)
@@ -129,13 +129,20 @@ struct EditVehicleView: View {
                 .padding(.horizontal, 16)
             }
             Spacer()
+            if vehicleManager.currentVehicle != vehicle {
+                Button("Set as current vehicle") {
+                    vehicleManager.setCurrentVehicle(vehicle)
+                    navManager.pop()
+                }
+                .buttonStyle(Primary())
+            }
             if vehicles.count > 1 {
                 Button(action: {
                     showDeleteAlert.toggle()
                 }, label: {
                     DeleteButton(title: "Delete vehicle")
                 })
-                .buttonStyle(Primary())
+                .buttonStyle(Secondary())
             }
         }
         .padding(.top, 24)

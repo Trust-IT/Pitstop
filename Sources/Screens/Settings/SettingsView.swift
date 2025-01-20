@@ -44,7 +44,7 @@ struct SettingsView: View {
                                 }
                             })
                         }
-                        .onDelete(perform: deleteVehicle)
+                        .onDelete(perform: vehicles.count > 1 ? deleteVehicle : nil)
 
                         Button(action: {
                             navManager.push(.onboardingRegistration)

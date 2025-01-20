@@ -13,23 +13,24 @@ struct EditVehicleView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     @State private var defaultFuelPicker: AlertConfig = .init(
-        enableBackgroundBlur: false,
+        enableBackgroundBlur: true,
         disableOutsideTap: false,
         transitionType: .slide
     )
     @State private var secondaryFuelPicker: AlertConfig = .init(
-        enableBackgroundBlur: false,
+        enableBackgroundBlur: true,
         disableOutsideTap: false,
         transitionType: .slide
     )
-    @State private var isTapped = false
-    @State private var isTapped2 = false
-
     var isDisabled: Bool {
-        name.isEmpty || brand.isEmpty || model.isEmpty || mainFuelType == .none || mainFuelType == secondaryFuelType
+        name.isEmpty ||
+        brand.isEmpty ||
+        model.isEmpty ||
+        mainFuelType == .none ||
+        mainFuelType == secondaryFuelType
     }
 
-    var vehicle2: Vehicle
+    @Bindable var vehicle: Vehicle
 
     @State private var name: String
     @State private var brand: String
@@ -37,205 +38,135 @@ struct EditVehicleView: View {
     @State private var plate: String
     @State private var mainFuelType: FuelType
     @State private var secondaryFuelType: FuelType
+    
 
-    init(vehicle2: Vehicle) {
-        self.vehicle2 = vehicle2
-        _name = State(initialValue: vehicle2.name)
-        _brand = State(initialValue: vehicle2.brand)
-        _model = State(initialValue: vehicle2.model)
-        _plate = State(initialValue: vehicle2.plate ?? "")
-        _mainFuelType = State(initialValue: vehicle2.mainFuelType)
-        _secondaryFuelType = State(initialValue: vehicle2.secondaryFuelType ?? .none)
+    init(vehicle: Vehicle) {
+        self.vehicle = vehicle
+        _name = State(initialValue: vehicle.name)
+        _brand = State(initialValue: vehicle.brand)
+        _model = State(initialValue: vehicle.model)
+        _plate = State(initialValue: vehicle.plate ?? "")
+        _mainFuelType = State(initialValue: vehicle.mainFuelType)
+        _secondaryFuelType = State(initialValue: vehicle.secondaryFuelType ?? .none)
     }
 
     var body: some View {
-        ZStack {
-            Palette.greyBackground.ignoresSafeArea()
-            VStack(spacing: 20) {
+        VStack(spacing: 20) {
+            ScrollView {
                 TextField(String(localized: "Vehicle name"), text: $name)
-                    .disableAutocorrection(true)
-                    .focused($focusedField, equals: .vehicleName)
-                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
-                    .frame(width: UIScreen.main.bounds.size.width * 0.90, height: UIScreen.main.bounds.size.height * 0.055)
-                    .background(focusedField == .vehicleName ? Palette.greyLight : Palette.greyBackground)
-                    .font(Typography.TextM)
-                    .foregroundColor(Palette.black)
-                    .cornerRadius(36)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 36)
-                            .stroke(focusedField == .vehicleName ? Palette.black : Palette.greyInput, lineWidth: 1)
-                    )
+                    .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .vehicleName))
                     .onSubmit {
                         focusedField = .brand
                     }
-
+                
                 TextField(String(localized: "Brand"), text: $brand)
-                    .disableAutocorrection(true)
-                    .focused($focusedField, equals: .brand)
-                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
-                    .frame(width: UIScreen.main.bounds.size.width * 0.90, height: UIScreen.main.bounds.size.height * 0.055)
-                    .background(focusedField == .brand ? Palette.greyLight : Palette.greyBackground)
-                    .font(Typography.TextM)
-                    .foregroundColor(Palette.black)
-                    .cornerRadius(36)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 36)
-                            .stroke(focusedField == .brand ? Palette.black : Palette.greyInput, lineWidth: 1)
-                    )
+                    .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .brand))
                     .onSubmit {
                         focusedField = .model
                     }
-
+                
                 TextField(String(localized: "Model"), text: $model)
-                    .disableAutocorrection(true)
-                    .focused($focusedField, equals: .model)
-                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
-                    .frame(width: UIScreen.main.bounds.size.width * 0.90, height: UIScreen.main.bounds.size.height * 0.055)
-                    .background(focusedField == .model ? Palette.greyLight : Palette.greyBackground)
-                    .font(Typography.TextM)
-                    .foregroundColor(Palette.black)
-                    .cornerRadius(36)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 36)
-                            .stroke(focusedField == .model ? Palette.black : Palette.greyInput, lineWidth: 1)
-                    )
+                    .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .model))
                     .onSubmit {
                         focusedField = .plate
                     }
-
+                
                 TextField(String(localized: "Plate"), text: $plate)
-                    .disableAutocorrection(true)
-                    .focused($focusedField, equals: .plate)
-                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
-                    .frame(width: UIScreen.main.bounds.size.width * 0.90, height: UIScreen.main.bounds.size.height * 0.055)
-                    .background(focusedField == .plate ? Palette.greyLight : Palette.greyBackground)
-                    .font(Typography.TextM)
-                    .foregroundColor(Palette.black)
-                    .cornerRadius(36)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 36)
-                            .stroke(focusedField == .plate ? Palette.black : Palette.greyInput, lineWidth: 1)
-                    )
+                    .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .plate))
                     .onSubmit {
                         focusedField = nil
                     }
-
-                // MARK: DEFAULT FUEL TYPE
-
-                Button(action: {
-                    defaultFuelPicker.present()
-                    isTapped.toggle()
-                }, label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 36)
-                            .stroke(isTapped ? Palette.black : Palette.greyInput, lineWidth: 1)
-                            .background(isTapped ? Palette.greyLight : Palette.greyBackground)
-                            .frame(width: UIScreen.main.bounds.size.width * 0.90, height: UIScreen.main.bounds.size.height * 0.055)
-                        HStack {
-                            Text(mainFuelType.rawValue)
-                                .font(Typography.TextM)
-                            Spacer()
-                        }
-                        .padding(.leading, 40)
+                
+                TextField("Main Fuel Type", text: fuelTypeBinding(for: $mainFuelType))
+                    .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .fuelType))
+                    .disabled(true)
+                    .onTapGesture {
+                        focusedField = nil
+                        defaultFuelPicker.present()
                     }
-                    .accentColor(Palette.black)
-                })
-                .alert(config: $defaultFuelPicker) {
-                    ConfirmationDialog(
-                        items: FuelType.allCases,
-                        message: "Select a default fuel type",
-                        onTap: { fuel in
-                            isTapped = false
-                            mainFuelType = fuel
-                            defaultFuelPicker.dismiss()
-                        },
-                        onCancel: {
-                            defaultFuelPicker.dismiss()
-                        }
-                    )
-                }
-
-                // MARK: SECONDARY FUEL TYPE
-
-                Button(action: {
-                    secondaryFuelPicker.present()
-                    isTapped2.toggle()
-                }, label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 36)
-                            .stroke(isTapped2 ? Palette.black : Palette.greyInput, lineWidth: 1)
-                            .background(isTapped2 ? Palette.greyLight : Palette.greyBackground)
-                            .frame(width: UIScreen.main.bounds.size.width * 0.90, height: UIScreen.main.bounds.size.height * 0.055)
-                        HStack {
-                            Text(secondaryFuelType.rawValue)
-                                .font(Typography.TextM)
-                            Spacer()
-                        }
-                        .padding(.leading, 40)
+                    .alert(config: $defaultFuelPicker) {
+                        ConfirmationDialog(
+                            items: FuelType.allCases,
+                            message: "Select a default fuel type",
+                            onTap: { fuel in
+                                mainFuelType = fuel
+                                defaultFuelPicker.dismiss()
+                            },
+                            onCancel: {
+                                defaultFuelPicker.dismiss()
+                            }
+                        )
                     }
-                    .accentColor(Palette.black)
-                })
-                .alert(config: $secondaryFuelPicker) {
-                    ConfirmationDialog(
-                        items: FuelType.allCases,
-                        message: "Select a second fuel type",
-                        onTap: { fuel in
-                            isTapped2 = false
-                            secondaryFuelType = fuel
-                            secondaryFuelPicker.dismiss()
-                        },
-                        onCancel: {
-                            secondaryFuelPicker.dismiss()
-                        }
-                    )
-                }
-                Spacer()
+                
+                TextField("Secondary Fuel Type", text: fuelTypeBinding(for: $secondaryFuelType))
+                    .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .fuelType))
+                    .disabled(true)
+                    .onTapGesture {
+                        focusedField = nil
+                        secondaryFuelPicker.present()
+                    }
+                    .alert(config: $secondaryFuelPicker) {
+                        ConfirmationDialog(
+                            items: FuelType.allCases,
+                            message: "Select a second fuel type",
+                            onTap: { fuel in
+                                secondaryFuelType = fuel
+                                secondaryFuelPicker.dismiss()
+                            },
+                            onCancel: {
+                                secondaryFuelPicker.dismiss()
+                            }
+                        )
+                    }
             }
-            .padding(.vertical, 30)
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(
-                leading:
+        }
+        .padding(.horizontal, 16)
+        .padding(.top, 24)
+        .background(Palette.greyBackground)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(name)
+                    .font(Typography.headerM)
+                    .foregroundColor(Palette.black)
+            }
+            ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }, label: {
-                    Image("arrowLeft")
-                })
-                .accentColor(Palette.greyHard),
-                trailing:
-                Button(action: {
-                    updateVehicle(vehicle2)
+                    updateVehicle(vehicle)
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text(String(localized: "Save"))
                         .font(Typography.headerM)
+                        .foregroundStyle(Palette.accent)
                 })
                 .disabled(isDisabled)
                 .opacity(isDisabled ? 0.6 : 1)
-            )
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text(name)
-                        .font(Typography.headerM)
-                        .foregroundColor(Palette.black)
-                }
             }
         }
     }
+}
 
-    private func updateVehicle(_ vehicle: Vehicle) {
+private extension EditVehicleView {
+    func updateVehicle(_ vehicle: Vehicle) {
         vehicle.name = name
         vehicle.brand = brand
         vehicle.model = model
         vehicle.plate = plate
         vehicle.mainFuelType = mainFuelType
         vehicle.secondaryFuelType = secondaryFuelType
-
-        do {
-            try modelContext.save()
-            print("Vehicle saved successfully!")
-        } catch {
-            print("Failed to save vehicle: \(error)")
-        }
     }
+
+    func fuelTypeBinding(for fuelType: Binding<FuelType>) -> Binding<String> {
+        Binding(
+            get: { fuelType.wrappedValue.rawValue },
+            set: { newValue in
+                if let newFuelType = FuelType(rawValue: newValue) {
+                    fuelType.wrappedValue = newFuelType
+                }
+            }
+        )
+    }
+}
+
+#Preview {
+    EditVehicleView(vehicle: Vehicle.mock())
 }

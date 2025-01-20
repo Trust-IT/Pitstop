@@ -77,7 +77,7 @@ extension Route: View {
         case .aboutUs:
             AboutView()
         case let .editVehicle(input: vehicleData):
-            EditVehicleView(vehicle2: vehicleData)
+            EditVehicleView(vehicle: vehicleData)
         default:
             EmptyView()
         }

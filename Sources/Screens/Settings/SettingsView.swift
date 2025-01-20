@@ -24,81 +24,111 @@ struct SettingsView: View {
     )
 
     var body: some View {
-        VStack {
-            CustomList {
-                Section(header: Text("Vehicles")) {
-                    ForEach(vehicles, id: \.uuid) { vehicle in
-                        let destination = EditVehicleView(vehicle2: vehicle)
-                        NavigationLink(destination: destination) {
-                            CategoryRow(input: .init(
-                                title: vehicle.name,
-                                icon: .carSettings,
-                                color: Palette.colorViolet
-                            ))
+        NavigationStack(path: $navManager.routes) {
+            VStack {
+                Text("")
+                CustomList {
+                    Section(header: Text("Vehicles")) {
+                        ForEach(vehicles, id: \.uuid) { vehicle in
+                            Button(action: {
+                                navManager.push(.editVehicle(input: vehicle))
+                            }, label: {
+                                HStack {
+                                    CategoryRow(input: .init(
+                                        title: vehicle.name,
+                                        icon: .carSettings,
+                                        color: Palette.colorViolet
+                                    ))
+                                    Spacer()
+                                    Image(.arrowRight)
+                                }
+                            })
                         }
-                    }
-                    .onDelete(perform: deleteVehicle)
+                        .onDelete(perform: deleteVehicle)
 
-                    Button(action: {
-                        navManager.push(.onboardingRegistration)
-                        appState.setAddingNewVehicle(true)
-                    }, label: {
-                        CategoryRow(input: .init(
-                            title: "Add vehicle",
-                            icon: .plus,
-                            color: Palette.greyBackground
-                        ))
-                    })
-                    .buttonStyle(.plain)
+                        Button(action: {
+                            navManager.push(.onboardingRegistration)
+                            appState.setAddingNewVehicle(true)
+                        }, label: {
+                            HStack {
+                                CategoryRow(input: .init(
+                                    title: "Add vehicle",
+                                    icon: .plus,
+                                    color: Palette.greyBackground
+                                ))
+                                Spacer()
+                                Image(.arrowRight)
+                            }
+                        })
+                    }
+                    .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
+
+                    Section(header: Text("Other")) {
+                        Button(action: {
+                            themePickerAlert.present()
+                        }, label: {
+                            HStack {
+                                CategoryRow(input: .init(
+                                    title: "Theme picker",
+                                    icon: .service,
+                                    color: Palette.greyBackground
+                                ))
+                                Spacer()
+                                Image(.arrowRight)
+                            }
+                        })
+                        Button(action: {
+                            navManager.push(.aboutUs)
+                        }, label: {
+                            HStack {
+                                CategoryRow(input: .init(
+                                    title: "About us",
+                                    icon: .paperclip,
+                                    color: Palette.greyBackground
+                                ))
+                                Spacer()
+                                Image(.arrowRight)
+                            }
+                        })
+                        Button(action: {
+                            navManager.push(.tos)
+                        }, label: {
+                            HStack {
+                                CategoryRow(input: .init(
+                                    title: "Terms of service",
+                                    icon: .paperclip,
+                                    color: Palette.greyBackground
+                                ))
+                                Spacer()
+                                Image(.arrowRight)
+                            }
+                        })
+                    }
+                    .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
                 }
-                .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
-
-                Section(header: Text("Other")) {
-                    Button(action: {
-                        themePickerAlert.present()
-                    }, label: {
-                        CategoryRow(input: .init(
-                            title: "Theme picker",
-                            icon: .service,
-                            color: Palette.greyBackground
-                        ))
-                    })
-                    .buttonStyle(.plain)
-
-                    NavigationLink(destination: AboutView()) {
-                        CategoryRow(input: .init(
-                            title: "About us",
-                            icon: .paperclip,
-                            color: Palette.greyBackground
-                        ))
-                    }
-
-                    NavigationLink(destination: ToSView()) {
-                        CategoryRow(input: .init(
-                            title: "Terms of service",
-                            icon: .paperclip,
-                            color: Palette.greyBackground
-                        ))
-                    }
-                }
-                .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
+                .listStyle(.insetGrouped)
+                Spacer()
             }
-            .listStyle(.insetGrouped)
-            Spacer()
-        }
-        .background(Palette.greyBackground)
-        .navigationBarItems(
-            leading:
-            Text("Settings")
-                .foregroundColor(Palette.black)
-                .font(Typography.headerXL)
-        )
-        .alert(config: $themePickerAlert) {
-            ThemePickerView(alert: $themePickerAlert)
-                .environment(appState)
+            .navigationBarItems(
+                leading:
+                Text("Settings")
+                    .foregroundColor(Palette.black)
+                    .font(Typography.headerXL)
+            )
+            .background(Palette.greyBackground)
+            .alert(config: $themePickerAlert) {
+                ThemePickerView(alert: $themePickerAlert)
+                    .environment(appState)
+            }
+            .navigationDestination(for: Route.self) { route in
+                route
+                    .toolbar(.hidden, for: .tabBar)
+            }
         }
     }
+}
 
+private extension SettingsView {
     func deleteVehicle(at offsets: IndexSet) {
         for index in offsets {
             let vehicleToDelete = vehicles[index]
@@ -114,63 +144,9 @@ struct SettingsView: View {
     }
 }
 
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView()
-    }
-}
-
-struct PremiumBanner: View {
-    var body: some View {
-        ZStack {
-            Rectangle()
-                .foregroundColor(.accentColor)
-                .cornerRadius(15)
-                .frame(width: UIScreen.main.bounds.width * 0.915, height: UIScreen.main.bounds.height * 0.235 - 50)
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("Get more features")
-                        .font(Typography.headerL)
-                        .foregroundColor(Palette.white)
-                    Text("Add more features to better \nmanage your vehicles")
-                        .font(Typography.TextM)
-                        .foregroundColor(Palette.white)
-                        .padding(.top, -8)
-                        .multilineTextAlignment(.leading)
-                    ZStack {
-                        Rectangle()
-                            .cornerRadius(8)
-                            .foregroundColor(Palette.white)
-                            .frame(width: 100, height: 32)
-                        Text("Coming soon")
-                            .foregroundColor(Palette.black)
-                            .font(Typography.ControlS)
-                    }.padding(.top, 10)
-
-                }.padding()
-                Image("premium")
-            }
-            .padding(8)
-        }
-    }
-}
-
-struct ToSView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-
-    var body: some View {
-        HTMLView(htmlFileName: "TermsOfService")
-            .padding()
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(
-                leading:
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }, label: {
-                    Image("arrowLeft")
-                })
-                .accentColor(Palette.greyHard)
-            )
-    }
+#Preview {
+    SettingsView()
+        .environment(AppState())
+        .environmentObject(NavigationManager())
+        .environmentObject(VehicleManager())
 }

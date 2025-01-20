@@ -17,6 +17,11 @@ enum Route {
 
     // Vehicle
     case addNewReport
+
+    // Settings
+    case tos
+    case aboutUs
+    case editVehicle(input: Vehicle)
 }
 
 extension Route: Hashable {
@@ -40,6 +45,12 @@ extension Route: Equatable {
             true
         case (.addNewReport, .addNewReport):
             true
+        case (.tos, .tos):
+            true
+        case (.aboutUs, .aboutUs):
+            true
+        case let (.editVehicle(leftData), .editVehicle(rightData)):
+            leftData == rightData
         default:
             false
         }
@@ -61,6 +72,12 @@ extension Route: View {
             OnbReadyView()
         case .addNewReport:
             AddReportView()
+        case .tos:
+            HTMLView(htmlFileName: "TermsOfService")
+        case .aboutUs:
+            AboutView()
+        case let .editVehicle(input: vehicleData):
+            EditVehicleView(vehicle2: vehicleData)
         default:
             EmptyView()
         }

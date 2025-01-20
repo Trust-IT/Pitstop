@@ -9,45 +9,44 @@ import SwiftUI
 
 struct EntryPointView: View {
     @EnvironmentObject private var navManager: NavigationManager
-    @State var selectedIndex: Int = 0
+    @State var selectedTab: TabBarItem = .vehicle
 
     var body: some View {
-        NavigationStack(path: $navManager.routes) {
-            TabView(selection: $selectedIndex) {
-                VehicleView()
-                    .tabItem {
-                        Label("Vehicle", image: .carIcon)
-                    }
-                    .tag(0)
+        TabView(selection: $selectedTab) {
+            VehicleView()
+                .tabItem {
+                    Label("Vehicle", image: .carIcon)
+                }
+                .tag(TabBarItem.vehicle)
 
-                AnalyticsView()
-                    .tabItem {
-                        Label("Analytics", image: .chartIcon)
-                    }
-                    .tag(1)
+            AnalyticsView()
+                .tabItem {
+                    Label("Analytics", image: .chartIcon)
+                }
+                .tag(TabBarItem.analytics)
 
-                SettingsView()
-                    .tabItem {
-                        Label("Settings", image: .settingsIcon)
-                    }
-                    .tag(2)
-            }
-            .onAppear {
-                UITabBar.appearance().unselectedItemTintColor = Palette.greyEBEBEB.uiColor
-                UITabBarItem.appearance().badgeColor = Palette.black.uiColor
-                UITabBar.appearance().backgroundColor = Palette.white.uiColor
-            }
-            .navigationDestination(for: Route.self) {
-                $0
-            }
+            SettingsView()
+                .tabItem {
+                    Label("Settings", image: .settingsIcon)
+                }
+                .tag(TabBarItem.settings)
+        }
+        .onAppear {
+            UITabBar.appearance().unselectedItemTintColor = Palette.greyEBEBEB.uiColor
+            UITabBarItem.appearance().badgeColor = Palette.black.uiColor
+            UITabBar.appearance().backgroundColor = Palette.white.uiColor
         }
         .tint(Palette.black)
     }
 }
 
-struct CustomTabBar_Previews: PreviewProvider {
-    static var previews: some View {
-        EntryPointView()
-            .environmentObject(NavigationManager())
-    }
+enum TabBarItem: String {
+    case vehicle
+    case analytics
+    case settings
+}
+
+#Preview {
+    EntryPointView()
+        .environmentObject(NavigationManager())
 }

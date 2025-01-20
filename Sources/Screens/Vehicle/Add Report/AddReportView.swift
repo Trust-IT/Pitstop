@@ -99,14 +99,18 @@ struct AddReportView: View {
                     action: {
                         switch currentPickerTab {
                         case .reminder:
-                            NotificationManager.shared.requestAuthNotifications()
+                            Task {
+                                await NotificationManager.shared.requestAuthNotifications()
+                            }
                             do {
                                 try reminder.saveToModelContext(context: modelContext)
                             } catch {
                                 // TODO: Implement error handling
                                 print("error \(error)")
                             }
-                            NotificationManager.shared.createNotification(for: reminder)
+                            Task {
+                                await NotificationManager.shared.createNotification(for: reminder)
+                            }
                             presentationMode.wrappedValue.dismiss()
                         case .fuel:
                             if fuelExpense.isValidOdometer(for: vehicleManager.currentVehicle) {

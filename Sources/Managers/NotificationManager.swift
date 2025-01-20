@@ -5,39 +5,37 @@
 //  Created by Ivan Voloshchuk on 03/06/22.
 //
 
-import Foundation
-import NotificationCenter
+@preconcurrency import UserNotifications
 
-final class NotificationManager {
+actor NotificationManager {
     static let shared = NotificationManager()
 
     private init() {}
 
-    func requestAuthNotifications() {
+    @MainActor
+    func requestAuthNotifications() async {
         let center = UNUserNotificationCenter.current()
 
-        center.getNotificationSettings { settings in
-            switch settings.authorizationStatus {
-            case .notDetermined:
-                center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                    if success {
-                        print("Notification authorization granted.")
-                    } else if let error {
-                        print("Notification authorization error: \(error.localizedDescription)")
-                    }
-                }
-            case .denied:
-                // TODO: Implement alert to enable notifications
-                print("Notifications are denied.")
-            case .authorized, .provisional, .ephemeral:
-                print("Notifications are already enabled.")
-            @unknown default:
-                print("Unknown notification authorization status.")
+        let settings = await center.notificationSettings()
+        switch settings.authorizationStatus {
+        case .notDetermined:
+            do {
+                try await center.requestAuthorization(options: [.alert, .badge, .sound])
+                print("Notification authorization granted.")
+            } catch {
+                print("Notification authorization error: \(error.localizedDescription)")
             }
+        case .denied:
+            // TODO: Implement alert to enable notifications
+            print("Notifications are denied.")
+        case .authorized, .provisional, .ephemeral:
+            print("Notifications are already enabled.")
+        @unknown default:
+            print("Unknown notification authorization status.")
         }
     }
 
-    func createNotification(for reminder: Reminder) {
+    func createNotification(for reminder: Reminder) async {
         let isItalian = Locale.current.language.languageCode?.identifier == "it"
         let category = reminder.category.rawValue.lowercased()
 
@@ -57,19 +55,21 @@ final class NotificationManager {
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDateComponents, repeats: false)
         let request = UNNotificationRequest(identifier: reminder.uuid.uuidString, content: content, trigger: trigger)
 
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error {
-                print("Error adding notification request: \(error.localizedDescription)")
-            }
+        do {
+            try await UNUserNotificationCenter.current().add(request)
+            print("Notification added successfully for reminder: \(reminder.title)")
+        } catch {
+            print("Error adding notification request: \(error.localizedDescription)")
         }
     }
 
-    func removeNotification(for reminder: Reminder) {
-        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
-            let identifiersToRemove = requests.filter { $0.identifier == reminder.uuid.uuidString }.map(\.identifier)
+    func removeNotification(for reminder: Reminder) async {
+        let center = UNUserNotificationCenter.current()
 
-            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiersToRemove)
-            print("Notifications unscheduled: \(identifiersToRemove)")
-        }
+        let requests = await center.pendingNotificationRequests()
+        let identifiersToRemove = requests.filter { $0.identifier == reminder.uuid.uuidString }.map(\.identifier)
+
+        center.removePendingNotificationRequests(withIdentifiers: identifiersToRemove)
+        print("Notifications unscheduled: \(identifiersToRemove)")
     }
 }

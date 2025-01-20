@@ -56,8 +56,10 @@ struct EditReminderView: View {
             trailing:
             Button(action: {
                 updateReminder(reminder)
-                NotificationManager.shared.removeNotification(for: reminder)
-                NotificationManager.shared.createNotification(for: reminder)
+                Task {
+                    await NotificationManager.shared.removeNotification(for: reminder)
+                    await NotificationManager.shared.createNotification(for: reminder)
+                }
                 presentationMode.wrappedValue.dismiss()
             }, label: {
                 Text(String(localized: "Save"))
@@ -88,7 +90,9 @@ struct EditReminderView: View {
                 title: Text(String(localized: "Are you sure you want to delete this reminder?")),
                 message: Text(String(localized: "This action cannot be undone")),
                 primaryButton: .destructive(Text(String(localized: "Delete"))) {
-                    NotificationManager.shared.removeNotification(for: reminder)
+                    Task {
+                        await NotificationManager.shared.removeNotification(for: reminder)
+                    }
                     deleteReminder(reminder)
                     presentationMode.wrappedValue.dismiss()
                 },

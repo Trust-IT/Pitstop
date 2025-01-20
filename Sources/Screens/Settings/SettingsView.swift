@@ -37,7 +37,7 @@ struct SettingsView: View {
                                     CategoryRow(input: .init(
                                         title: vehicle.name,
                                         icon: .carSettings,
-                                        color: Palette.colorViolet
+                                        color: Palette.greyBackground
                                     ))
                                     Spacer()
                                     Image(.arrowRight)

@@ -25,7 +25,7 @@ struct FuelExpenseInputView: View {
                     value: $fuelExpense.odometer,
                     unit: "km",
                     placeholder: "0",
-                    keyboardType: .numberPad,
+                    keyboardType: .decimalPad,
                     focusType: FuelInputFocusField.odometer,
                     focusState: fuelInputFocus
                 )

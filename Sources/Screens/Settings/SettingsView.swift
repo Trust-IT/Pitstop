@@ -44,7 +44,6 @@ struct SettingsView: View {
                                 }
                             })
                         }
-                        .onDelete(perform: vehicles.count > 1 ? deleteVehicle : nil)
 
                         Button(action: {
                             navManager.push(.onboardingRegistration)
@@ -109,12 +108,13 @@ struct SettingsView: View {
                 .listStyle(.insetGrouped)
                 Spacer()
             }
-            .navigationBarItems(
-                leading:
-                Text("Settings")
-                    .foregroundColor(Palette.black)
-                    .font(Typography.headerXL)
-            )
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Text("Settings")
+                        .foregroundColor(Palette.black)
+                        .font(Typography.headerXL)
+                }
+            }
             .background(Palette.greyBackground)
             .alert(config: $themePickerAlert) {
                 ThemePickerView(alert: $themePickerAlert)

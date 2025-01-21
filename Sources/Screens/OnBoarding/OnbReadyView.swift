@@ -9,6 +9,7 @@ import SwiftUI
 
 struct OnbReadyView: View {
     @EnvironmentObject private var navManager: NavigationManager
+    @AppStorage("shouldShowOnboarding") var shouldShowOnboarding: Bool = true
 
     var body: some View {
         VStack(alignment: .center) {
@@ -27,6 +28,7 @@ struct OnbReadyView: View {
             Spacer()
             Button(action: {
                 navManager.popAll()
+                shouldShowOnboarding = false
             }, label: {
                 Text("Okayyyy let's go")
             })

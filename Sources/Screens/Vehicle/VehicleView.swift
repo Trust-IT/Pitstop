@@ -12,8 +12,7 @@ struct VehicleView: View {
     @EnvironmentObject var vehicleManager: VehicleManager
     @EnvironmentObject private var navManager: NavigationManager
 
-    @AppStorage("shouldShowOnboardings") var shouldShowOnboarding: Bool = true
-//    @State var shouldShowOnboarding : Bool = true //FOR TESTING
+    @AppStorage("shouldShowOnboarding") var shouldShowOnboarding: Bool = true
     @State private var showAddReport = false
 
     var body: some View {
@@ -26,7 +25,7 @@ struct VehicleView: View {
             VStack {
                 Spacer(minLength: UIScreen.main.bounds.size.height * 0.77)
                 Button(action: {
-                    showAddReport.toggle()
+                    navManager.present(.addNewReport)
                 }, label: {
                     HStack {
                         Spacer()
@@ -45,9 +44,6 @@ struct VehicleView: View {
             }
         )
         .ignoresSafeArea(.keyboard)
-        .sheet(isPresented: $showAddReport) {
-            AddReportView()
-        }
         .fullScreenCover(isPresented: $navManager.isPresented) {
             if let presentedRoute = navManager.presentedRoute {
                 ModalNavigationContainerView(route: presentedRoute)

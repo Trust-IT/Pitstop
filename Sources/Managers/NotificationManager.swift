@@ -35,7 +35,7 @@ actor NotificationManager {
         }
     }
 
-    func createNotification(for reminder: Reminder) async {
+    func createNotification(for reminder: ReminderNotificationData) async {
         let isItalian = Locale.current.language.languageCode?.identifier == "it"
         let category = reminder.category.rawValue.lowercased()
 
@@ -63,7 +63,7 @@ actor NotificationManager {
         }
     }
 
-    func removeNotification(for reminder: Reminder) async {
+    func removeNotification(for reminder: ReminderNotificationData) async {
         let center = UNUserNotificationCenter.current()
 
         let requests = await center.pendingNotificationRequests()
@@ -71,5 +71,28 @@ actor NotificationManager {
 
         center.removePendingNotificationRequests(withIdentifiers: identifiersToRemove)
         print("Notifications unscheduled: \(identifiersToRemove)")
+    }
+}
+
+struct ReminderNotificationData {
+    let uuid: UUID
+    let title: String
+    let date: Date
+    let category: ServiceCategory
+
+    init(from reminder: Reminder) {
+        self.init(
+            uuid: reminder.uuid,
+            title: reminder.title,
+            date: reminder.date,
+            category: reminder.category
+        )
+    }
+
+    init(uuid: UUID, title: String, date: Date, category: ServiceCategory) {
+        self.uuid = uuid
+        self.title = title
+        self.date = date
+        self.category = category
     }
 }

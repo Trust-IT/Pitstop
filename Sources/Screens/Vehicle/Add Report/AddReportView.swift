@@ -109,7 +109,7 @@ struct AddReportView: View {
                                 print("error \(error)")
                             }
                             Task {
-                                await NotificationManager.shared.createNotification(for: reminder)
+                                await NotificationManager.shared.createNotification(for: ReminderNotificationData(from: reminder))
                             }
                             presentationMode.wrappedValue.dismiss()
                         case .fuel:

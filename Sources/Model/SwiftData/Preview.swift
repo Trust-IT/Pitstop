@@ -19,9 +19,8 @@ struct Preview {
         }
     }
 
+    @MainActor
     func addVehicle(_ vehicle: Vehicle) {
-        Task { @MainActor in
-            modelContainer.mainContext.insert(vehicle)
-        }
+        modelContainer.mainContext.insert(vehicle)
     }
 }

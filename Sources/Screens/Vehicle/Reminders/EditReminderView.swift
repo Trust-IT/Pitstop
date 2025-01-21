@@ -56,10 +56,7 @@ struct EditReminderView: View {
             trailing:
             Button(action: {
                 updateReminder(reminder)
-                Task {
-                    await NotificationManager.shared.removeNotification(for: reminder)
-                    await NotificationManager.shared.createNotification(for: reminder)
-                }
+                createNotification(from: reminder)
                 presentationMode.wrappedValue.dismiss()
             }, label: {
                 Text(String(localized: "Save"))
@@ -90,9 +87,7 @@ struct EditReminderView: View {
                 title: Text(String(localized: "Are you sure you want to delete this reminder?")),
                 message: Text(String(localized: "This action cannot be undone")),
                 primaryButton: .destructive(Text(String(localized: "Delete"))) {
-                    Task {
-                        await NotificationManager.shared.removeNotification(for: reminder)
-                    }
+                    removeNotification(for: reminder)
                     deleteReminder(reminder)
                     presentationMode.wrappedValue.dismiss()
                 },
@@ -196,6 +191,21 @@ private extension EditReminderView {
             print("Reminder saved successfully!")
         } catch {
             print("Failed to save reminder: \(error)")
+        }
+    }
+
+    func createNotification(from reminder: Reminder) {
+        let inputData = ReminderNotificationData(from: reminder)
+        Task {
+            await NotificationManager.shared.removeNotification(for: inputData)
+            await NotificationManager.shared.createNotification(for: inputData)
+        }
+    }
+
+    func removeNotification(for reminder: Reminder) {
+        let inputData = ReminderNotificationData(from: reminder)
+        Task {
+            await NotificationManager.shared.removeNotification(for: inputData)
         }
     }
 }

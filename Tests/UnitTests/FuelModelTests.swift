@@ -32,7 +32,7 @@ import Testing
     func populateVehicleWithFuelExpenses() {
         let fuelExpenses = [
             FuelExpense(
-                totalPrice: 50.0,
+                totalPrice: .init(value: 50.0),
                 quantity: 20.0,
                 pricePerUnit: 2.5,
                 odometer: 10000,
@@ -41,7 +41,7 @@ import Testing
                 vehicle: vehicle
             ),
             FuelExpense(
-                totalPrice: 60.0,
+                totalPrice: .init(value: 60.0),
                 quantity: 25.0,
                 pricePerUnit: 2.4,
                 odometer: 15000,
@@ -50,7 +50,7 @@ import Testing
                 vehicle: vehicle
             ),
             FuelExpense(
-                totalPrice: 60.0,
+                totalPrice: .init(value: 60.0),
                 quantity: 25.0,
                 pricePerUnit: 2.4,
                 odometer: 15000,
@@ -59,7 +59,7 @@ import Testing
                 vehicle: vehicle
             ),
             FuelExpense(
-                totalPrice: 70.0,
+                totalPrice: .init(value: 70.0),
                 quantity: 30.0,
                 pricePerUnit: 2.3,
                 odometer: 20000,
@@ -87,7 +87,7 @@ import Testing
     @Test func validOdometerBetweenExpenses() throws {
         // Create a FuelExpense with a valid odometer value between 15000 and 20000
         let validFuelExpense = FuelExpense(
-            totalPrice: 55.0,
+            totalPrice: .init(value: 55.0),
             quantity: 22.0,
             pricePerUnit: 2.5,
             odometer: 17500,
@@ -104,7 +104,7 @@ import Testing
     @Test func odometerLowerThanPreviousExpense() throws {
         // Create a FuelExpense with an invalid odometer value lower than the previous (15000)
         let invalidFuelExpense = FuelExpense(
-            totalPrice: 55.0,
+            totalPrice: .init(value: 55.0),
             quantity: 22.0,
             pricePerUnit: 2.5,
             odometer: 14000,
@@ -120,7 +120,7 @@ import Testing
     @Test func odometerHigherThanNextExpense() throws {
         // Create a FuelExpense with an invalid odometer value higher than the next (20000)
         let invalidFuelExpense = FuelExpense(
-            totalPrice: 55.0,
+            totalPrice: .init(value: 55.0),
             quantity: 22.0,
             pricePerUnit: 2.5,
             odometer: 25000,
@@ -136,7 +136,7 @@ import Testing
     @Test func odometerLowerThanLastExpense() throws {
         // Create a FuelExpense with an invalid odometer value lower than the last one (20000)
         let invalidFuelExpense = FuelExpense(
-            totalPrice: 55.0,
+            totalPrice: .init(value: 55.0),
             quantity: 22.0,
             pricePerUnit: 2.5,
             odometer: 19000,
@@ -152,7 +152,7 @@ import Testing
     @Test func odometerHigherThanFirstExpense() throws {
         // Create a FuelExpense with a higher odometer value than the first expense (10000)
         let validFuelExpense = FuelExpense(
-            totalPrice: 55.0,
+            totalPrice: .init(value: 55.0),
             quantity: 22.0,
             pricePerUnit: 2.5,
             odometer: 11000,
@@ -167,7 +167,7 @@ import Testing
     @Test func odometerAsFirstExpense() throws {
         // Create a FuelExpense with a higher odometer value than the first expense (10000)
         let invalidFuelExpense = FuelExpense(
-            totalPrice: 55.0,
+            totalPrice: .init(value: 55.0),
             quantity: 22.0,
             pricePerUnit: 2.5,
             odometer: 11000,
@@ -181,7 +181,7 @@ import Testing
     // Test case 7: Odometer higher value between two equal odometer value
     @Test func odometerBetweenDuplicateOdometerValues() throws {
         let invalidExpense = FuelExpense(
-            totalPrice: 55.0,
+            totalPrice: .init(value: 55.0),
             quantity: 22.0,
             pricePerUnit: 2.5,
             odometer: 16000,
@@ -197,7 +197,7 @@ import Testing
         deleteFuelExpenses()
 
         let invalidFuelExpense = FuelExpense(
-            totalPrice: 55.0,
+            totalPrice: .init(value: 55.0),
             quantity: 22.0,
             pricePerUnit: 2.5,
             odometer: 19000,

@@ -9,8 +9,6 @@ enum VehicleError: Error {
 // swiftlint:disable type_body_length
 
 class DataViewModel: ObservableObject {
-    let manager = CoreDataManager.instance
-
     // Expense
     @Published var expenseList: [ExpenseViewModel] = []
     @Published var expenses: [Expense] = []
@@ -30,34 +28,32 @@ class DataViewModel: ObservableObject {
     init() {}
 
     func save() {
-        manager.save()
+//        manager.save()
     }
 
     // MARK: - EXPENSE CRUD
 
-    func getExpenseByID(expenseID: NSManagedObjectID) throws -> ExpenseViewModel {
-        guard let expense = manager.getExpenseById(id: expenseID) else {
-            throw VehicleError.VehicleNotFound // DA FIXARE
-        }
+    func getExpenseByID(expenseID _: NSManagedObjectID) throws -> ExpenseViewModel {
+//
 
-        let expenseVM = ExpenseViewModel(expense: expense)
+        let expenseVM = ExpenseViewModel(expense: Expense())
         return expenseVM
     }
 
-    func addExpense(expense: ExpenseState) {
-        let newExpense = Expense(context: manager.context)
-        var newOdometer: Float = 0.0
-        newExpense.note = expense.note
-        newExpense.price = expense.price
-        newExpense.odometer = expense.odometer
-        newExpense.category = expense.category ?? 0
-        newExpense.date = expense.date
-        newExpense.fuelType = expense.fuelType ?? 0
-        newExpense.liters = expense.liters ?? 0.0
-        newExpense.priceLiter = expense.priceLiter ?? 1.0
-        print(" Expense : \(newExpense)")
-        expenseList.append(ExpenseViewModel(expense: newExpense))
-        save()
+    func addExpense(expense _: ExpenseState) {
+//        let newExpense = Expense(context: manager.context)
+//        var newOdometer: Float = 0.0
+//        newExpense.note = expense.note
+//        newExpense.price = expense.price
+//        newExpense.odometer = expense.odometer
+//        newExpense.category = expense.category ?? 0
+//        newExpense.date = expense.date
+//        newExpense.fuelType = expense.fuelType ?? 0
+//        newExpense.liters = expense.liters ?? 0.0
+//        newExpense.priceLiter = expense.priceLiter ?? 1.0
+//        print(" Expense : \(newExpense)")
+//        expenseList.append(ExpenseViewModel(expense: newExpense))
+//        save()
     }
 
     // MARK: EXPENSE UPDATE
@@ -67,25 +63,25 @@ class DataViewModel: ObservableObject {
             return print("Expense ID not found during update")
         }
 
-        guard let expense = manager.getExpenseById(id: expenseID) else {
-            return print("Expense not found during update")
-        }
-
-        expense.price = es.price
-        expense.odometer = es.price
-        expense.date = es.date
-        expense.odometer = es.odometer
-        expense.priceLiter = es.priceLiter ?? 0.0
-        expense.fuelType = es.fuelType ?? 7
-        expense.liters = es.liters ?? 0.0
-        expense.category = es.category ?? 8
-        expense.note = es.note
+//        guard let expense = manager.getExpenseById(id: expenseID) else {
+//            return print("Expense not found during update")
+//        }
+//
+//        expense.price = es.price
+//        expense.odometer = es.price
+//        expense.date = es.date
+//        expense.odometer = es.odometer
+//        expense.priceLiter = es.priceLiter ?? 0.0
+//        expense.fuelType = es.fuelType ?? 7
+//        expense.liters = es.liters ?? 0.0
+//        expense.category = es.category ?? 8
+//        expense.note = es.note
 
         // PUBLISHED LIST UPDATE
         for (index, value) in expenseList.enumerated() {
             if value.expenseID == es.expenseID {
                 expenseList.remove(at: index)
-                expenseList.insert(ExpenseViewModel(expense: expense), at: index)
+//                expenseList.insert(ExpenseViewModel(expense: expense), at: index)
             }
         }
 
@@ -122,20 +118,20 @@ class DataViewModel: ObservableObject {
             return print("Expense ID not found during update")
         }
 
-        let expense = manager.getExpenseById(id: expenseID)
-        if let expense {
-            manager.deleteExpense(expense)
-        }
+//        let expense = manager.getExpenseById(id: expenseID)
+//        if let expense {
+//            manager.deleteExpense(expense)
+//        }
         save()
     }
 
     func removeAllExpenses() {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Expense")
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        manager.removeAllItems(deleteRequest: deleteRequest)
+//        manager.removeAllItems(deleteRequest: deleteRequest)
     }
 
-    func getExpensesCoreData(filter: NSPredicate?, storage: @escaping ([ExpenseViewModel]) -> Void) {
+    func getExpensesCoreData(filter: NSPredicate?, storage _: @escaping ([ExpenseViewModel]) -> Void) {
         let request = NSFetchRequest<Expense>(entityName: "Expense")
         let expense: [Expense]
 
@@ -144,10 +140,10 @@ class DataViewModel: ObservableObject {
         request.predicate = filter
 
         do {
-            expense = try manager.context.fetch(request)
-            DispatchQueue.main.async {
-                storage(expense.map(ExpenseViewModel.init))
-            }
+//            expense = try manager.context.fetch(request)
+//            DispatchQueue.main.async {
+//                storage(expense.map(ExpenseViewModel.init))
+//            }
 
         } catch {
             print("💰 Error fetching expenses: \(error.localizedDescription)")
@@ -187,13 +183,5 @@ class DataViewModel: ObservableObject {
     func addNewExpensePriceToTotal(expense: ExpenseState) {
         totalExpense += expense.price
         print("Add new expense")
-    }
-}
-
-extension Date {
-    func toString(dateFormat format: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = format
-        return dateFormatter.string(from: self)
     }
 }

@@ -36,7 +36,6 @@ class CategoryViewModel: ObservableObject {
     @Published var parkingList = [ExpenseViewModel]()
     @Published var otherList = [ExpenseViewModel]()
 
-    let manager = CoreDataManager.instance
     @Published var filter: NSPredicate?
     @Published var expenseList: [ExpenseViewModel] = []
     @Published var totalExpense: Float = 0.0
@@ -353,23 +352,13 @@ class CategoryViewModel: ObservableObject {
         })
     }
 
-    func getExpensesCoreData(filter: NSPredicate?, storage: @escaping ([ExpenseViewModel]) -> Void) {
+    func getExpensesCoreData(filter: NSPredicate?, storage _: @escaping ([ExpenseViewModel]) -> Void) {
         let request = NSFetchRequest<Expense>(entityName: "Expense")
         let expense: [Expense]
 
         let sort = NSSortDescriptor(keyPath: \Expense.objectID, ascending: true)
         request.sortDescriptors = [sort]
         request.predicate = filter
-
-        do {
-            expense = try manager.context.fetch(request)
-            DispatchQueue.main.async {
-                storage(expense.map(ExpenseViewModel.init))
-            }
-
-        } catch {
-            print("💰 Error fetching expenses: \(error.localizedDescription)")
-        }
     }
 }
 

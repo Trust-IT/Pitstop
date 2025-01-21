@@ -139,8 +139,6 @@ struct FiltersRow: View {
     @State private var maintenanceIsPressed = false
     @State private var roadTaxIsPressed = false
 
-    @ObservedObject var dataVM: DataViewModel
-
     @State var curretFilter: [Int] = [] // Array to store the filters used
 
     @Binding var isFilterSelected: Int
@@ -158,11 +156,9 @@ struct FiltersRow: View {
                     if fuelIsPressed == true {
                         isFilterSelected += 1
                         curretFilter.append(Category.fuel.rawValue)
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     } else {
                         isFilterSelected -= 1
                         if let index = curretFilter.firstIndex(of: Category.fuel.rawValue) { curretFilter.remove(at: index) }
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $fuelIsPressed))
@@ -174,11 +170,9 @@ struct FiltersRow: View {
                     if maintenanceIsPressed == true {
                         isFilterSelected += 1
                         curretFilter.append(Category.maintenance.rawValue)
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     } else {
                         isFilterSelected -= 1
                         if let index = curretFilter.firstIndex(of: Category.maintenance.rawValue) { curretFilter.remove(at: index) }
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $maintenanceIsPressed))
@@ -190,11 +184,9 @@ struct FiltersRow: View {
                     if tollsIsPressed == true {
                         isFilterSelected += 1
                         curretFilter.append(Category.tolls.rawValue)
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     } else {
                         isFilterSelected -= 1
                         if let index = curretFilter.firstIndex(of: Category.tolls.rawValue) { curretFilter.remove(at: index) }
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $tollsIsPressed))
@@ -205,11 +197,9 @@ struct FiltersRow: View {
                     if insuranceIsPressed == true {
                         isFilterSelected += 1
                         curretFilter.append(Category.insurance.rawValue)
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     } else {
                         isFilterSelected -= 1
                         if let index = curretFilter.firstIndex(of: Category.insurance.rawValue) { curretFilter.remove(at: index) }
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $insuranceIsPressed))
@@ -220,11 +210,9 @@ struct FiltersRow: View {
                     if roadTaxIsPressed == true {
                         isFilterSelected += 1
                         curretFilter.append(Category.roadTax.rawValue)
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     } else {
                         isFilterSelected -= 1
                         if let index = curretFilter.firstIndex(of: Category.roadTax.rawValue) { curretFilter.remove(at: index) }
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $roadTaxIsPressed))
@@ -236,11 +224,9 @@ struct FiltersRow: View {
                     if finesIsPressed == true {
                         isFilterSelected += 1
                         curretFilter.append(Category.fines.rawValue)
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     } else {
                         isFilterSelected -= 1
                         if let index = curretFilter.firstIndex(of: Category.fines.rawValue) { curretFilter.remove(at: index) }
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $finesIsPressed))
@@ -251,11 +237,9 @@ struct FiltersRow: View {
                     if parkingIsPressed == true {
                         isFilterSelected += 1
                         curretFilter.append(Category.parking.rawValue)
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     } else {
                         isFilterSelected -= 1
                         if let index = curretFilter.firstIndex(of: Category.parking.rawValue) { curretFilter.remove(at: index) }
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $parkingIsPressed))
@@ -266,11 +250,9 @@ struct FiltersRow: View {
                     if otherIsPressed == true {
                         isFilterSelected += 1
                         curretFilter.append(Category.other.rawValue)
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     } else {
                         isFilterSelected -= 1
                         if let index = curretFilter.firstIndex(of: Category.other.rawValue) { curretFilter.remove(at: index) }
-                        dataVM.expenseFilteredList = dataVM.expenseList.filter { curretFilter.contains(Int($0.category)) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $otherIsPressed))

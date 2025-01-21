@@ -58,6 +58,7 @@ public enum PitstopAPPAsset: Sendable {
     public static let arrowAnalytics = PitstopAPPImages(name: "arrowAnalytics")
     public static let arrowDown = PitstopAPPImages(name: "arrowDown")
     public static let arrowLeft = PitstopAPPImages(name: "arrowLeft")
+    public static let arrowRight = PitstopAPPImages(name: "arrowRight")
     public static let bellHome = PitstopAPPImages(name: "bellHome")
     public static let bestBoy = PitstopAPPImages(name: "bestBoy")
     public static let carSettings = PitstopAPPImages(name: "car-settings")
@@ -244,6 +245,7 @@ extension PitstopAPPImages {
   static let assets_arrowAnalytics = PitstopAPPAsset.Assets.arrowAnalytics
   static let assets_arrowDown = PitstopAPPAsset.Assets.arrowDown
   static let assets_arrowLeft = PitstopAPPAsset.Assets.arrowLeft
+  static let assets_arrowRight = PitstopAPPAsset.Assets.arrowRight
   static let assets_bellHome = PitstopAPPAsset.Assets.bellHome
   static let assets_bestBoy = PitstopAPPAsset.Assets.bestBoy
   static let assets_carSettings = PitstopAPPAsset.Assets.carSettings

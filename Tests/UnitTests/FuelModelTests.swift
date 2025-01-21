@@ -11,7 +11,7 @@ import SwiftData
 import Testing
 
 @Suite("Fuel Model Odometer Tests")
-struct FuelModelTests {
+@preconcurrency struct FuelModelTests {
     let vehicle: Vehicle = .mock()
     let modelContainer: ModelContainer
 

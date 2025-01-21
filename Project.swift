@@ -4,6 +4,7 @@ let project = Project(
     name: "Pitstop",
     settings:
     .settings(
+        base: ["SWIFT_VERSION": "6.0"],
         configurations: [
             .debug(
                 name: "Debug",
@@ -54,6 +55,7 @@ let project = Project(
                 configurations: [
                     .debug(
                         name: "Debug",
+                        settings: ["SWIFT_VERSION": "6.0"],
                         xcconfig: "./xcconfigs/Debug.xcconfig"
                     ),
                 ]

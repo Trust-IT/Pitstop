@@ -15,6 +15,9 @@ struct AddReportView: View {
     @Environment(AppState.self) var appState: AppState
 
     @State private var showOdometerAlert = false
+    @State private var showNotificationErrorAlert = false
+    @State private var notificationRequestError : Error?
+    @State private var showNotificationDeniedAlert = false
 
     @State private var reminder: Reminder = .mock()
     @State var fuelExpense: FuelExpense = .mock()
@@ -99,19 +102,7 @@ struct AddReportView: View {
                     action: {
                         switch currentPickerTab {
                         case .reminder:
-                            Task {
-                                await NotificationManager.shared.requestAuthNotifications()
-                            }
-                            do {
-                                try reminder.saveToModelContext(context: modelContext)
-                            } catch {
-                                // TODO: Implement error handling
-                                print("error \(error)")
-                            }
-                            Task {
-                                await NotificationManager.shared.createNotification(for: ReminderNotificationData(from: reminder))
-                            }
-                            presentationMode.wrappedValue.dismiss()
+                            createReminderNotification()
                         case .fuel:
                             if fuelExpense.isValidOdometer(for: vehicleManager.currentVehicle) {
                                 if fuelExpense.odometer > vehicleManager.currentVehicle.odometer {
@@ -186,6 +177,30 @@ struct AddReportView: View {
         fuelCategories.append(currentVehicle.mainFuelType)
         guard let secondaryFuelType = currentVehicle.secondaryFuelType else { return }
         fuelCategories.append(secondaryFuelType)
+    }
+}
+
+private extension AddReportView {
+    func createReminderNotification() {
+        Task {
+            do {
+                let status = try await NotificationManager.shared.requestAuthNotifications()
+                
+                guard status == .authorized else {
+                    showNotificationDeniedAlert.toggle()
+                    return
+                }
+                
+                await NotificationManager.shared.createNotification(for: ReminderNotificationData(from: reminder))
+                
+                try reminder.saveToModelContext(context: modelContext)
+                
+                navManager.pop()
+            } catch {
+                notificationRequestError = error
+                showNotificationErrorAlert.toggle()
+            }
+        }
     }
 }
 

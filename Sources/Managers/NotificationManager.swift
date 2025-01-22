@@ -13,25 +13,24 @@ actor NotificationManager {
     private init() {}
 
     @MainActor
-    func requestAuthNotifications() async {
+    func requestAuthNotifications() async throws -> UNAuthorizationStatus {
         let center = UNUserNotificationCenter.current()
-
+        
         let settings = await center.notificationSettings()
         switch settings.authorizationStatus {
         case .notDetermined:
             do {
-                try await center.requestAuthorization(options: [.alert, .badge, .sound])
-                print("Notification authorization granted.")
+                let hasAccepted = try await center.requestAuthorization(options: [.alert, .badge, .sound])
+                return hasAccepted ? .authorized : .denied
             } catch {
-                print("Notification authorization error: \(error.localizedDescription)")
+                throw error
             }
         case .denied:
-            // TODO: Implement alert to enable notifications
-            print("Notifications are denied.")
+            return settings.authorizationStatus
         case .authorized, .provisional, .ephemeral:
-            print("Notifications are already enabled.")
+            return settings.authorizationStatus
         @unknown default:
-            print("Unknown notification authorization status.")
+            throw StatusError.unknownStatus
         }
     }
 
@@ -71,6 +70,19 @@ actor NotificationManager {
 
         center.removePendingNotificationRequests(withIdentifiers: identifiersToRemove)
         print("Notifications unscheduled: \(identifiersToRemove)")
+    }
+}
+
+extension NotificationManager {
+    enum StatusError: Error {
+        case unknownStatus
+        
+        var localizedDescription: String {
+            switch self {
+            case .unknownStatus:
+                return "Unknown status"
+            }
+        }
     }
 }
 

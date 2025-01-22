@@ -31,7 +31,11 @@ struct OnbNotificationView: View {
             VStack(spacing: 16) {
                 Button(action: {
                     Task {
-                        await NotificationManager.shared.requestAuthNotifications()
+                        do {
+                            _ = try await NotificationManager.shared.requestAuthNotifications()
+                        } catch {
+                            print("Error requesting notifications: \(error)")
+                        }
                     }
                     navManager.push(.onboardingReady)
                 }, label: {

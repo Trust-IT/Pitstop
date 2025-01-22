@@ -83,47 +83,36 @@ struct AddReportView: View {
             }
         }
         .background(Palette.greyBackground)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarItems(
-            leading:
+        .toolbar {
+            // Cancel button
+            ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
                     navManager.pop()
                 }, label: {
                     Text("Cancel")
                         .font(Typography.headerM)
                 })
-                .accentColor(Palette.greyHard),
-            trailing:
-                Button(
-                    action: {
-                        switch currentPickerTab {
-                        case .reminder:
-                            createReminderNotification()
-                        case .fuel:
-                            if fuelExpense.isValidOdometer(for: vehicleManager.currentVehicle) {
-                                if fuelExpense.odometer > vehicleManager.currentVehicle.odometer {
-                                    vehicleManager.currentVehicle.odometer = fuelExpense.odometer
-                                }
-                                
-                                fuelExpense.totalPrice = fuelTotal
-                                vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
-                                fuelExpense.insert(context: modelContext)
-                                navManager.pop()
-                            } else {
-                                showAlert(with: "Attention", and: "The odometer value is lower than the last report")
-                            }
-                        }
-                    },
-                    label: {
-                        Text(String(localized: "Save"))
-                            .font(Typography.headerM)
+                .accentColor(Palette.greyHard)
+            }
+            
+            // Save button
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    switch currentPickerTab {
+                    case .reminder:
+                        createReminderNotification()
+                    case .fuel:
+                        createFuelExpense()
                     }
-                )
+                },label: {
+                    Text(String(localized: "Save"))
+                        .font(Typography.headerM)
+                })
                 .disabled(reminder.title.isEmpty && (fuelTotal.isZero || fuelExpense.quantity.isZero))
                 .opacity(reminder.title.isEmpty && (fuelTotal.isZero || fuelExpense.quantity.isZero) ? 0.6 : 1)
-        )
-        .toolbar {
-            /// Keyboard focus
+            }
+            
+            // Dismiss keyboard button (keyboard toolbar)
             ToolbarItem(placement: .keyboard) {
                 HStack {
                     Button(action: {
@@ -140,6 +129,7 @@ struct AddReportView: View {
                     })
                 }
             }
+            
             ToolbarItem(placement: .principal) {
                 Text(String(localized: "New report"))
                     .font(Typography.headerM)
@@ -153,23 +143,6 @@ struct AddReportView: View {
         .onAppear {
             initializeFuelExpense()
         }
-    }
-
-    private func initializeFuelExpense() {
-        let currentVehicle = vehicleManager.currentVehicle
-        fuelExpense = FuelExpense(
-            totalPrice: 0.0,
-            quantity: 0,
-            pricePerUnit: 0.0,
-            odometer: currentVehicle.odometer,
-            fuelType: currentVehicle.mainFuelType,
-            date: Date(),
-            vehicle: nil
-        )
-
-        fuelCategories.append(currentVehicle.mainFuelType)
-        guard let secondaryFuelType = currentVehicle.secondaryFuelType else { return }
-        fuelCategories.append(secondaryFuelType)
     }
 }
 
@@ -200,6 +173,38 @@ private extension AddReportView {
                 showAlert(with: "Error", and: error.localizedDescription)
             }
         }
+    }
+    
+    func createFuelExpense() {
+        if fuelExpense.isValidOdometer(for: vehicleManager.currentVehicle) {
+            if fuelExpense.odometer > vehicleManager.currentVehicle.odometer {
+                vehicleManager.currentVehicle.odometer = fuelExpense.odometer
+            }
+            
+            fuelExpense.totalPrice = fuelTotal
+            vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
+            fuelExpense.insert(context: modelContext)
+            navManager.pop()
+        } else {
+            showAlert(with: "Attention", and: "The odometer value is lower than the last report")
+        }
+    }
+    
+    func initializeFuelExpense() {
+        let currentVehicle = vehicleManager.currentVehicle
+        fuelExpense = FuelExpense(
+            totalPrice: 0.0,
+            quantity: 0,
+            pricePerUnit: 0.0,
+            odometer: currentVehicle.odometer,
+            fuelType: currentVehicle.mainFuelType,
+            date: Date(),
+            vehicle: nil
+        )
+
+        fuelCategories.append(currentVehicle.mainFuelType)
+        guard let secondaryFuelType = currentVehicle.secondaryFuelType else { return }
+        fuelCategories.append(secondaryFuelType)
     }
 }
 

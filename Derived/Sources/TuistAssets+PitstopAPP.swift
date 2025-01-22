@@ -175,90 +175,12 @@ public extension SwiftUI.Image {
     self.init(asset.name, bundle: bundle, label: label)
   }
 
-  init(_ asset: PitstopAPPImages) {
-    let bundle = Bundle.module
-    self.init(asset.name, bundle: bundle)
-  }
-
-  init(_ asset: PitstopAPPImages, label: Text) {
-    let bundle = Bundle.module
-    self.init(asset.name, bundle: bundle)
-  }
-
   init(decorative asset: PitstopAPPImages) {
     let bundle = Bundle.module
     self.init(decorative: asset.name, bundle: bundle)
   }
 }
 #endif
-
-@available(iOS 11.0, tvOS 11.0,*)
-@available(watchOS, unavailable)
-extension UIKit.UIImage {
-   /// Initialize `UIImage` with a Tuist generated image resource
-   convenience init(resource asset: PitstopAPPImages) {
-        #if !os(watchOS)
-            self.init(named: asset.name, in: Bundle.module, compatibleWith: nil)! 
-        #else
-            self.init()
-        #endif
-   }
-}
-
-// swiftlint:disable identifier_name line_length nesting type_body_length type_name
-extension PitstopAPPImages {
-
-
-
-  static let assets_day = PitstopAPPAsset.Assets.day
-  static let assets_liters = PitstopAPPAsset.Assets.liters
-  static let assets_note = PitstopAPPAsset.Assets.note
-  static let assets_odometer = PitstopAPPAsset.Assets.odometer
-  static let assets_recurrent = PitstopAPPAsset.Assets.recurrent
-  static let assets_time = PitstopAPPAsset.Assets.time
-  static let assets_basedOn = PitstopAPPAsset.Assets.basedOn
-  static let assets_category = PitstopAPPAsset.Assets.category
-  static let assets_fuelType = PitstopAPPAsset.Assets.fuelType
-  static let assets_literColored = PitstopAPPAsset.Assets.literColored
-  static let assets_noteColored = PitstopAPPAsset.Assets.noteColored
-  static let assets_priceLiter = PitstopAPPAsset.Assets.priceLiter
-  static let assets_priceLiterColored = PitstopAPPAsset.Assets.priceLiterColored
-  static let assets_remindMe = PitstopAPPAsset.Assets.remindMe
-  static let assets_fuel = PitstopAPPAsset.Assets.fuel
-  static let assets_insurance = PitstopAPPAsset.Assets.insurance
-  static let assets_other = PitstopAPPAsset.Assets.other
-  static let assets_parking = PitstopAPPAsset.Assets.parking
-  static let assets_tolls = PitstopAPPAsset.Assets.tolls
-  static let assets_fines = PitstopAPPAsset.Assets.fines
-  static let assets_maintenance = PitstopAPPAsset.Assets.maintenance
-  static let assets_roadTax = PitstopAPPAsset.Assets.roadTax
-  static let assets_documents = PitstopAPPAsset.Assets.documents
-  static let assets_page1 = PitstopAPPAsset.Assets.page1
-  static let assets_page4 = PitstopAPPAsset.Assets.page4
-  static let assets_page5 = PitstopAPPAsset.Assets.page5
-  static let assets_phone = PitstopAPPAsset.Assets.phone
-  static let assets_photo = PitstopAPPAsset.Assets.photo
-  static let assets_carIcon = PitstopAPPAsset.Assets.carIcon
-  static let assets_chartIcon = PitstopAPPAsset.Assets.chartIcon
-  static let assets_plus = PitstopAPPAsset.Assets.plus
-  static let assets_settingsIcon = PitstopAPPAsset.Assets.settingsIcon
-  static let assets_arrowAnalytics = PitstopAPPAsset.Assets.arrowAnalytics
-  static let assets_arrowDown = PitstopAPPAsset.Assets.arrowDown
-  static let assets_arrowLeft = PitstopAPPAsset.Assets.arrowLeft
-  static let assets_arrowRight = PitstopAPPAsset.Assets.arrowRight
-  static let assets_bellHome = PitstopAPPAsset.Assets.bellHome
-  static let assets_bestBoy = PitstopAPPAsset.Assets.bestBoy
-  static let assets_carSettings = PitstopAPPAsset.Assets.carSettings
-  static let assets_deleteIcon = PitstopAPPAsset.Assets.deleteIcon
-  static let assets_download = PitstopAPPAsset.Assets.download
-  static let assets_ics = PitstopAPPAsset.Assets.ics
-  static let assets_logo = PitstopAPPAsset.Assets.logo
-  static let assets_paperclip = PitstopAPPAsset.Assets.paperclip
-  static let assets_premium = PitstopAPPAsset.Assets.premium
-  static let assets_service = PitstopAPPAsset.Assets.service
-
-}
-// swiftlint:enable identifier_name line_length nesting type_body_length type_name
 
 // swiftlint:enable all
 // swiftformat:enable all

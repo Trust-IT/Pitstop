@@ -9,15 +9,14 @@ import SwiftUI
 
 struct AddReportView: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.presentationMode) private var presentationMode
     @EnvironmentObject var vehicleManager: VehicleManager
+    @EnvironmentObject var navManager: NavigationManager
 
     @Environment(AppState.self) var appState: AppState
 
-    @State private var showOdometerAlert = false
-    @State private var showNotificationErrorAlert = false
-    @State private var notificationRequestError : Error?
-    @State private var showNotificationDeniedAlert = false
+    @State private var showAlert = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
 
     @State private var reminder: Reminder = .mock()
     @State var fuelExpense: FuelExpense = .mock()
@@ -32,72 +31,69 @@ struct AddReportView: View {
     @State private var currentPickerTab: NewReportTab = .fuel
 
     var body: some View {
-        NavigationView {
-            VStack {
-                // MARK: Input fields
-
-                switch currentPickerTab {
-                case .reminder:
-                    HStack {
-                        Spacer()
-                        TextField("-", text: $reminder.title)
-                            .focused($reminderInputFocus, equals: .reminderTitle)
-                            .textFieldStyle(InputTextFieldStyle())
-                            .fixedSize(horizontal: true, vertical: true)
-                        Spacer()
-                    }
-                    .padding(.top, 26)
-                case .fuel:
-                    HStack {
-                        Spacer()
-                        TextField("0,0", value: $fuelTotal, formatter: NumberFormatter.twoDecimalPlaces)
-                            .keyboardType(.decimalPad)
-                            .focused($fuelInputFocus, equals: .totalPrice)
-                            .textFieldStyle(InputTextFieldStyle())
-                            .fixedSize(horizontal: true, vertical: true)
-                        Text(appState.currency)
-                            .font(Typography.headerXXL)
-                            .foregroundColor(Palette.black)
-                        Spacer()
-                    }
-                    .padding(.top, 26)
+        VStack {
+            switch currentPickerTab {
+            case .reminder:
+                HStack {
+                    Spacer()
+                    TextField("-", text: $reminder.title)
+                        .focused($reminderInputFocus, equals: .reminderTitle)
+                        .textFieldStyle(InputTextFieldStyle())
+                        .fixedSize(horizontal: true, vertical: true)
+                    Spacer()
                 }
-
-                SegmentedPicker(currentTab: $currentPickerTab, onTap: {})
-                    .padding(.horizontal, 32)
-                    .padding(.top, 24)
-
-                // MARK: List
-
-                switch currentPickerTab {
-                case .reminder:
-                    ReminderInputView(reminder: reminder, reminderInputFocus: $reminderInputFocus)
-
-                case .fuel:
-                    FuelExpenseInputView(
-                        vehicleFuels: fuelCategories,
-                        fuelInputFocus: $fuelInputFocus,
-                        fuelExpense: fuelExpense
-                    )
-                    .onAppear {
-                        fuelInputFocus = .totalPrice
-                        // Reset the reminder when switching tabs
-                        reminder = .mock()
-                    }
+                .padding(.top, 26)
+            case .fuel:
+                HStack {
+                    Spacer()
+                    TextField("0,0", value: $fuelTotal, formatter: NumberFormatter.twoDecimalPlaces)
+                        .keyboardType(.decimalPad)
+                        .focused($fuelInputFocus, equals: .totalPrice)
+                        .textFieldStyle(InputTextFieldStyle())
+                        .fixedSize(horizontal: true, vertical: true)
+                    Text(appState.currency)
+                        .font(Typography.headerXXL)
+                        .foregroundColor(Palette.black)
+                    Spacer()
+                }
+                .padding(.top, 26)
+            }
+            
+            SegmentedPicker(currentTab: $currentPickerTab, onTap: {})
+                .padding(.horizontal, 32)
+                .padding(.top, 24)
+            
+            // MARK: List
+            
+            switch currentPickerTab {
+            case .reminder:
+                ReminderInputView(reminder: reminder, reminderInputFocus: $reminderInputFocus)
+                
+            case .fuel:
+                FuelExpenseInputView(
+                    vehicleFuels: fuelCategories,
+                    fuelInputFocus: $fuelInputFocus,
+                    fuelExpense: fuelExpense
+                )
+                .onAppear {
+                    fuelInputFocus = .totalPrice
+                    // Reset the reminder when switching tabs
+                    reminder = .mock()
                 }
             }
-            .background(Palette.greyBackground)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(
-                leading:
+        }
+        .background(Palette.greyBackground)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarItems(
+            leading:
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()
+                    navManager.pop()
                 }, label: {
                     Text("Cancel")
                         .font(Typography.headerM)
                 })
                 .accentColor(Palette.greyHard),
-                trailing:
+            trailing:
                 Button(
                     action: {
                         switch currentPickerTab {
@@ -108,13 +104,13 @@ struct AddReportView: View {
                                 if fuelExpense.odometer > vehicleManager.currentVehicle.odometer {
                                     vehicleManager.currentVehicle.odometer = fuelExpense.odometer
                                 }
-
+                                
                                 fuelExpense.totalPrice = fuelTotal
                                 vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
                                 fuelExpense.insert(context: modelContext)
-                                presentationMode.wrappedValue.dismiss()
+                                navManager.pop()
                             } else {
-                                showOdometerAlert.toggle()
+                                showAlert(with: "Attention", and: "The odometer value is lower than the last report")
                             }
                         }
                     },
@@ -125,38 +121,35 @@ struct AddReportView: View {
                 )
                 .disabled(reminder.title.isEmpty && (fuelTotal.isZero || fuelExpense.quantity.isZero))
                 .opacity(reminder.title.isEmpty && (fuelTotal.isZero || fuelExpense.quantity.isZero) ? 0.6 : 1)
-            )
-            .toolbar {
-                /// Keyboard focus
-                ToolbarItem(placement: .keyboard) {
-                    HStack {
-                        Button(action: {
-                            switch currentPickerTab {
-                            case .reminder:
-                                reminderInputFocus = nil
-                            case .fuel:
-                                fuelInputFocus = nil
-                            }
-                        }, label: {
-                            Image(systemName: "keyboard.chevron.compact.down")
-                                .resizable()
-                                .foregroundColor(Palette.black)
-                        })
-                    }
-                }
-                ToolbarItem(placement: .principal) {
-                    Text(String(localized: "New report"))
-                        .font(Typography.headerM)
-                        .foregroundColor(Palette.black)
+        )
+        .toolbar {
+            /// Keyboard focus
+            ToolbarItem(placement: .keyboard) {
+                HStack {
+                    Button(action: {
+                        switch currentPickerTab {
+                        case .reminder:
+                            reminderInputFocus = nil
+                        case .fuel:
+                            fuelInputFocus = nil
+                        }
+                    }, label: {
+                        Image(systemName: "keyboard.chevron.compact.down")
+                            .resizable()
+                            .foregroundColor(Palette.black)
+                    })
                 }
             }
-            .alert(isPresented: $showOdometerAlert) {
-                Alert(
-                    title: Text("Attention"),
-                    message: Text("Can't set this odometer value for the specific timerframe, make sure it's correct")
-                )
+            ToolbarItem(placement: .principal) {
+                Text(String(localized: "New report"))
+                    .font(Typography.headerM)
+                    .foregroundColor(Palette.black)
             }
         }
+        .alert(alertTitle,
+               isPresented: $showAlert,
+               actions: {},
+               message: { Text(alertMessage)})
         .onAppear {
             initializeFuelExpense()
         }
@@ -181,13 +174,20 @@ struct AddReportView: View {
 }
 
 private extension AddReportView {
+    
+    func showAlert(with title: String,and message: String) {
+        showAlert.toggle()
+        alertTitle = title
+        alertMessage = message
+    }
+    
     func createReminderNotification() {
         Task {
             do {
                 let status = try await NotificationManager.shared.requestAuthNotifications()
                 
                 guard status == .authorized else {
-                    showNotificationDeniedAlert.toggle()
+                    showAlert(with: "Attention", and: "Enable the notifications in the settings before creating a reminder")
                     return
                 }
                 
@@ -197,8 +197,7 @@ private extension AddReportView {
                 
                 navManager.pop()
             } catch {
-                notificationRequestError = error
-                showNotificationErrorAlert.toggle()
+                showAlert(with: "Error", and: error.localizedDescription)
             }
         }
     }

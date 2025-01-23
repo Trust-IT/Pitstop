@@ -16,44 +16,52 @@ struct VehicleView: View {
     @State private var showAddReport = false
 
     var body: some View {
-        GeometryReader { proxy in
-            let topEdge = proxy.safeAreaInsets.top
-            HomeStyleView(topEdge: topEdge)
-                .ignoresSafeArea(.all, edges: .top)
-        }
-        .overlay(
-            VStack {
-                Spacer(minLength: UIScreen.main.bounds.size.height * 0.77)
-                Button(action: {
-                    navManager.present(.addNewReport)
-                }, label: {
-                    HStack {
-                        Spacer()
-                        Image("plus")
-                            .resizable()
-                            .foregroundColor(Palette.white)
-                            .frame(width: 14, height: 14)
-                        Text("Add report")
-                            .foregroundColor(Palette.white)
-                            .font(Typography.ControlS)
-                        Spacer()
-                    }
-                })
-                .buttonStyle(Primary())
-                Spacer()
+        NavigationStack(path: $navManager.routes) {
+//            VStack {
+                GeometryReader { proxy in
+                    let topEdge = proxy.safeAreaInsets.top
+                    HomeStyleView(topEdge: topEdge)
+                        .background()
+//                        .ignoresSafeArea(.all, edges: .top)
+                }
+//            }
+            .navigationDestination(for: Route.self) { route in
+                route
+                    .toolbar(.hidden, for: .tabBar)
             }
-        )
-        .ignoresSafeArea(.keyboard)
-        .fullScreenCover(isPresented: $navManager.isPresented) {
-            if let presentedRoute = navManager.presentedRoute {
-                ModalNavigationContainerView(route: presentedRoute)
+            .overlay(
+                VStack {
+                    Spacer(minLength: UIScreen.main.bounds.size.height * 0.77)
+                    Button(action: {
+                        navManager.push(.fuelReport)
+                    }, label: {
+                        HStack {
+                            Spacer()
+                            Image("plus")
+                                .resizable()
+                                .foregroundColor(Palette.white)
+                                .frame(width: 14, height: 14)
+                            Text("Fuel report")
+                                .foregroundColor(Palette.white)
+                                .font(Typography.ControlS)
+                            Spacer()
+                        }
+                    })
+                    .buttonStyle(Primary())
+                    Spacer()
+                }
+            )
+            .fullScreenCover(isPresented: $navManager.isPresented) {
+                if let presentedRoute = navManager.presentedRoute {
+                    ModalNavigationContainerView(route: presentedRoute)
+                }
             }
-        }
-        .onAppear {
-            if shouldShowOnboarding {
-                navManager.present(.onboardingWelcome)
-            } else {
-                vehicleManager.loadCurrentVehicle(modelContext: modelContext)
+            .onAppear {
+                if shouldShowOnboarding {
+                    navManager.present(.onboardingWelcome)
+                } else {
+                    vehicleManager.loadCurrentVehicle(modelContext: modelContext)
+                }
             }
         }
     }

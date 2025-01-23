@@ -45,6 +45,28 @@ struct Secondary: ButtonStyle {
     }
 }
 
+struct SecondaryCapsule: ButtonStyle {
+    @Environment(\.isEnabled) var isEnabled
+    let height: CGFloat
+
+    init(height: CGFloat = 48) {
+        self.height = height
+    }
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .frame(maxWidth: .infinity, maxHeight: height)
+            .background(Capsule(style: .continuous).fill(isEnabled ? Palette.greyLight : Palette.greyInput))
+            .font(Typography.ControlS)
+            .foregroundColor(Palette.black)
+            .opacity(configuration.isPressed ? 0.8 : 1.0)
+            .onTapGesture {
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            }
+    }
+}
+
+
 struct ButtonStyle_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
@@ -58,6 +80,12 @@ struct ButtonStyle_Previews: PreviewProvider {
             Button("Secondary") {}
                 .buttonStyle(Secondary())
                 .disabled(false)
+            Button("Capsule") {}
+                .buttonStyle(SecondaryCapsule())
+                .disabled(false)
+            Button("Capsule") {}
+                .buttonStyle(SecondaryCapsule())
+                .disabled(true)
             Spacer()
         }
         .background(Palette.greyHard)

@@ -29,6 +29,7 @@ enum Palette {
     static let greyBackground = Color(lightRGB: 0xFBFBFB, darkRGB: 0x121212)
 
     static let colorVioletLight = Color(rgb: 0x94BCF8)
+    static let colorVioletIcon = Color(rgb: 0x9A7EFF)
 
     static let colorMainBlue = Color(rgb: 0x9FFCF7)
     static let colorMainGreen = Color(rgb: 0x94F3C7)

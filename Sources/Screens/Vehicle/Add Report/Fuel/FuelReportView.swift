@@ -22,6 +22,8 @@ struct FuelReportView: View {
     @State private var selectedDate = Date()
     @State private var alert = AlertConfig(enableBackgroundBlur: true,
                                            disableOutsideTap: false)
+    @State private var showOdometerAlert = false
+
     let fuelExpense: FuelExpense
     init(fuelExpense: FuelExpense) {
         self.fuelExpense = fuelExpense
@@ -66,7 +68,6 @@ struct FuelReportView: View {
             Spacer()
             Button("Save") {
                 saveExpense()
-                navManager.pop()
             }
             .disabled(!areFieldsValid)
             .buttonStyle(Primary())
@@ -83,8 +84,7 @@ struct FuelReportView: View {
         }
         .alert(config: $alert) {
             VStack {
-                // TODO: Fix date range
-                DatePicker("label", selection: $selectedDate, displayedComponents: [.date])
+                DatePicker("", selection: $selectedDate, in: ...Date(), displayedComponents: [.date])
                     .datePickerStyle(.graphical)
                     .labelsHidden()
                     .accentColor(appState.currentTheme.accentColor)
@@ -92,6 +92,10 @@ struct FuelReportView: View {
             .background(RoundedRectangle(cornerRadius: 16).fill(Palette.white))
             .padding()
         }
+        .alert("Attention",
+               isPresented: $showOdometerAlert,
+               actions: {},
+               message: { Text("The odometer value is lower than the last report") })
         .padding(.top, 50)
         .background(Palette.greyBackground.ignoresSafeArea(.all))
         .navigationBarBackButtonHidden()
@@ -121,13 +125,29 @@ private extension FuelReportView {
     }
 
     func saveExpense() {
-        let formatter = Money.decimalFormatter()
-
         guard let odometerValue = odometer.toFloat(),
               let litersValue = liters.toFloat() else {
             return
         }
 
+        updateFuelExpense(odometerValue: odometerValue, litersValue: litersValue)
+
+        // Note: this check should be done after updating the fuelExpense othervise
+        // it will not read the correct values of the fuelExpense odometer and date
+        // FIXME: The function should be refactor and move to the Vehicle model
+        guard fuelExpense.isValidOdometer(for: vehicleManager.currentVehicle) else {
+            showOdometerAlert.toggle()
+            return
+        }
+
+        if odometerValue > vehicleManager.currentVehicle.odometer {
+            vehicleManager.currentVehicle.odometer = odometerValue
+        }
+        vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
+        navManager.pop()
+    }
+
+    func updateFuelExpense(odometerValue: Float, litersValue: Float) {
         fuelExpense.totalPrice = Money(stringValue: totalPrice)
         fuelExpense.odometer = odometerValue
         fuelExpense.quantity = litersValue
@@ -227,58 +247,5 @@ private extension FuelReportView {
             .environment(AppState())
             .environmentObject(NavigationManager())
             .environment(SceneDelegate())
-    }
-}
-
-struct FuelInputTextField: View {
-    @Environment(AppState.self) var appState: AppState
-
-    let title: String
-    let placeholder: String
-    let measurement: String
-    let icon: ImageResource
-    @FocusState.Binding var focusState: FuelInputFocusField?
-    let focus: FuelInputFocusField
-    @Binding var text: String
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text(title)
-                .foregroundStyle(Palette.black)
-                .font(Typography.headerM)
-                .padding(.horizontal, 12)
-            HStack {
-                ZStack {
-                    Circle()
-                        .fill(text.isEmpty ? Palette.greyLight : appState.currentTheme.colors.background)
-                        .frame(width: 32, height: 32)
-                    Image(icon)
-                        .resizable()
-                        .frame(width: 16, height: 16)
-                        .foregroundStyle(text.isEmpty ? Palette.greyInput : appState.currentTheme.accentColor)
-                }
-                TextField(placeholder, text: $text)
-                    .foregroundStyle(Palette.black)
-                    .font(Typography.headerM)
-                    .padding(.leading, 12)
-                    .keyboardType(.decimalPad)
-                    .focused($focusState, equals: focus)
-                Spacer()
-                Text(measurement)
-                    .foregroundStyle(Palette.black)
-                    .font(Typography.headerM)
-            }
-            .padding(.horizontal, 12)
-            .frame(height: 54)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Palette.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(focusState == focus ? Palette.black : Palette.white, lineWidth: 1)
-                    )
-            )
-        }
-        .padding(.horizontal, 12)
-        .background(Palette.greyBackground)
     }
 }

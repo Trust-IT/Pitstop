@@ -305,14 +305,15 @@ struct CategoryComponent: View {
 
     var body: some View {
         HStack {
-            ZStack {
-                Circle()
-                    .frame(width: 32, height: 32)
-                    .foregroundColor(category.color)
-                Image(category.icon)
-                    .resizable()
-                    .frame(width: 16, height: 16)
-            }
+//            ZStack {
+//                Circle()
+//                    .frame(width: 32, height: 32)
+//                    .foregroundColor(appState.currentTheme.colors.background)
+//                Image(category.icon)
+//                    .resizable()
+//                    .frame(width: 16, height: 16)
+//                    .tint(appState.currentTheme.accentColor)
+//            }
             VStack(alignment: .leading) {
                 HStack {
                     Text(category.label)

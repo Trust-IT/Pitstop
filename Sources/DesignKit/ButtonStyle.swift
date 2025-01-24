@@ -56,13 +56,15 @@ struct SecondaryCapsule: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .frame(maxWidth: .infinity, maxHeight: height)
-            .background(Capsule(style: .continuous).fill(isEnabled ? Palette.greyLight : Palette.greyInput))
-            .font(Typography.ControlS)
-            .foregroundColor(Palette.black)
-            .opacity(configuration.isPressed ? 0.8 : 1.0)
-            .onTapGesture {
-                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            .background {
+                if configuration.isPressed {
+                    Capsule(style: .continuous).fill(Palette.black )
+                } else {
+                    Capsule(style: .continuous).fill(isEnabled ? Palette.greyLight : Palette.greyInput)
+                }
             }
+            .font(Typography.ControlS)
+            .foregroundStyle(configuration.isPressed ? Palette.white : Palette.black)
     }
 }
 

@@ -13,6 +13,7 @@ struct EditVehicleView: View {
     @EnvironmentObject var vehicleManager: VehicleManager
     @FocusState var focusedField: VehicleInfoFocusField?
     @Environment(\.modelContext) private var modelContext
+    @Environment(AppState.self) var appState: AppState
 
     @State private var defaultFuelPicker: AlertConfig = .init(
         enableBackgroundBlur: true,
@@ -172,7 +173,7 @@ struct EditVehicleView: View {
                 }, label: {
                     Text(String(localized: "Save"))
                         .font(Typography.headerM)
-                        .foregroundStyle(Palette.accent)
+                        .foregroundStyle(appState.currentTheme.accentColor)
                 })
                 .disabled(isDisabled)
                 .opacity(isDisabled ? 0.6 : 1)

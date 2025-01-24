@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FuelReportView: View {
     @FocusState private var focusState: FuelInputFocusField?
+    @Environment(AppState.self) var appState: AppState
     @EnvironmentObject private var navManager: NavigationManager
     @State private var totalPrice = ""
     @State private var odometer = ""
@@ -70,7 +71,7 @@ struct FuelReportView: View {
                 DatePicker("label", selection: $selectedDate, displayedComponents: [.date])
                     .datePickerStyle(.graphical)
                     .labelsHidden()
-                    .accentColor(Palette.colorMainViolet)
+                    .accentColor(appState.currentTheme.accentColor)
             }
             .background(RoundedRectangle(cornerRadius: 16).fill(Palette.white))
             .padding()
@@ -182,6 +183,8 @@ private extension FuelReportView {
 }
 
 struct ExtractedView: View {
+    @Environment(AppState.self) var appState: AppState
+
     let title: String
     let placeholder: String
     let measurement: String
@@ -198,12 +201,12 @@ struct ExtractedView: View {
             HStack {
                 ZStack {
                     Circle()
-                        .fill(text.isEmpty ? Palette.greyLight : Palette.colorViolet)
+                        .fill(text.isEmpty ? Palette.greyLight : appState.currentTheme.colors.background)
                         .frame(width: 32, height: 32)
                     Image(icon)
                         .resizable()
                         .frame(width: 16, height: 16)
-                        .foregroundStyle(text.isEmpty ? Palette.greyInput : Palette.colorVioletIcon)
+                        .foregroundStyle(text.isEmpty ? Palette.greyInput : appState.currentTheme.accentColor)
                 }
                 TextField(placeholder, text: $text)
                     .foregroundStyle(Palette.black)

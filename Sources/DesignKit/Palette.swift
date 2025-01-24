@@ -8,7 +8,6 @@
 import SwiftUI
 
 enum Palette {
-    static let accent = Color(lightRGB: 0x1691F7, darkRGB: 0x1691F7)
     static let white = Color(lightRGB: 0xFFFFFF, darkRGB: 0x1E1E1E)
     static let black = Color(lightRGB: 0x0B0B0B, darkRGB: 0xF9F9F9)
 
@@ -29,8 +28,13 @@ enum Palette {
     static let greyBackground = Color(lightRGB: 0xFBFBFB, darkRGB: 0x121212)
 
     static let colorVioletLight = Color(rgb: 0x94BCF8)
-    static let colorVioletIcon = Color(rgb: 0x9A7EFF)
-
+ 
+    // Accent:
+    static let violetAccent = Color(rgb: 0x9A7EFF)
+    static let greenAccent = Color(rgb: 0x4CD38C)
+    static let yellowAccent = Color(rgb: 0xE8CA51)
+    static let blueAccent = Color(rgb: 0x59E4DA)
+    
     static let colorMainBlue = Color(rgb: 0x9FFCF7)
     static let colorMainGreen = Color(rgb: 0x94F3C7)
     static let colorMainYellow = Color(rgb: 0xFBE989)

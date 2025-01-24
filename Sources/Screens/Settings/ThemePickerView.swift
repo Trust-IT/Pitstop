@@ -133,6 +133,19 @@ enum ThemeColors: String, CaseIterable {
             (Palette.colorBlue, Palette.colorMainBlue)
         }
     }
+    
+    var accentColor: Color {
+        switch self {
+        case .amethystDrive:
+            Palette.violetAccent
+        case .greenlight:
+            Palette.greenAccent
+        case .goldenGear:
+            Palette.yellowAccent
+        case .aquaDrift:
+            Palette.blueAccent
+        }
+    }
 
     private static let userDefaultsKey = "selectedThemeColor"
 

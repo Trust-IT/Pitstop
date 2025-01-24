@@ -17,14 +17,11 @@ struct VehicleView: View {
 
     var body: some View {
         NavigationStack(path: $navManager.routes) {
-//            VStack {
             GeometryReader { proxy in
                 let topEdge = proxy.safeAreaInsets.top
-                HomeStyleView(topEdge: topEdge)
-                    .background()
-//                        .ignoresSafeArea(.all, edges: .top)
+                HomeStyleView(topEdge: topEdge + 40)
+
             }
-//            }
             .navigationDestination(for: Route.self) { route in
                 route
                     .toolbar(.hidden, for: .tabBar)
@@ -70,5 +67,9 @@ struct VehicleView: View {
 struct VehicleView_Previews: PreviewProvider {
     static var previews: some View {
         VehicleView()
+            .environmentObject(VehicleManager())
+            .environmentObject(NavigationManager())
+            .environment(AppState())
+            .environment(SceneDelegate())
     }
 }

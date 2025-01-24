@@ -16,47 +16,48 @@ struct HomeStyleView: View {
     let maxHeight = UIScreen.main.bounds.height / 3.8
 
     var body: some View {
-        ZStack {
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 15) {
-                    GeometryReader { _ in
-                        // HEADER CONTENT
-                        HeaderContent(offset: $offset, maxHeight: maxHeight)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .opacity(fadeOutOpacity()) // Directly apply opacity
-                            .frame(height: getHeaderHeight(), alignment: .bottom)
-                            .background(appState.currentTheme.colors.background)
-                            .overlay(
-                                // TOP NAV BAR
-                                TopNav(offset: offset, maxHeight: maxHeight, topEdge: topEdge)
-                                    .padding(.horizontal)
-                                    .frame(height: 60)
-                                    .padding(.top, topEdge + 10),
-                                alignment: .top
-                            )
-                    }
-                    .frame(height: maxHeight)
-                    .offset(y: -offset)
-                    .zIndex(1)
-
-                    // BOTTOM CONTENT VIEW
-                    ZStack {
-                        BottomContentView()
-                            .background(
-                                Palette.greyBackground,
-                                in: CustomCorner(corners: [.topLeft, .topRight], radius: getCornerRadius())
-                            )
-                    }
-                    .background(appState.currentTheme.colors.background)
-                    .padding(.top, -15)
-                    .zIndex(0)
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(spacing: 0) {
+                GeometryReader { _ in
+                    // HEADER CONTENT
+                    HeaderContent(offset: $offset, maxHeight: maxHeight)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .opacity(fadeOutOpacity()) // Directly apply opacity
+                        .frame(height: getHeaderHeight(), alignment: .bottom)
+                        .background(appState.currentTheme.colors.background)
+                        .overlay(
+                            // TOP NAV BAR
+                            TopNav(offset: offset, maxHeight: maxHeight, topEdge: topEdge)
+                                .padding(.horizontal)
+                                .frame(height: 60)
+                                .padding(.top, topEdge + 10),
+                            alignment: .top
+                        )
                 }
-                .modifier(OffsetModifier(offset: $offset))
+                .frame(height: maxHeight)
+                .offset(y: -offset)
+                .zIndex(1)
+
+                // BOTTOM CONTENT VIEW
+                ZStack {
+                    BottomContentView()
+                        .background(
+                            UnevenRoundedRectangle(
+                                topLeadingRadius: getCornerRadius(),
+                                topTrailingRadius: getCornerRadius()
+                            )
+                            .foregroundStyle(Palette.greyBackground)
+                        )
+                }
+                .background(appState.currentTheme.colors.background)
+                .zIndex(0)
             }
-            .background(Palette.greyBackground)
-            .coordinateSpace(name: "SCROLL")
+            .modifier(OffsetModifier(offset: $offset))
         }
+        .background(Palette.greyBackground)
+        .coordinateSpace(name: "SCROLL")
+        .ignoresSafeArea(.all, edges: .top)
     }
 
     // Helper Functions
@@ -84,12 +85,6 @@ struct HomeStyleView: View {
     }
 }
 
-// struct Home_Previews: PreviewProvider {
-//    static var previews: some View {
-//        VehicleView()
-//    }
-// }
-
 struct OffsetModifier: ViewModifier {
     @Binding var offset: CGFloat
 
@@ -112,12 +107,16 @@ struct OffsetModifier: ViewModifier {
     }
 }
 
-struct CustomCorner: Shape {
-    var corners: UIRectCorner
-    var radius: CGFloat
-
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-        return Path(path.cgPath)
+#Preview {
+    @Previewable @StateObject var nav = NavigationManager()
+    NavigationStack(path: $nav.routes) {
+        GeometryReader { proxy in
+            let topEdge = proxy.safeAreaInsets.top
+            HomeStyleView(topEdge: topEdge)
+                .environmentObject(VehicleManager())
+                .environmentObject(NavigationManager())
+                .environment(AppState())
+                .environment(SceneDelegate())
+        }
     }
 }

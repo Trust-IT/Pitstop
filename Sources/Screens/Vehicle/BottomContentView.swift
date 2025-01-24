@@ -160,7 +160,7 @@ struct BottomContentView: View {
 
             // Trick for scroll space, if you remove this you will see the problem
             Text("")
-                .padding(.vertical, 55)
+                .padding(.vertical, 35)
             Spacer()
         }
         .sheet(isPresented: $showEventEdit) {

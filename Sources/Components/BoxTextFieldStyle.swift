@@ -29,7 +29,7 @@ struct BoxTextFieldStyle<Field: Hashable>: TextFieldStyle {
 }
 
 #Preview {
-    @Previewable @State var text: String = ""
+    @Previewable @State var text = ""
     @Previewable @FocusState var focusedField: Int?
 
     TextField("Test", text: $text)

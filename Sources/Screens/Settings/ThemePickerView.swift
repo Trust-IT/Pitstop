@@ -133,7 +133,7 @@ enum ThemeColors: String, CaseIterable {
             (Palette.colorBlue, Palette.colorMainBlue)
         }
     }
-    
+
     var accentColor: Color {
         switch self {
         case .amethystDrive:

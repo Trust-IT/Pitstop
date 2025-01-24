@@ -12,11 +12,11 @@ struct FuelReportView: View {
     @EnvironmentObject private var navManager: NavigationManager
     @Environment(AppState.self) var appState: AppState
     @Environment(\.modelContext) private var modelContext
-    
+
     @FocusState private var focusState: FuelInputFocusField?
-    @State private var totalPrice : String
-    @State private var odometer : String
-    @State private var liters : String
+    @State private var totalPrice: String
+    @State private var odometer: String
+    @State private var liters: String
     @State private var fuelType: FuelType = .diesel
     @State private var secondaryFuelType: FuelType?
     @State private var selectedDate = Date()
@@ -25,15 +25,15 @@ struct FuelReportView: View {
     let fuelExpense: FuelExpense
     init(fuelExpense: FuelExpense) {
         self.fuelExpense = fuelExpense
-        self.totalPrice = fuelExpense.totalPrice.amount != 0 ? fuelExpense.totalPrice.description : ""
-        self.odometer = fuelExpense.odometer != 0 ? fuelExpense.odometer.description : ""
-        self.liters = fuelExpense.quantity != 0 ? fuelExpense.quantity.description : ""
+        totalPrice = fuelExpense.totalPrice.amount != 0 ? fuelExpense.totalPrice.description : ""
+        odometer = fuelExpense.odometer != 0 ? fuelExpense.odometer.description : ""
+        liters = fuelExpense.quantity != 0 ? fuelExpense.quantity.description : ""
     }
 
     var body: some View {
-        VStack(spacing:0){
-            ScrollView{
-                VStack(spacing:14){
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(spacing: 14) {
                     FuelInputTextField(
                         title: "Total",
                         placeholder: "\(fuelExpense.totalPrice)",
@@ -56,7 +56,7 @@ struct FuelReportView: View {
                         title: "Liters",
                         placeholder: "\(fuelExpense.quantity)",
                         measurement: "L",
-                        icon:.liters,
+                        icon: .liters,
                         focusState: $focusState,
                         focus: .quantity,
                         text: $liters
@@ -70,16 +70,16 @@ struct FuelReportView: View {
             }
             .disabled(!areFieldsValid)
             .buttonStyle(Primary())
-            .padding(.bottom,12)
+            .padding(.bottom, 12)
         }
         .onAppear {
             focusState = .totalPrice
-            
+
             // Note: The vehicleManager is passed down when the body is called (as EnvObj),
             // so it doesn't yet exist during the initialization phase, hence it cause runtime crash
             // To fix this, we need to move the initialization of this values into the onAppear
-            self.fuelType = vehicleManager.currentVehicle.mainFuelType
-            self.secondaryFuelType = vehicleManager.currentVehicle.secondaryFuelType
+            fuelType = vehicleManager.currentVehicle.mainFuelType
+            secondaryFuelType = vehicleManager.currentVehicle.secondaryFuelType
         }
         .alert(config: $alert) {
             VStack {
@@ -92,7 +92,7 @@ struct FuelReportView: View {
             .background(RoundedRectangle(cornerRadius: 16).fill(Palette.white))
             .padding()
         }
-        .padding(.top,50)
+        .padding(.top, 50)
         .background(Palette.greyBackground.ignoresSafeArea(.all))
         .navigationBarBackButtonHidden()
         .toolbar {
@@ -111,7 +111,7 @@ private extension FuelReportView {
             focusState = .totalPrice
         }
     }
-    
+
     func changeFuelType() {
         if fuelType == vehicleManager.currentVehicle.mainFuelType {
             fuelType = secondaryFuelType ?? fuelType
@@ -119,14 +119,12 @@ private extension FuelReportView {
             fuelType = vehicleManager.currentVehicle.mainFuelType
         }
     }
-    
+
     func saveExpense() {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale.current
-        formatter.numberStyle = .decimal
-        
-        guard let odometerValue = formatter.number(from: odometer)?.floatValue,
-              let litersValue = formatter.number(from: liters)?.floatValue else {
+        let formatter = Money.decimalFormatter()
+
+        guard let odometerValue = odometer.toFloat(),
+              let litersValue = liters.toFloat() else {
             return
         }
 
@@ -138,24 +136,18 @@ private extension FuelReportView {
         fuelExpense.vehicle = vehicleManager.currentVehicle
         fuelExpense.insert(context: modelContext)
     }
-    
+
     var areFieldsValid: Bool {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale.current
-        formatter.numberStyle = .decimal
-        
-        guard let totalPriceValue = formatter.number(from: totalPrice)?.floatValue,
-              let odometerValue = formatter.number(from: odometer)?.floatValue,
-              let litersValue = formatter.number(from: liters)?.floatValue else {
+        guard let totalPriceValue = totalPrice.toFloat(),
+              let odometerValue = odometer.toFloat(),
+              let litersValue = liters.toFloat() else {
             return false
         }
         return totalPriceValue > 0 && odometerValue > 0 && litersValue > 0
     }
-    
 }
 
 private extension FuelReportView {
-    
     @ToolbarContentBuilder
     func navigationItems() -> some ToolbarContent {
         if let focus = focusState {
@@ -253,7 +245,7 @@ struct FuelInputTextField: View {
             Text(title)
                 .foregroundStyle(Palette.black)
                 .font(Typography.headerM)
-                .padding(.horizontal,12)
+                .padding(.horizontal, 12)
             HStack {
                 ZStack {
                     Circle()
@@ -267,7 +259,7 @@ struct FuelInputTextField: View {
                 TextField(placeholder, text: $text)
                     .foregroundStyle(Palette.black)
                     .font(Typography.headerM)
-                    .padding(.leading,12)
+                    .padding(.leading, 12)
                     .keyboardType(.decimalPad)
                     .focused($focusState, equals: focus)
                 Spacer()
@@ -275,7 +267,7 @@ struct FuelInputTextField: View {
                     .foregroundStyle(Palette.black)
                     .font(Typography.headerM)
             }
-            .padding(.horizontal,12)
+            .padding(.horizontal, 12)
             .frame(height: 54)
             .background(
                 RoundedRectangle(cornerRadius: 16)
@@ -286,7 +278,7 @@ struct FuelInputTextField: View {
                     )
             )
         }
-        .padding(.horizontal,12)
+        .padding(.horizontal, 12)
         .background(Palette.greyBackground)
     }
 }

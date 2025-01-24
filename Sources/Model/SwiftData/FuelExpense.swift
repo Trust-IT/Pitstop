@@ -45,7 +45,7 @@ class FuelExpense: Identifiable {
     static func mock() -> FuelExpense {
         .init(totalPrice: .init(value: 0.0), quantity: 0, pricePerUnit: 0, odometer: 0, fuelType: .diesel, date: .now, vehicle: nil)
     }
-    
+
     static func initialState() -> FuelExpense {
         .init(totalPrice: .init(value: 0.0), quantity: 0, pricePerUnit: 0, odometer: 0, fuelType: .diesel, date: .now, vehicle: nil)
     }
@@ -74,7 +74,6 @@ class FuelExpense: Identifiable {
 }
 
 extension FuelExpense {
-    
     func calculatePricePerUnit() {
         guard quantity > 0 else {
             pricePerUnit = 0
@@ -84,7 +83,7 @@ extension FuelExpense {
             pricePerUnit = (totalPrice.amount.floatValue / quantity).rounded(toPlaces: 2)
         }
     }
-    
+
     /// Checks if the odometer value is valid for the current fuel expense
     /// - Parameter vehicle: The vehicle to check the odometer value against
     /// - Returns: A boolean indicating if the odometer value is valid

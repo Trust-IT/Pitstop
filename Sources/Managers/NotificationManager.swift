@@ -15,7 +15,7 @@ actor NotificationManager {
     @MainActor
     func requestAuthNotifications() async throws -> UNAuthorizationStatus {
         let center = UNUserNotificationCenter.current()
-        
+
         let settings = await center.notificationSettings()
         switch settings.authorizationStatus {
         case .notDetermined:
@@ -76,11 +76,11 @@ actor NotificationManager {
 extension NotificationManager {
     enum StatusError: Error {
         case unknownStatus
-        
+
         var localizedDescription: String {
             switch self {
             case .unknownStatus:
-                return "Unknown status"
+                "Unknown status"
             }
         }
     }

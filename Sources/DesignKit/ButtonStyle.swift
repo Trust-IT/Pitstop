@@ -52,13 +52,13 @@ struct SecondaryCapsule: ButtonStyle {
     init(height: CGFloat = 48) {
         self.height = height
     }
-    
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .frame(maxWidth: .infinity, maxHeight: height)
             .background {
                 if configuration.isPressed {
-                    Capsule(style: .continuous).fill(Palette.black )
+                    Capsule(style: .continuous).fill(Palette.black)
                 } else {
                     Capsule(style: .continuous).fill(isEnabled ? Palette.greyLight : Palette.greyInput)
                 }
@@ -67,7 +67,6 @@ struct SecondaryCapsule: ButtonStyle {
             .foregroundStyle(configuration.isPressed ? Palette.white : Palette.black)
     }
 }
-
 
 struct ButtonStyle_Previews: PreviewProvider {
     static var previews: some View {

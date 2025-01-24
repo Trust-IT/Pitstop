@@ -53,6 +53,7 @@ extension Money: CustomStringConvertible {
 extension Money {
     static func decimalFormatter() -> NumberFormatter {
         let formatter = NumberFormatter()
+        formatter.locale = Locale.current
         formatter.numberStyle = .decimal
         formatter.maximumFractionDigits = 2
         return formatter

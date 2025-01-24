@@ -124,7 +124,7 @@ struct MoneyCodableTests {
 
         // All this boilerplate is because JSON serialization
         // does not guarantee the order of keys when encoding a Swift object into JSON.
-        
+
         let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]
         let expectedJSON: [String: Any] = [
             "amount": "123.45",

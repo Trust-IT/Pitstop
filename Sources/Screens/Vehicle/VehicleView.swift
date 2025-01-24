@@ -18,12 +18,12 @@ struct VehicleView: View {
     var body: some View {
         NavigationStack(path: $navManager.routes) {
 //            VStack {
-                GeometryReader { proxy in
-                    let topEdge = proxy.safeAreaInsets.top
-                    HomeStyleView(topEdge: topEdge)
-                        .background()
+            GeometryReader { proxy in
+                let topEdge = proxy.safeAreaInsets.top
+                HomeStyleView(topEdge: topEdge)
+                    .background()
 //                        .ignoresSafeArea(.all, edges: .top)
-                }
+            }
 //            }
             .navigationDestination(for: Route.self) { route in
                 route

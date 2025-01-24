@@ -28,13 +28,13 @@ enum Palette {
     static let greyBackground = Color(lightRGB: 0xFBFBFB, darkRGB: 0x121212)
 
     static let colorVioletLight = Color(rgb: 0x94BCF8)
- 
+
     // Accent:
     static let violetAccent = Color(rgb: 0x9A7EFF)
     static let greenAccent = Color(rgb: 0x4CD38C)
     static let yellowAccent = Color(rgb: 0xE8CA51)
     static let blueAccent = Color(rgb: 0x59E4DA)
-    
+
     static let colorMainBlue = Color(rgb: 0x9FFCF7)
     static let colorMainGreen = Color(rgb: 0x94F3C7)
     static let colorMainYellow = Color(rgb: 0xFBE989)

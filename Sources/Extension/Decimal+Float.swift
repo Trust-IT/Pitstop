@@ -9,7 +9,6 @@ import Foundation
 
 extension Decimal {
     var floatValue: Float {
-        return NSDecimalNumber(decimal: self).floatValue
+        NSDecimalNumber(decimal: self).floatValue
     }
 }
-

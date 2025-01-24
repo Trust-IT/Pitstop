@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CategoryRow: View {
+    @Environment(AppState.self) var appState: AppState
     var input: CategoryRow.Input
 
     var body: some View {
@@ -19,6 +20,7 @@ struct CategoryRow: View {
                 Image(input.icon)
                     .resizable()
                     .frame(width: 16, height: 16)
+                    .tint(appState.currentTheme.accentColor)
             }
             Text(input.title)
                 .font(Typography.headerM)

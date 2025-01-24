@@ -58,17 +58,17 @@ struct AddReportView: View {
                 }
                 .padding(.top, 26)
             }
-            
+
             SegmentedPicker(currentTab: $currentPickerTab, onTap: {})
                 .padding(.horizontal, 32)
                 .padding(.top, 24)
-            
+
             // MARK: List
-            
+
             switch currentPickerTab {
             case .reminder:
                 ReminderInputView(reminder: reminder, reminderInputFocus: $reminderInputFocus)
-                
+
             case .fuel:
                 FuelExpenseInputView(
                     vehicleFuels: fuelCategories,
@@ -83,9 +83,11 @@ struct AddReportView: View {
             }
         }
         .background(Palette.greyBackground)
+        .navigationTitle("New report")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             // Cancel button
-            ToolbarItem(placement: .navigationBarLeading) {
+            ToolbarItem(placement: .navigation) {
                 Button(action: {
                     navManager.pop()
                 }, label: {
@@ -94,9 +96,9 @@ struct AddReportView: View {
                 })
                 .accentColor(Palette.greyHard)
             }
-            
+
             // Save button
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .primaryAction) {
                 Button(action: {
                     switch currentPickerTab {
                     case .reminder:
@@ -104,17 +106,28 @@ struct AddReportView: View {
                     case .fuel:
                         createFuelExpense()
                     }
-                },label: {
+                }, label: {
                     Text(String(localized: "Save"))
                         .font(Typography.headerM)
                 })
                 .disabled(reminder.title.isEmpty && (fuelTotal.isZero || fuelExpense.quantity.isZero))
                 .opacity(reminder.title.isEmpty && (fuelTotal.isZero || fuelExpense.quantity.isZero) ? 0.6 : 1)
             }
-            
-            // Dismiss keyboard button (keyboard toolbar)
-            ToolbarItem(placement: .keyboard) {
+
+            ToolbarTitleMenu {
+                Button("Fuel") {
+                    currentPickerTab = .fuel
+                }
+                .buttonStyle(Primary())
+                Button("Expense") {
+                    currentPickerTab = .reminder
+                }
+                .buttonStyle(Secondary())
+            }
+
+            ToolbarItemGroup(placement: .keyboard) {
                 HStack {
+                    Spacer()
                     Button(action: {
                         switch currentPickerTab {
                         case .reminder:
@@ -127,19 +140,21 @@ struct AddReportView: View {
                             .resizable()
                             .foregroundColor(Palette.black)
                     })
+                    Spacer()
                 }
+                .background(Color.red)
             }
-            
-            ToolbarItem(placement: .principal) {
-                Text(String(localized: "New report"))
-                    .font(Typography.headerM)
-                    .foregroundColor(Palette.black)
-            }
+
+//            ToolbarItem(placement: .principal) {
+//                Text(String(localized: "New report"))
+//                    .font(Typography.headerM)
+//                    .foregroundColor(Palette.black)
+//            }
         }
         .alert(alertTitle,
                isPresented: $showAlert,
                actions: {},
-               message: { Text(alertMessage)})
+               message: { Text(alertMessage) })
         .onAppear {
             initializeFuelExpense()
         }
@@ -147,40 +162,39 @@ struct AddReportView: View {
 }
 
 private extension AddReportView {
-    
-    func showAlert(with title: String,and message: String) {
+    func showAlert(with title: String, and message: String) {
         showAlert.toggle()
         alertTitle = title
         alertMessage = message
     }
-    
+
     func createReminderNotification() {
         Task {
             do {
                 let status = try await NotificationManager.shared.requestAuthNotifications()
-                
+
                 guard status == .authorized else {
                     showAlert(with: "Attention", and: "Enable the notifications in the settings before creating a reminder")
                     return
                 }
-                
+
                 await NotificationManager.shared.createNotification(for: ReminderNotificationData(from: reminder))
-                
+
                 try reminder.saveToModelContext(context: modelContext)
-                
+
                 navManager.pop()
             } catch {
                 showAlert(with: "Error", and: error.localizedDescription)
             }
         }
     }
-    
+
     func createFuelExpense() {
         if fuelExpense.isValidOdometer(for: vehicleManager.currentVehicle) {
             if fuelExpense.odometer > vehicleManager.currentVehicle.odometer {
                 vehicleManager.currentVehicle.odometer = fuelExpense.odometer
             }
-            
+
 //            fuelExpense.totalPrice = fuelTotal
             vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
             fuelExpense.insert(context: modelContext)
@@ -189,7 +203,7 @@ private extension AddReportView {
             showAlert(with: "Attention", and: "The odometer value is lower than the last report")
         }
     }
-    
+
     func initializeFuelExpense() {
         let currentVehicle = vehicleManager.currentVehicle
         fuelExpense = FuelExpense(

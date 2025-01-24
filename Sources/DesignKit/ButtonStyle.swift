@@ -57,14 +57,12 @@ struct SecondaryCapsule: ButtonStyle {
         configuration.label
             .frame(maxWidth: .infinity, maxHeight: height)
             .background {
-                if configuration.isPressed {
-                    Capsule(style: .continuous).fill(Palette.black)
-                } else {
-                    Capsule(style: .continuous).fill(isEnabled ? Palette.greyLight : Palette.greyInput)
-                }
+                Capsule(style: .continuous)
+                    .fill(configuration.isPressed ? Palette.white : Palette.black)
             }
             .font(Typography.ControlS)
-            .foregroundStyle(configuration.isPressed ? Palette.white : Palette.black)
+            .foregroundStyle(configuration.isPressed ? Palette.black : Palette.white)
+            .opacity(isEnabled ? 1.0 : 0.4)
     }
 }
 

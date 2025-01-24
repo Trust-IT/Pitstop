@@ -45,6 +45,10 @@ class FuelExpense: Identifiable {
     static func mock() -> FuelExpense {
         .init(totalPrice: 0, quantity: 0, pricePerUnit: 0, odometer: 0, fuelType: .diesel, date: .now, vehicle: nil)
     }
+    
+    static func initialState() -> FuelExpense {
+        .init(totalPrice: 0, quantity: 0, pricePerUnit: 0, odometer: 0, fuelType: .diesel, date: .now, vehicle: nil)
+    }
 
     // MARK: CRUD
 

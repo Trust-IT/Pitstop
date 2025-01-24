@@ -8,43 +8,52 @@
 import SwiftUI
 
 struct FuelReportView: View {
-    @FocusState private var focusState: FuelInputFocusField?
-    @Environment(AppState.self) var appState: AppState
+    @EnvironmentObject var vehicleManager: VehicleManager
     @EnvironmentObject private var navManager: NavigationManager
+    @Environment(AppState.self) var appState: AppState
+    @Environment(\.modelContext) private var modelContext
+    
+    @FocusState private var focusState: FuelInputFocusField?
     @State private var totalPrice = ""
-    @State private var odometer = ""
-    @State private var liters = ""
+    @State private var odometer : String
+    @State private var liters : String
     @State private var fuelType: FuelType = .diesel
-    @State private var secondaryFuelType: FuelType? = .gasoline
+    @State private var secondaryFuelType: FuelType?
     @State private var selectedDate = Date()
     @State private var alert = AlertConfig(enableBackgroundBlur: true,
                                            disableOutsideTap: false)
+    let fuelExpense: FuelExpense
+    init(fuelExpense: FuelExpense) {
+        self.fuelExpense = fuelExpense
+        self.odometer = fuelExpense.odometer != 0 ? fuelExpense.odometer.description : ""
+        self.liters = fuelExpense.quantity != 0 ? fuelExpense.quantity.description : ""
+    }
 
     var body: some View {
         VStack(spacing:0){
             ScrollView{
                 VStack(spacing:14){
-                    ExtractedView(
+                    FuelInputTextField(
                         title: "Total",
-                        placeholder: "0.0",
+                        placeholder: "\(fuelExpense.totalPrice)",
                         measurement: "€",
                         icon: .category,
                         focusState: $focusState,
                         focus: .totalPrice,
                         text: $totalPrice
                     )
-                    ExtractedView(
+                    FuelInputTextField(
                         title: "Odometer",
-                        placeholder: "0.0",
+                        placeholder: "\(vehicleManager.currentVehicle.odometer)",
                         measurement: "Km",
                         icon: .odometer,
                         focusState: $focusState,
                         focus: .odometer,
                         text: $odometer
                     )
-                    ExtractedView(
+                    FuelInputTextField(
                         title: "Liters",
-                        placeholder: "0",
+                        placeholder: "\(fuelExpense.quantity)",
                         measurement: "L",
                         icon:.liters,
                         focusState: $focusState,
@@ -57,17 +66,22 @@ struct FuelReportView: View {
             Button("Save") {
                 navManager.pop()
             }
+            .disabled(!areFieldsValid)
             .buttonStyle(Primary())
             .padding(.bottom,12)
         }
-        .onTapGesture {
-            focusState = nil
-        }
         .onAppear {
             focusState = .totalPrice
+            
+            // Note: The vehicleManager is passed down when the body is called (as EnvObj),
+            // so it doesn't yet exist during the initialization phase, hence it cause runtime crash
+            // To fix this, we need to move the initialization of this values into the onAppear
+            self.fuelType = vehicleManager.currentVehicle.mainFuelType
+            self.secondaryFuelType = vehicleManager.currentVehicle.secondaryFuelType
         }
         .alert(config: $alert) {
             VStack {
+                // TODO: Fix date range
                 DatePicker("label", selection: $selectedDate, displayedComponents: [.date])
                     .datePickerStyle(.graphical)
                     .labelsHidden()
@@ -97,9 +111,24 @@ private extension FuelReportView {
     }
     
     func changeFuelType() {
-        if let secondaryFuelType {
-            fuelType = secondaryFuelType
+        if fuelType == vehicleManager.currentVehicle.mainFuelType {
+            fuelType = secondaryFuelType ?? fuelType
+        } else {
+            fuelType = vehicleManager.currentVehicle.mainFuelType
         }
+    }
+    
+    var areFieldsValid: Bool {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale.current
+        formatter.numberStyle = .decimal
+        
+        guard let totalPriceValue = formatter.number(from: totalPrice)?.doubleValue,
+              let odometerValue = formatter.number(from: odometer)?.doubleValue,
+              let litersValue = formatter.number(from: liters)?.doubleValue else {
+            return false
+        }
+        return totalPriceValue > 0 && odometerValue > 0 && litersValue > 0
     }
 }
 
@@ -110,6 +139,11 @@ private extension FuelReportView {
         if let focus = focusState {
             ToolbarItem(placement: .keyboard) {
                 HStack {
+                    Button(action: {
+                        focusState = nil
+                    }, label: {
+                        Image(systemName: "keyboard.chevron.compact.down")
+                    })
                     Spacer()
                     Button(action: {
                         nextFieldFor(focus)
@@ -174,7 +208,7 @@ private extension FuelReportView {
 #Preview {
     @Previewable @State var navManager = NavigationManager()
     NavigationStack(path: $navManager.routes) {
-        FuelReportView()
+        FuelReportView(fuelExpense: FuelExpense.mock())
             .environmentObject(VehicleManager())
             .environment(AppState())
             .environmentObject(NavigationManager())
@@ -182,7 +216,7 @@ private extension FuelReportView {
     }
 }
 
-struct ExtractedView: View {
+struct FuelInputTextField: View {
     @Environment(AppState.self) var appState: AppState
 
     let title: String

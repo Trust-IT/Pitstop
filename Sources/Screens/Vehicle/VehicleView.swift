@@ -33,7 +33,7 @@ struct VehicleView: View {
                 VStack {
                     Spacer(minLength: UIScreen.main.bounds.size.height * 0.77)
                     Button(action: {
-                        navManager.push(.fuelReport)
+                        navManager.push(.fuelReport(input: .initialState()))
                     }, label: {
                         HStack {
                             Spacer()

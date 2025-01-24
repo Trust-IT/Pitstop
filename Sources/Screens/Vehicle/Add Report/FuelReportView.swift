@@ -13,43 +13,51 @@ struct FuelReportView: View {
     @State private var totalPrice = ""
     @State private var odometer = ""
     @State private var liters = ""
+    @State private var fuelType: FuelType = .diesel
+    @State private var secondaryFuelType: FuelType? = .gasoline
+    @State private var selectedDate = Date()
+    @State private var alert = AlertConfig(enableBackgroundBlur: true,
+                                           disableOutsideTap: false)
+
     var body: some View {
-        ScrollView{
-            VStack(spacing:14){
-                ExtractedView(
-                    title: "Total",
-                    placeholder: "0.0",
-                    measurement: "€",
-                    icon: .category,
-                    focusState: $focusState,
-                    focus: .totalPrice,
-                    text: $totalPrice
-                )
-                ExtractedView(
-                    title: "Odometer",
-                    placeholder: "Odometer",
-                    measurement: "Km",
-                    icon: .odometer,
-                    focusState: $focusState,
-                    focus: .odometer,
-                    text: $odometer
-                )
-                ExtractedView(
-                    title: "Liters",
-                    placeholder: "Liters",
-                    measurement: "L",
-                    icon:.liters,
-                    focusState: $focusState,
-                    focus: .quantity,
-                    text: $liters
-                )
-                Spacer()
-                Button("Save") {
-                    navManager.pop()
+        VStack(spacing:0){
+            ScrollView{
+                VStack(spacing:14){
+                    ExtractedView(
+                        title: "Total",
+                        placeholder: "0.0",
+                        measurement: "€",
+                        icon: .category,
+                        focusState: $focusState,
+                        focus: .totalPrice,
+                        text: $totalPrice
+                    )
+                    ExtractedView(
+                        title: "Odometer",
+                        placeholder: "0.0",
+                        measurement: "Km",
+                        icon: .odometer,
+                        focusState: $focusState,
+                        focus: .odometer,
+                        text: $odometer
+                    )
+                    ExtractedView(
+                        title: "Liters",
+                        placeholder: "0",
+                        measurement: "L",
+                        icon:.liters,
+                        focusState: $focusState,
+                        focus: .quantity,
+                        text: $liters
+                    )
                 }
-                .buttonStyle(Primary())
-                .padding(.bottom,12)
             }
+            Spacer()
+            Button("Save") {
+                navManager.pop()
+            }
+            .buttonStyle(Primary())
+            .padding(.bottom,12)
         }
         .onTapGesture {
             focusState = nil
@@ -57,70 +65,106 @@ struct FuelReportView: View {
         .onAppear {
             focusState = .totalPrice
         }
+        .alert(config: $alert) {
+            VStack {
+                DatePicker("label", selection: $selectedDate, displayedComponents: [.date])
+                    .datePickerStyle(.graphical)
+                    .labelsHidden()
+                    .accentColor(Palette.colorMainViolet)
+            }
+            .background(RoundedRectangle(cornerRadius: 16).fill(Palette.white))
+            .padding()
+        }
         .padding(.top,50)
         .background(Palette.greyBackground.ignoresSafeArea(.all))
         .navigationBarBackButtonHidden()
         .toolbar {
-            if let focus = focusState {
-                ToolbarItem(placement: .keyboard) {
-                    Button(action: {
-                        if focus == .totalPrice {
-                            focusState = .odometer
-                        } else if focus == .odometer {
-                            focusState = .quantity
-                        } else if focus == .quantity {
-                            focusState = .totalPrice
-                        }
-                    }, label: {
-//                        HStack {
-//                            Spacer()
-                            Text("Next")
-                                .foregroundStyle(Palette.black)
-                                .font(Typography.headerM)
-//                        }
-                    })
-                }
-            }
-            ToolbarItem(placement: .navigation) {
-                Button(action: {
-                    navManager.pop()
-                }, label: {
-                    Image(.arrowLeft)
-                        .resizable()
-                        .frame(width: 12, height: 16)
-                        .tint(Palette.black)
-                })
-            }
-            ToolbarItemGroup(placement: .topBarTrailing) {
+            navigationItems()
+        }
+    }
+}
+
+private extension FuelReportView {
+    func nextFieldFor(_ current: FuelInputFocusField) {
+        if current == .totalPrice {
+            focusState = .odometer
+        } else if current == .odometer {
+            focusState = .quantity
+        } else if current == .quantity {
+            focusState = .totalPrice
+        }
+    }
+    
+    func changeFuelType() {
+        if let secondaryFuelType {
+            fuelType = secondaryFuelType
+        }
+    }
+}
+
+private extension FuelReportView {
+    
+    @ToolbarContentBuilder
+    func navigationItems() -> some ToolbarContent {
+        if let focus = focusState {
+            ToolbarItem(placement: .keyboard) {
                 HStack {
-                  
+                    Spacer()
                     Button(action: {
+                        nextFieldFor(focus)
                     }, label: {
-                        HStack {
-                            Image(.fuelType)
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                                .tint(Palette.black)
-                            Text("CNG (Methane)")
-                                .fixedSize()
-                        }
-                        .padding(8)
+                        Text("Next")
+                            .foregroundStyle(Palette.black)
+                            .font(Typography.headerM)
                     })
-                    .buttonStyle(SecondaryCapsule())
-                    Button(action: {
-                    }, label: {
-                        HStack {
-                            Image(.day)
-                                .resizable()
-                                .frame(width: 16, height: 16)
-                                .tint(Palette.black)
-                            Text("23.01.2025")
-                                .fixedSize()
-                        }
-                        .padding(8)
-                    })
-                    .buttonStyle(SecondaryCapsule())
                 }
+            }
+        }
+        ToolbarItem(placement: .navigation) {
+            Button(action: {
+                navManager.pop()
+            }, label: {
+                Image(.arrowLeft)
+                    .resizable()
+                    .frame(width: 12, height: 16)
+                    .tint(Palette.black)
+            })
+        }
+        ToolbarItemGroup(placement: .topBarTrailing) {
+            HStack {
+                Button(action: {
+                    changeFuelType()
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                }, label: {
+                    HStack {
+                        Image(.fuelType)
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                            .tint(Palette.black)
+                        Text(fuelType.rawValue)
+                            .fixedSize()
+                    }
+                    .padding(8)
+                })
+                .disabled(secondaryFuelType == nil)
+                .buttonStyle(SecondaryCapsule())
+                .transaction { $0.animation = nil }
+                Button(action: {
+                    focusState = nil
+                    alert.present()
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                }, label: {
+                    HStack {
+                        Image(.day)
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                            .tint(Palette.black)
+                        Text(selectedDate.formatDate(with: "dd MMM YYYY"))
+                            .fixedSize()
+                    }
+                    .padding(8)
+                })
+                .buttonStyle(SecondaryCapsule())
             }
         }
     }
@@ -133,6 +177,7 @@ struct FuelReportView: View {
             .environmentObject(VehicleManager())
             .environment(AppState())
             .environmentObject(NavigationManager())
+            .environment(SceneDelegate())
     }
 }
 
@@ -153,12 +198,12 @@ struct ExtractedView: View {
             HStack {
                 ZStack {
                     Circle()
-                        .fill(Palette.colorViolet)
+                        .fill(text.isEmpty ? Palette.greyLight : Palette.colorViolet)
                         .frame(width: 32, height: 32)
                     Image(icon)
                         .resizable()
                         .frame(width: 16, height: 16)
-                        .foregroundStyle(Palette.colorVioletIcon)
+                        .foregroundStyle(text.isEmpty ? Palette.greyInput : Palette.colorVioletIcon)
                 }
                 TextField(placeholder, text: $text)
                     .foregroundStyle(Palette.black)
@@ -166,14 +211,10 @@ struct ExtractedView: View {
                     .padding(.leading,12)
                     .keyboardType(.decimalPad)
                     .focused($focusState, equals: focus)
-                //                .background(Color.yellow)
-                //                .frame(width: 200,alignment: .trailing)
                 Spacer()
                 Text(measurement)
                     .foregroundStyle(Palette.black)
                     .font(Typography.headerM)
-                //            Spacer()
-                
             }
             .padding(.horizontal,12)
             .frame(height: 54)

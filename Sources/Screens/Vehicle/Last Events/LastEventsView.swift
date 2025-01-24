@@ -41,7 +41,7 @@ struct LastEventsView: View {
                             CategoryComponent(
                                 category: .fuel,
                                 date: fuelExpense.date,
-                                cost: String(fuelExpense.totalPrice)
+                                cost: fuelExpense.totalPrice.description
                             )
                         })
                     }

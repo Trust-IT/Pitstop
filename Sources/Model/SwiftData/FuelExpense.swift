@@ -13,7 +13,7 @@ class FuelExpense: Identifiable {
     @Attribute(.unique)
     var uuid: UUID
 
-    var totalPrice: Float
+    var totalPrice: Money
     var quantity: Float
     var pricePerUnit: Float
     var odometer: Float
@@ -22,7 +22,7 @@ class FuelExpense: Identifiable {
 
     init(
         uuid: UUID = UUID(),
-        totalPrice: Float,
+        totalPrice: Money,
         quantity: Float,
         pricePerUnit: Float,
         odometer: Float,
@@ -43,16 +43,18 @@ class FuelExpense: Identifiable {
     var vehicle: Vehicle?
 
     static func mock() -> FuelExpense {
-        .init(totalPrice: 0, quantity: 0, pricePerUnit: 0, odometer: 0, fuelType: .diesel, date: .now, vehicle: nil)
+        .init(totalPrice: .init(value: 0.0), quantity: 0, pricePerUnit: 0, odometer: 0, fuelType: .diesel, date: .now, vehicle: nil)
     }
     
     static func initialState() -> FuelExpense {
-        .init(totalPrice: 0, quantity: 0, pricePerUnit: 0, odometer: 0, fuelType: .diesel, date: .now, vehicle: nil)
+        .init(totalPrice: .init(value: 0.0), quantity: 0, pricePerUnit: 0, odometer: 0, fuelType: .diesel, date: .now, vehicle: nil)
     }
 
     // MARK: CRUD
 
+    /// When inserting It calcultates the price per unit of fuel automatically
     func insert(context: ModelContext) {
+        calculatePricePerUnit()
         context.insert(self)
         save(context: context)
     }
@@ -72,6 +74,17 @@ class FuelExpense: Identifiable {
 }
 
 extension FuelExpense {
+    
+    func calculatePricePerUnit() {
+        guard quantity > 0 else {
+            pricePerUnit = 0
+            return
+        }
+        if totalPrice.amount > 0 {
+            pricePerUnit = (totalPrice.amount.floatValue / quantity).rounded(toPlaces: 2)
+        }
+    }
+    
     /// Checks if the odometer value is valid for the current fuel expense
     /// - Parameter vehicle: The vehicle to check the odometer value against
     /// - Returns: A boolean indicating if the odometer value is valid

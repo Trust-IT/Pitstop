@@ -14,7 +14,7 @@ struct FuelReportView: View {
     @Environment(\.modelContext) private var modelContext
     
     @FocusState private var focusState: FuelInputFocusField?
-    @State private var totalPrice = ""
+    @State private var totalPrice : String
     @State private var odometer : String
     @State private var liters : String
     @State private var fuelType: FuelType = .diesel
@@ -25,6 +25,7 @@ struct FuelReportView: View {
     let fuelExpense: FuelExpense
     init(fuelExpense: FuelExpense) {
         self.fuelExpense = fuelExpense
+        self.totalPrice = fuelExpense.totalPrice.amount != 0 ? fuelExpense.totalPrice.description : ""
         self.odometer = fuelExpense.odometer != 0 ? fuelExpense.odometer.description : ""
         self.liters = fuelExpense.quantity != 0 ? fuelExpense.quantity.description : ""
     }
@@ -64,6 +65,7 @@ struct FuelReportView: View {
             }
             Spacer()
             Button("Save") {
+                saveExpense()
                 navManager.pop()
             }
             .disabled(!areFieldsValid)
@@ -118,18 +120,38 @@ private extension FuelReportView {
         }
     }
     
+    func saveExpense() {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale.current
+        formatter.numberStyle = .decimal
+        
+        guard let odometerValue = formatter.number(from: odometer)?.floatValue,
+              let litersValue = formatter.number(from: liters)?.floatValue else {
+            return
+        }
+
+        fuelExpense.totalPrice = Money(stringValue: totalPrice)
+        fuelExpense.odometer = odometerValue
+        fuelExpense.quantity = litersValue
+        fuelExpense.fuelType = fuelType
+        fuelExpense.date = selectedDate
+        fuelExpense.vehicle = vehicleManager.currentVehicle
+        fuelExpense.insert(context: modelContext)
+    }
+    
     var areFieldsValid: Bool {
         let formatter = NumberFormatter()
         formatter.locale = Locale.current
         formatter.numberStyle = .decimal
         
-        guard let totalPriceValue = formatter.number(from: totalPrice)?.doubleValue,
-              let odometerValue = formatter.number(from: odometer)?.doubleValue,
-              let litersValue = formatter.number(from: liters)?.doubleValue else {
+        guard let totalPriceValue = formatter.number(from: totalPrice)?.floatValue,
+              let odometerValue = formatter.number(from: odometer)?.floatValue,
+              let litersValue = formatter.number(from: liters)?.floatValue else {
             return false
         }
         return totalPriceValue > 0 && odometerValue > 0 && litersValue > 0
     }
+    
 }
 
 private extension FuelReportView {

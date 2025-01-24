@@ -181,7 +181,7 @@ private extension AddReportView {
                 vehicleManager.currentVehicle.odometer = fuelExpense.odometer
             }
             
-            fuelExpense.totalPrice = fuelTotal
+//            fuelExpense.totalPrice = fuelTotal
             vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
             fuelExpense.insert(context: modelContext)
             navManager.pop()
@@ -193,7 +193,7 @@ private extension AddReportView {
     func initializeFuelExpense() {
         let currentVehicle = vehicleManager.currentVehicle
         fuelExpense = FuelExpense(
-            totalPrice: 0.0,
+            totalPrice: .init(value: 0.0),
             quantity: 0,
             pricePerUnit: 0.0,
             odometer: currentVehicle.odometer,

@@ -81,8 +81,8 @@ final class Vehicle: Identifiable {
 
 extension Vehicle {
     func calculateTotalFuelExpenses() -> String {
-        let total = fuelExpenses.reduce(0.0) { $0 + $1.totalPrice }
-        return String(format: "%.2f", total)
+        let total = fuelExpenses.reduce(0.0) { $0 + $1.totalPrice.amount }
+        return total.description
     }
 
     func calculateFuelEfficiency() -> Float? {

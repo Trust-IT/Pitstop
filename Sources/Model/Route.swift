@@ -16,7 +16,7 @@ enum Route {
     case onboardingReady
 
     // Vehicle
-    case addNewReport
+    case addNewReport // OLD
     case fuelReport(input: FuelExpense)
 
     // Settings

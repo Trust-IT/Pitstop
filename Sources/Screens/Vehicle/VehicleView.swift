@@ -14,6 +14,7 @@ struct VehicleView: View {
 
     @AppStorage("shouldShowOnboarding") var shouldShowOnboarding: Bool = true
     @State private var showAddReport = false
+    @State private var showingAdd = false
 
     var body: some View {
         NavigationStack(path: $navManager.routes) {

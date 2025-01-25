@@ -14,6 +14,8 @@ class NavigationManager: ObservableObject {
     @Published var presentedRoute: Route?
     @Published var isPresented: Bool = false
 
+    @Published var selectedTab: TabBarItem = .vehicle
+
     /// Pushes a new route onto the stack
     func push(_ route: Route) {
         if isPresented {

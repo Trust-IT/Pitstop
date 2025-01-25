@@ -130,18 +130,13 @@ private extension FuelReportView {
             return
         }
 
-        updateFuelExpense(odometerValue: odometerValue, litersValue: litersValue)
-
-        // Note: this check should be done after updating the fuelExpense othervise
-        // it will not read the correct values of the fuelExpense odometer and date
-        // FIXME: The function should be refactor and move to the Vehicle model
-        guard fuelExpense.isValidOdometer(for: vehicleManager.currentVehicle) else {
+        guard vehicleManager.currentVehicle.isValidOdometer(odometerValue, for: selectedDate) else {
             showOdometerAlert.toggle()
             return
         }
+        updateFuelExpense(odometerValue: odometerValue, litersValue: litersValue)
 
-        if odometerValue > vehicleManager.currentVehicle.odometer {
-            vehicleManager.currentVehicle.odometer = odometerValue
+        if odometerValue > vehicleManager.currentVehicle.odometer { vehicleManager.currentVehicle.odometer = odometerValue
         }
         vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
         navManager.pop()

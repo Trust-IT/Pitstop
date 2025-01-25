@@ -127,7 +127,7 @@ struct MoneyCodableTests {
 
         let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]
         let expectedJSON: [String: Any] = [
-            "amount": "123.45",
+            "amount": 123.45,
             "currency": "USD"
         ]
 

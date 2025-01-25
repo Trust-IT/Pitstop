@@ -190,18 +190,18 @@ private extension AddReportView {
     }
 
     func createFuelExpense() {
-        if fuelExpense.isValidOdometer(for: vehicleManager.currentVehicle) {
-            if fuelExpense.odometer > vehicleManager.currentVehicle.odometer {
-                vehicleManager.currentVehicle.odometer = fuelExpense.odometer
-            }
+//        if fuelExpense.isValidOdometer(for: vehicleManager.currentVehicle) {
+        if fuelExpense.odometer > vehicleManager.currentVehicle.odometer {
+            vehicleManager.currentVehicle.odometer = fuelExpense.odometer
+        }
 
 //            fuelExpense.totalPrice = fuelTotal
-            vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
-            fuelExpense.insert(context: modelContext)
-            navManager.pop()
-        } else {
-            showAlert(with: "Attention", and: "The odometer value is lower than the last report")
-        }
+        vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
+        fuelExpense.insert(context: modelContext)
+        navManager.pop()
+//        } else {
+//            showAlert(with: "Attention", and: "The odometer value is lower than the last report")
+//        }
     }
 
     func initializeFuelExpense() {

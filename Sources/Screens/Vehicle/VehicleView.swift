@@ -20,7 +20,6 @@ struct VehicleView: View {
             GeometryReader { proxy in
                 let topEdge = proxy.safeAreaInsets.top
                 HomeStyleView(topEdge: topEdge + 40)
-
             }
             .navigationDestination(for: Route.self) { route in
                 route

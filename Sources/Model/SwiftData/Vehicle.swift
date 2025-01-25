@@ -114,6 +114,56 @@ extension Vehicle {
         // Total Fuel Consumed (Liters) / Total Distance Traveled (Kilometers) * 100
         return (totalFuelConsumed / totalDistanceTraveled) * 100
     }
+
+    /// Checks if the odometer value is valid
+    /// - Parameters: odometer: The odometer value to check
+    /// - Parameters: designatedDate: The date for which the odometer value is being checked
+    /// - Returns: A boolean indicating if the odometer value is valid
+    func isValidOdometer(_ odometer: Float, for designatedDate: Date) -> Bool {
+        let sortedExpenses = fuelExpenses.sorted { $0.date < $1.date }
+
+        guard sortedExpenses.count > 0 else {
+            // No previous expenses, so the value is valid only if it's higher than the current odometer
+            return odometer > self.odometer
+        }
+
+        // Check if the designated date is before the first expense's date
+        if let firstExpense = sortedExpenses.first, designatedDate < firstExpense.date {
+            // Odometer is valid only if it is not greater than the first recorded odometer
+            return odometer <= firstExpense.odometer
+        }
+
+        // Check the last recorded expense
+        if let lastExpense = sortedExpenses.last, designatedDate > lastExpense.date {
+            // Ensure the odometer value is greater than the vehicle's current odometer
+            guard odometer > self.odometer else {
+                return false
+            }
+        }
+
+        // Binary search for the current fuel expense date
+        guard let index = sortedExpenses.firstIndex(where: { $0.date >= designatedDate }) else {
+            if let lastExpense = sortedExpenses.last, lastExpense.odometer > odometer {
+                return false
+            }
+            return true
+        }
+
+        let closestBefore = index > 0 ? sortedExpenses[index - 1] : nil
+        let closestAfter = index < sortedExpenses.count - 1 ? sortedExpenses[index + 1] : nil
+
+        // Check if the odometer value is not lower than the previous
+        if let before = closestBefore, before.odometer > odometer {
+            return false
+        }
+
+        // Check if the odometer value is not higher than the next
+        if let after = closestAfter, after.odometer < odometer {
+            return false
+        }
+
+        return true
+    }
 }
 
 extension Vehicle: Codable {

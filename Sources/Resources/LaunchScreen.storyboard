@@ -16,26 +16,31 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pitstop" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="GJd-Yh-RWb">
-                                <rect key="frame" x="136.66666666666666" y="403.33333333333331" width="119.66666666666666" height="45.666666666666686"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="38"/>
-                                <color key="textColor" red="0.2352941036" green="0.21960783" blue="0.35686278339999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <rect key="frame" x="138" y="744.33333333333348" width="119.66666666666669" height="34.666666666666629"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="29"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="LzH-xD-9ce">
-                                <rect key="frame" x="21" y="159" width="351" height="204.33333333333337"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logoIcon" translatesAutoresizingMaskIntoConstraints="NO" id="LzH-xD-9ce">
+                                <rect key="frame" x="96" y="326" width="200" height="200"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="hYd-fJ-ELF"/>
+                                    <constraint firstAttribute="width" constant="200" id="wO7-zL-3Lr"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="LzH-xD-9ce" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="100" id="1OL-Rt-awq"/>
-                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="top" secondItem="LzH-xD-9ce" secondAttribute="bottom" constant="40" id="4Kk-RR-Jfh"/>
-                            <constraint firstItem="LzH-xD-9ce" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="21" id="I15-Xt-JQM"/>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="GJd-Yh-RWb" secondAttribute="trailing" constant="136.66999999999999" id="IBJ-5E-LlI"/>
-                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="dU5-c5-KbC"/>
-                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="eR9-SK-fRW"/>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="LzH-xD-9ce" secondAttribute="trailing" constant="21" id="gjk-r4-4xp"/>
+                            <constraint firstItem="LzH-xD-9ce" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="96" id="4lg-S1-Qxe"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="GJd-Yh-RWb" secondAttribute="trailing" constant="135.33000000000001" id="KuY-3v-g43"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="LzH-xD-9ce" secondAttribute="trailing" constant="97" id="RIv-z9-XcH"/>
+                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="138" id="YPJ-hp-MBB"/>
+                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="top" secondItem="LzH-xD-9ce" secondAttribute="bottom" constant="218.33000000000001" id="f1Y-gf-cbd"/>
+                            <constraint firstItem="LzH-xD-9ce" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="267" id="jRw-wu-9vB"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="LzH-xD-9ce" secondAttribute="trailing" constant="21" id="xHi-qe-fyU"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -45,6 +50,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="logo" width="1024" height="1024"/>
+        <image name="logoIcon" width="561" height="538"/>
     </resources>
 </document>

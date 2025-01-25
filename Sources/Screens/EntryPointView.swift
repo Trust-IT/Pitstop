@@ -44,8 +44,8 @@ struct EntryPointView: View {
             }
         }
         .sheet(isPresented: $isPresented) {
-            AddNewReportsView(isPresented: $isPresented)
-                .presentationDetents([.fraction(0.3)])
+            AddReportMenuView(isPresented: $isPresented)
+                .presentationDetents([.fraction(0.25)])
                 .presentationDragIndicator(.visible)
         }
         .onAppear {
@@ -67,17 +67,7 @@ enum TabBarItem: String {
 #Preview {
     EntryPointView()
         .environmentObject(NavigationManager())
-}
-
-struct AddNewReportsView: View {
-    @EnvironmentObject private var navManager: NavigationManager
-    @Binding var isPresented: Bool
-
-    var body: some View {
-        Text("Add fuel")
-            .onTapGesture {
-                isPresented.toggle()
-                navManager.push(.fuelReport(input: .initialState()))
-            }
-    }
+        .environmentObject(VehicleManager())
+        .environment(AppState())
+        .environment(SceneDelegate())
 }

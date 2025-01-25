@@ -13,6 +13,7 @@ enum Typography {
     static let headerXL = Font.system(size: 26, weight: .semibold, design: .rounded)
     static let headerL = Font.system(size: 20, weight: .bold, design: .rounded)
     static let headerM = Font.system(size: 17, weight: .medium, design: .rounded)
+    static let headerMS = Font.system(size: 16, weight: .semibold, design: .rounded)
     static let headerS = Font.system(size: 14, weight: .semibold, design: .rounded)
     static let headerXS = Font.system(size: 11.5, weight: .semibold, design: .rounded)
     static let headerLM = Font.system(size: 19, weight: .bold, design: .rounded)

@@ -9,11 +9,13 @@ import Foundation
 import SwiftUI
 
 struct AnalyticsView: View {
+    @EnvironmentObject var vehicleManager: VehicleManager
+    @EnvironmentObject private var navManager: NavigationManager
     @State private var selectedTimeFrame: AnalyticsTimeFrame = .month
     @State private var selectedTab: AnalyticsTabs = .overview
 
     var body: some View {
-        NavigationView {
+        NavigationStack(path: $navManager.routes) {
             VStack {
                 ScrollView {
                     Spacer()
@@ -93,10 +95,14 @@ private struct TimeFrameSelector: View {
 
 #Preview {
     AnalyticsView()
+        .environmentObject(VehicleManager())
+        .environmentObject(NavigationManager())
+        .environment(AppState())
+        .environment(SceneDelegate())
 }
 
 enum AnalyticsTimeFrame: String, CaseIterable, Identifiable {
-    case month = "Per month"
+    case month = "Last 30 days"
     case year = "Yearly"
 
     var id: Self { self }

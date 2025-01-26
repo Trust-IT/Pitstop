@@ -12,4 +12,8 @@ extension Float {
         let multiplier = pow(10.0, Float(places))
         return (self * multiplier).rounded() / multiplier
     }
+
+    func toString(withFormat format: String = "%.2f") -> String {
+        String(format: format, self)
+    }
 }

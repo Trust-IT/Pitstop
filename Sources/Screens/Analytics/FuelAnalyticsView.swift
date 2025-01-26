@@ -10,25 +10,21 @@ import SwiftUI
 
 struct FuelAnalyticsView: View {
     @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(AppState.self) var appState: AppState
     @State private var animatedData: [(month: String, value: Float)] = []
+    @State private var monthlyData: MonthlyFuelData = .init()
+    @State private var efficiency: String = "0"
 
     var body: some View {
         VStack(spacing: 16) {
-            VStack(spacing: 26) {
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("8.71 L/100 km")
-                            .font(Typography.headerL)
-                            .foregroundStyle(Palette.black)
-                        Text("Efficiency")
-                            .font(Typography.headerS)
-                            .foregroundStyle(Palette.greyMiddle)
-                    }
-                    Spacer()
-                    HStack {
-                        Image(.arrowAnalytics)
-                        Text("12 %")
-                    }
+            VStack(alignment: .leading, spacing: 26) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(efficiency + " L / 100 km")
+                        .font(Typography.headerL)
+                        .foregroundStyle(Palette.black)
+                    Text("Efficiency")
+                        .font(Typography.headerS)
+                        .foregroundStyle(Palette.greyMiddle)
                 }
                 Chart {
                     ForEach(animatedData, id: \.month) { item in
@@ -72,16 +68,16 @@ struct FuelAnalyticsView: View {
                 .fill(Palette.white))
             .padding(.horizontal, 16)
             VStack(spacing: 16) {
-                fuelAnalyticsRow(category: "Test", amount: "$ 84")
+                fuelAnalyticsRow(category: "Total cost", amount: monthlyData.totalCost.description + appState.currency)
                 Divider()
                     .overlay(Palette.greyLight)
-                fuelAnalyticsRow(category: "Test", amount: "$ 84")
+                fuelAnalyticsRow(category: "Average liter price", amount: monthlyData.averageCost.description + appState.currency)
                 Divider()
                     .overlay(Palette.greyLight)
-                fuelAnalyticsRow(category: "Test", amount: "$ 84")
+                fuelAnalyticsRow(category: "Refuels amount", amount: monthlyData.refuelsAmount.description)
                 Divider()
                     .overlay(Palette.greyLight)
-                fuelAnalyticsRow(category: "Test", amount: "$ 84")
+                fuelAnalyticsRow(category: "Days from last refuel", amount: monthlyData.daysFromLastRefuel.description)
             }
 
             .padding(16)
@@ -96,17 +92,20 @@ struct FuelAnalyticsView: View {
         .background(Palette.greyBackground)
         .onAppear {
             animateChart()
-            vehicleManager.getMonthlyFuelEfficency()
         }
     }
 
     private func animateChart() {
-        animatedData = [] // Start with no data
-        for (index, value) in vehicleManager.monthlyFuelEfficency.enumerated() {
-            withAnimation(.interactiveSpring(duration: 0.3).delay(Double(index) * 0.1)) {
-                animatedData.append((month: value.key, value: value.value))
-            }
-        }
+        let graphData = vehicleManager.calculateFuelEfficencyData(expenses: vehicleManager.currentVehicle.fuelExpenses)
+//        for (index, value) in graphData.enumerated() {
+//            withAnimation(.interactiveSpring(duration: 0.3).delay(Double(index) * 0.1)) {
+//                animatedData.append((month: value.0, value: value.1))
+//            }
+//        }
+        animatedData = graphData
+        let efficency = vehicleManager.calculateTotalFuelEfficency(efficencies: graphData.map(\.1))
+        efficiency = efficency.rounded().toString()
+        monthlyData = vehicleManager.getMonthlyFuelData()
     }
 
     @ViewBuilder
@@ -125,4 +124,8 @@ struct FuelAnalyticsView: View {
 
 #Preview {
     FuelAnalyticsView()
+        .environmentObject(VehicleManager())
+        .environmentObject(NavigationManager())
+        .environment(AppState())
+        .environment(SceneDelegate())
 }

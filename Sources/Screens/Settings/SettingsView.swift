@@ -37,28 +37,13 @@ struct SettingsView: View {
                                     CategoryRow(input: .init(
                                         title: vehicle.name,
                                         icon: .carSettings,
-                                        color: Palette.greyBackground
+                                        color: appState.currentTheme.colors.background
                                     ))
                                     Spacer()
                                     Image(.arrowRight)
                                 }
                             })
                         }
-
-                        Button(action: {
-                            navManager.push(.onboardingRegistration)
-                            appState.setAddingNewVehicle(true)
-                        }, label: {
-                            HStack {
-                                CategoryRow(input: .init(
-                                    title: "Add vehicle",
-                                    icon: .plus,
-                                    color: Palette.greyBackground
-                                ))
-                                Spacer()
-                                Image(.arrowRight)
-                            }
-                        })
                     }
                     .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
 

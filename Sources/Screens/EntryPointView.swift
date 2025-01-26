@@ -45,7 +45,7 @@ struct EntryPointView: View {
         }
         .sheet(isPresented: $isPresented) {
             AddReportMenuView(isPresented: $isPresented)
-                .presentationDetents([.fraction(0.25)])
+                .presentationDetents([.fraction(0.35)])
                 .presentationDragIndicator(.visible)
         }
         .onAppear {

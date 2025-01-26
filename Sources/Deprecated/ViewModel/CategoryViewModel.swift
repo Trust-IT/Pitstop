@@ -325,41 +325,6 @@ class CategoryViewModel: ObservableObject {
                       Category2(name: String(localized: "Parking"), color: Palette.colorViolet, icon: .parking, totalCosts: parkingTotal),
                       Category2(name: String(localized: "Other"), color: Palette.colorViolet, icon: .other, totalCosts: otherTotal)]
     }
-
-    func retrieveAndUpdate(vehicleID: NSManagedObjectID) {
-        expenseList = []
-        avgOdometer = 0
-        odometerTotal = 0
-        estimatedOdometerPerYear = 0
-        let filterCurrentExpense = NSPredicate(format: "vehicle = %@", vehicleID)
-        getExpensesCoreData(filter: filterCurrentExpense, storage: { storage in
-            self.expenseList = storage
-            self.assignCategories(expenseList: storage)
-            self.getRefuel(timeFrame: self.selectedTimeFrame, fuelList: self.fuelList)
-
-            if self.fuelList.count >= 2 {
-                self.getAverageOdometer(expenseList: self.expenseList, timeFrame: self.selectedTimeFrame)
-                self.getEstimatedOdometerPerYear(timeFrame: self.selectedTimeFrame)
-
-                self.getAverageDaysRefuel(timeFrame: self.selectedTimeFrame, fuelList: self.fuelList)
-                self.getAveragePrice(timeFrame: self.selectedTimeFrame, fuelList: self.fuelList)
-            }
-            self.getFuelEfficiency(timeFrame: self.selectedTimeFrame, fuelList: self.fuelList)
-            self.getTotalExpense(expenses: self.expenseList)
-            self.totalCostPercentage(totalCost: self.totalExpense, expenseList: self.expenseList)
-            self.getLitersData(expenses: self.expenseList)
-            self.getOdometersData(expenses: self.expenseList)
-        })
-    }
-
-    func getExpensesCoreData(filter: NSPredicate?, storage _: @escaping ([ExpenseViewModel]) -> Void) {
-        let request = NSFetchRequest<Expense>(entityName: "Expense")
-        let expense: [Expense]
-
-        let sort = NSSortDescriptor(keyPath: \Expense.objectID, ascending: true)
-        request.sortDescriptors = [sort]
-        request.predicate = filter
-    }
 }
 
 enum Category: Int, Hashable {
@@ -454,5 +419,43 @@ enum CategoryEnum {
 extension Date {
     static func timeDifference(lhs: Date, rhs: Date) -> TimeInterval {
         lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
+    }
+}
+
+struct ExpenseViewModel: Hashable {
+    var category: Int16 {
+        0
+    }
+
+    var fuelType: Int16 {
+        0
+    }
+
+    var date: Date {
+        Date()
+    }
+
+    var note: String {
+        ""
+    }
+
+    var odometer: Float {
+        0
+    }
+
+    var liters: Float {
+        0
+    }
+
+    var priceLiter: Float {
+        0
+    }
+
+    var price: Float {
+        0
+    }
+
+    var expenseID: NSManagedObjectID {
+        .init()
     }
 }

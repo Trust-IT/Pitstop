@@ -147,9 +147,3 @@ struct LineGraph: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }
-
-struct AnalyticsCostView_Previews: PreviewProvider {
-    static var previews: some View {
-        AnalyticsCostView(categoryVM: CategoryViewModel(), dataVM: DataViewModel())
-    }
-}

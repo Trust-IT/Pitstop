@@ -21,10 +21,6 @@ final class Vehicle: Identifiable {
     var odometer: Float
     var plate: String?
 
-    // Relationships
-    @Relationship(deleteRule: .cascade, inverse: \Expense2.vehicle)
-    var expenses: [Expense2] = []
-
     @Relationship(deleteRule: .cascade, inverse: \Number.vehicle)
     var numbers: [Number] = []
 
@@ -181,20 +177,5 @@ extension Vehicle: Codable {
         try container.encode(secondaryFuelType, forKey: .secondaryFuelType)
         try container.encode(odometer, forKey: .odometer)
         try container.encode(plate, forKey: .plate)
-    }
-}
-
-// TODO: Implement
-
-@Model
-final class Expense2: Identifiable {
-    @Attribute(.unique)
-    var uuid: UUID
-
-    var vehicle: Vehicle?
-
-    init(uuid: UUID, vehicle: Vehicle? = nil) {
-        self.uuid = uuid
-        self.vehicle = vehicle
     }
 }

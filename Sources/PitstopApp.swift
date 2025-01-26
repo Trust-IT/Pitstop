@@ -21,7 +21,6 @@ struct PitstopApp: App {
             Document.self,
             Reminder.self,
             Vehicle.self,
-            Expense2.self,
             Number.self,
             FuelExpense.self
         ])

@@ -9,6 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct ReminderInputView: View {
+    @Environment(AppState.self) var appState: AppState
     @State private var selectedType: Reminder.Typology = .date
     @Bindable var reminder: Reminder
 
@@ -22,7 +23,7 @@ struct ReminderInputView: View {
                 CategoryRow(input: .init(
                     title: String(localized: "Category"),
                     icon: .category,
-                    color: Palette.colorYellow
+                    color: appState.currentTheme.colors.background
                 )
                 )
                 Spacer()
@@ -52,8 +53,8 @@ struct ReminderInputView: View {
                 label: {
                     CategoryRow(input: .init(
                         title: String(localized: "Based on"),
-                        icon: .basedOn,
-                        color: Palette.colorOrange
+                        icon: .star,
+                        color: appState.currentTheme.colors.background
                     ))
                 }
             )
@@ -66,13 +67,14 @@ struct ReminderInputView: View {
                 ) {
                     CategoryRow(input: .init(
                         title: String(localized: "Remind me on"),
-                        icon: .remindMe,
-                        color: Palette.colorGreen
+                        icon: .bell,
+                        color: appState.currentTheme.colors.background
                     ))
 
                     .padding(.bottom, 10)
                 }
                 .datePickerStyle(.compact)
+                .accentColor(appState.currentTheme.accentColor)
 //            default:
 //                HStack {
 //                    CategoryRow(title: String(localized: "Remind me in"), icon: .remindMe, color: Palette.colorGreen)
@@ -107,9 +109,10 @@ struct ReminderInputView: View {
                 ZStack {
                     Circle()
                         .frame(width: 32, height: 32)
-                        .foregroundColor(reminder.note.isEmpty ? Palette.greyLight : Palette.colorViolet)
-                    Image(reminder.note.isEmpty ? .note : .noteColored)
+                        .foregroundColor(reminder.note.isEmpty ? Palette.greyLight : appState.currentTheme.colors.background)
+                    Image(.note)
                         .resizable()
+                        .foregroundColor(reminder.note.isEmpty ? Palette.greyInput : appState.currentTheme.accentColor)
                         .frame(width: 16, height: 16)
                 }
                 TextField(String(localized: "Note"), text: $reminder.note)
@@ -120,8 +123,16 @@ struct ReminderInputView: View {
         }
         .padding(.top, -10)
         .onAppear {
-            /// Setting the keyboard focus on the price when opening the modal
             reminderInputFocus.wrappedValue = .reminderTitle
         }
     }
+}
+
+#Preview {
+    @Previewable @FocusState var reminderInputFocus: ReminderInputFocusField?
+    ReminderInputView(reminder: .mock(), reminderInputFocus: $reminderInputFocus)
+        .environmentObject(NavigationManager())
+        .environmentObject(VehicleManager())
+        .environment(AppState())
+        .environment(SceneDelegate())
 }

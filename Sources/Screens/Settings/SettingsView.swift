@@ -69,7 +69,7 @@ struct SettingsView: View {
                             HStack {
                                 CategoryRow(input: .init(
                                     title: "Theme picker",
-                                    icon: .service,
+                                    icon: .wrench,
                                     color: Palette.greyBackground
                                 ))
                                 Spacer()

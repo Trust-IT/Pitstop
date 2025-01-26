@@ -153,7 +153,7 @@ private extension EditReminderView {
             HStack {
                 CategoryRow(input: .init(
                     title: String(localized: "Note"),
-                    icon: .noteColored,
+                    icon: .note,
                     color: Palette.colorViolet
                 ))
                 Spacer()

@@ -78,6 +78,6 @@ struct SegmentedPickerStyle {
 }
 
 #Preview {
-    @Previewable @State var tabs: NewReportTab = .fuel
+    @Previewable @State var tabs: AnalyticsTabs = .fuel
     SegmentedPicker(currentTab: $tabs, onTap: {})
 }

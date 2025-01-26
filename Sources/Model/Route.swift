@@ -16,7 +16,7 @@ enum Route {
     case onboardingReady
 
     // Vehicle
-    case addNewReport // OLD
+    case reminderReport // OLD
     case fuelReport(input: FuelExpense)
 
     // Settings
@@ -44,7 +44,7 @@ extension Route: Equatable {
             true
         case (.onboardingReady, .onboardingReady):
             true
-        case (.addNewReport, .addNewReport):
+        case (.reminderReport, .reminderReport):
             true
         case (.tos, .tos):
             true
@@ -73,8 +73,8 @@ extension Route: View {
             OnbNotificationView()
         case .onboardingReady:
             OnbReadyView()
-        case .addNewReport:
-            AddReportView()
+        case .reminderReport:
+            ReminderReportView()
         case let .fuelReport(fuelData):
             FuelReportView(fuelExpense: fuelData)
         case .tos:

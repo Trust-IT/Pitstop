@@ -193,7 +193,7 @@ struct BottomContentView: View {
                     Circle()
                         .frame(width: 24, height: 24)
                         .foregroundColor(Palette.greyLight)
-                    Image(.service)
+                    Image(.wrench)
                         .resizable()
                         .frame(width: 14, height: 14)
                         .foregroundColor(Palette.black)

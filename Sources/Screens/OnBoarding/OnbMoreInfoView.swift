@@ -57,7 +57,7 @@ struct OnbMoreInfoView: View {
                 }, label: {
                     moreInfoCard(text: "Plate number",
                                  bgColor: Palette.colorOrange,
-                                 iconName: .basedOn)
+                                 iconName: .star)
                 })
                 if !plate.isEmpty {
                     cardInput(value: plate)

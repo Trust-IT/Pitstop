@@ -59,3 +59,9 @@ struct FuelInputTextField: View {
         .background(Palette.greyBackground)
     }
 }
+
+enum FuelInputFocusField: Hashable {
+    case totalPrice
+    case odometer
+    case quantity
+}

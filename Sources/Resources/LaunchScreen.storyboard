@@ -16,31 +16,29 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pitstop" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="GJd-Yh-RWb">
-                                <rect key="frame" x="138" y="744.33333333333348" width="119.66666666666669" height="34.666666666666629"/>
+                                <rect key="frame" x="138" y="744.33333333333337" width="119.66666666666669" height="34.666666666666629"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="29"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logoIcon" translatesAutoresizingMaskIntoConstraints="NO" id="LzH-xD-9ce">
-                                <rect key="frame" x="96" y="326" width="200" height="200"/>
+                                <rect key="frame" x="121" y="314.33333333333331" width="150" height="150"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="hYd-fJ-ELF"/>
-                                    <constraint firstAttribute="width" constant="200" id="wO7-zL-3Lr"/>
+                                    <constraint firstAttribute="height" constant="150" id="Jl6-qO-txY"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="LzH-xD-9ce" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="96" id="4lg-S1-Qxe"/>
+                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="top" secondItem="LzH-xD-9ce" secondAttribute="bottom" constant="280" id="0DS-Ng-12c"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" secondItem="GJd-Yh-RWb" secondAttribute="bottom" constant="39" id="66g-Os-Qdk"/>
+                            <constraint firstItem="LzH-xD-9ce" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="121" id="7PE-86-6FX"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="LzH-xD-9ce" secondAttribute="trailing" constant="122" id="JXK-SF-rGA"/>
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="GJd-Yh-RWb" secondAttribute="trailing" constant="135.33000000000001" id="KuY-3v-g43"/>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="LzH-xD-9ce" secondAttribute="trailing" constant="97" id="RIv-z9-XcH"/>
                             <constraint firstItem="GJd-Yh-RWb" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="138" id="YPJ-hp-MBB"/>
-                            <constraint firstItem="GJd-Yh-RWb" firstAttribute="top" secondItem="LzH-xD-9ce" secondAttribute="bottom" constant="218.33000000000001" id="f1Y-gf-cbd"/>
-                            <constraint firstItem="LzH-xD-9ce" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="267" id="jRw-wu-9vB"/>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="LzH-xD-9ce" secondAttribute="trailing" constant="21" id="xHi-qe-fyU"/>
                         </constraints>
                     </view>
                 </viewController>

@@ -317,7 +317,7 @@ class CategoryViewModel: ObservableObject {
         otherTotal = CategoryViewModel.totalCategoryCost(categoryList: otherList)
 
         categories = [Category2(name: String(localized: "Fuel"), color: Palette.colorYellow, icon: .fuelType, totalCosts: fuelTotal),
-                      Category2(name: String(localized: "Maintenance"), color: Palette.colorGreen, icon: .maintenance, totalCosts: maintenanceTotal),
+                      Category2(name: String(localized: "Maintenance"), color: Palette.colorGreen, icon: .wrench, totalCosts: maintenanceTotal),
                       Category2(name: String(localized: "Insurance"), color: Palette.colorOrange, icon: .insurance, totalCosts: insuranceTotal),
                       Category2(name: String(localized: "Road tax"), color: Palette.colorOrange, icon: .roadTax, totalCosts: roadTaxTotal),
                       Category2(name: String(localized: "Fines"), color: Palette.colorOrange, icon: .fines, totalCosts: finesTotal),
@@ -400,7 +400,7 @@ extension Category: CaseIterable {
         case .fuel:
             .fuel
         case .maintenance:
-            .maintenance
+            .wrench
         case .insurance:
             .insurance
         case .roadTax:

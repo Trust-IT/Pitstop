@@ -44,14 +44,14 @@ struct AddReportMenuView: View {
             })
             Button(action: {
                 isPresented.toggle()
-                navManager.push(.addNewReport)
+                navManager.push(.reminderReport)
             }, label: {
                 HStack {
                     ZStack {
                         Circle()
                             .fill(Palette.colorGreen)
                             .frame(width: 34, height: 34)
-                        Image(.remindMe)
+                        Image(.bell)
                             .resizable()
                             .frame(width: 20, height: 20)
                             .foregroundStyle(Palette.greenAccent)

@@ -21,7 +21,7 @@ enum ServiceCategory: String, Codable, CaseIterable, Identifiable {
     var icon: ImageResource {
         switch self {
         case .maintenance:
-            .maintenance
+            .wrench
         case .insurance:
             .insurance
         case .roadTax:

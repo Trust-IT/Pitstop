@@ -29,7 +29,7 @@ struct FuelAnalyticsView: View {
                 Chart {
                     ForEach(animatedData, id: \.month) { item in
                         LineMark(
-                            x: .value("Month", item.month),
+                            x: .value("Day", item.month),
                             y: .value("Value", item.value)
                         )
                         .foregroundStyle(.green)
@@ -37,7 +37,7 @@ struct FuelAnalyticsView: View {
                         .interpolationMethod(.cardinal)
 
                         AreaMark(
-                            x: .value("Month", item.month),
+                            x: .value("Day", item.month),
                             y: .value("Value", item.value)
                         )
                         .foregroundStyle(

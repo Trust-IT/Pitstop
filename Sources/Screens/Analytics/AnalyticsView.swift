@@ -22,7 +22,7 @@ struct AnalyticsView: View {
                     case .yearly:
                         YearAnalyticsView()
                     case .lastMonth:
-                        FuelAnalyticsView()
+                        MonthlyAnalyticsView()
                     }
                     Spacer()
                 }

@@ -1,5 +1,5 @@
 //
-//  FuelAnalyticsView.swift
+//  MonthlyAnalyticsView.swift
 //  Pitstop-APP
 //
 //  Created by Ivan Voloshchuk on 09/01/25.
@@ -8,7 +8,7 @@
 import Charts
 import SwiftUI
 
-struct FuelAnalyticsView: View {
+struct MonthlyAnalyticsView: View {
     @EnvironmentObject var vehicleManager: VehicleManager
     @Environment(AppState.self) var appState: AppState
     @State private var selectedValue: String?
@@ -141,7 +141,7 @@ struct FuelAnalyticsView: View {
 }
 
 #Preview {
-    FuelAnalyticsView()
+    MonthlyAnalyticsView()
         .environmentObject(VehicleManager())
         .environmentObject(NavigationManager())
         .environment(AppState())

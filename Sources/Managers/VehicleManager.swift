@@ -173,7 +173,7 @@ class VehicleManager: ObservableObject {
         let daysFromLastRefuel = Calendar.current.dateComponents([.day],
                                                                  from: lastMonthExpenses.last?.date ?? Date(),
                                                                  to: Date()).day ?? 0
-        let averageCost = getAverageFuelCost(for: lastMonthExpenses)
+        let averageCost = getAverageFuelCost(for: lastMonthExpenses).rounded(toPlaces: 2)
         return MonthlyFuelData(
             totalCost: totalCost,
             averageCost: averageCost,

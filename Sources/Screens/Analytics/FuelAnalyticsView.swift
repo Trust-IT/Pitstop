@@ -11,6 +11,7 @@ import SwiftUI
 struct FuelAnalyticsView: View {
     @EnvironmentObject var vehicleManager: VehicleManager
     @Environment(AppState.self) var appState: AppState
+    @State private var selectedValue: String?
     @State private var animatedData: [(month: String, value: Float)] = []
     @State private var monthlyData: MonthlyFuelData = .init()
     @State private var efficiency: String = "0"
@@ -26,29 +27,46 @@ struct FuelAnalyticsView: View {
                         .font(Typography.headerS)
                         .foregroundStyle(Palette.greyMiddle)
                 }
-                Chart {
-                    ForEach(animatedData, id: \.month) { item in
-                        LineMark(
-                            x: .value("Day", item.month),
-                            y: .value("Value", item.value)
-                        )
-                        .foregroundStyle(.green)
-                        .lineStyle(StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
-                        .interpolationMethod(.cardinal)
+                Chart(animatedData, id: \.month) { item in
+                    LineMark(
+                        x: .value("Day", item.month),
+                        y: .value("Value", item.value)
+                    )
+                    .foregroundStyle(.green)
+                    .lineStyle(StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+                    .interpolationMethod(.cardinal)
 
-                        AreaMark(
-                            x: .value("Day", item.month),
-                            y: .value("Value", item.value)
+                    AreaMark(
+                        x: .value("Day", item.month),
+                        y: .value("Value", item.value)
+                    )
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Palette.chartGreen.opacity(0.3), Palette.chartGreen.opacity(0)],
+                            startPoint: .top,
+                            endPoint: .bottom
                         )
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [Palette.chartGreen.opacity(0.3), Palette.chartGreen.opacity(0)],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
+                    )
+                    if let selectedX = selectedValue, selectedX == item.month {
+                        RuleMark(
+                            x: .value("X", item.month)
                         )
+                        .foregroundStyle(Palette.black.opacity(0.5))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
+                        PointMark(
+                            x: .value("X", item.month),
+                            y: .value("Y", item.value)
+                        )
+                        .foregroundStyle(Palette.black)
+                        .symbolSize(150)
+                        .annotation(position: .top) {
+                            Text("\(Int(item.value))")
+                                .font(Typography.headerMS)
+                                .foregroundColor(Palette.black)
+                        }
                     }
                 }
+                .chartXSelection(value: $selectedValue)
                 .chartXAxis {
                     AxisMarks(values: .automatic) { value in
                         if let month = value.as(String.self) {

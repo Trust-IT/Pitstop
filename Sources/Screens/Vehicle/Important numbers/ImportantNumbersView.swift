@@ -75,7 +75,11 @@ struct NumberCardView: View {
                 Spacer()
             }
         }
-        .frame(width: UIScreen.main.bounds.size.width * 0.90, height: UIScreen.main.bounds.size.height * 0.075, alignment: .center)
+        .frame(
+            width: UIScreen.main.bounds.size.width * 0.90,
+            height: UIScreen.main.bounds.size.height * 0.075,
+            alignment: .center
+        )
     }
 }
 

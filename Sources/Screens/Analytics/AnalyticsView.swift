@@ -11,7 +11,7 @@ import SwiftUI
 struct AnalyticsView: View {
     @EnvironmentObject var vehicleManager: VehicleManager
     @EnvironmentObject private var navManager: NavigationManager
-    @State private var selectedTab: AnalyticsTabs = .yearly
+    @State private var selectedTab: AnalyticsTabs = .lastMonth
 
     var body: some View {
         NavigationStack(path: $navManager.routes) {

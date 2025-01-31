@@ -4,6 +4,9 @@
 //
 //  Created by Asya Tealdi on 23/05/22.
 //
+
+// swiftlint:disable all
+
 import SwiftUI
 
 // TODO: Need huge refactoring
@@ -155,10 +158,9 @@ struct FiltersRow: View {
 
                     if fuelIsPressed == true {
                         isFilterSelected += 1
-                        curretFilter.append(Category.fuel.rawValue)
                     } else {
                         isFilterSelected -= 1
-                        if let index = curretFilter.firstIndex(of: Category.fuel.rawValue) { curretFilter.remove(at: index) }
+//                        if let index = curretFilter.firstIndex(of: Category.fuel.rawValue) { curretFilter.remove(at: index) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $fuelIsPressed))
@@ -169,10 +171,9 @@ struct FiltersRow: View {
 
                     if maintenanceIsPressed == true {
                         isFilterSelected += 1
-                        curretFilter.append(Category.maintenance.rawValue)
                     } else {
                         isFilterSelected -= 1
-                        if let index = curretFilter.firstIndex(of: Category.maintenance.rawValue) { curretFilter.remove(at: index) }
+//                        if let index = curretFilter.firstIndex(of: Category.maintenance.rawValue) { curretFilter.remove(at: index) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $maintenanceIsPressed))
@@ -183,10 +184,10 @@ struct FiltersRow: View {
 
                     if tollsIsPressed == true {
                         isFilterSelected += 1
-                        curretFilter.append(Category.tolls.rawValue)
+//                        curretFilter.append(Category.tolls.rawValue)
                     } else {
                         isFilterSelected -= 1
-                        if let index = curretFilter.firstIndex(of: Category.tolls.rawValue) { curretFilter.remove(at: index) }
+//                        if let index = curretFilter.firstIndex(of: Category.tolls.rawValue) { curretFilter.remove(at: index) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $tollsIsPressed))
@@ -196,10 +197,10 @@ struct FiltersRow: View {
                     insuranceIsPressed.toggle()
                     if insuranceIsPressed == true {
                         isFilterSelected += 1
-                        curretFilter.append(Category.insurance.rawValue)
+//                        curretFilter.append(Category.insurance.rawValue)
                     } else {
                         isFilterSelected -= 1
-                        if let index = curretFilter.firstIndex(of: Category.insurance.rawValue) { curretFilter.remove(at: index) }
+//                        if let index = curretFilter.firstIndex(of: Category.insurance.rawValue) { curretFilter.remove(at: index) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $insuranceIsPressed))
@@ -209,10 +210,10 @@ struct FiltersRow: View {
                     roadTaxIsPressed.toggle()
                     if roadTaxIsPressed == true {
                         isFilterSelected += 1
-                        curretFilter.append(Category.roadTax.rawValue)
+//                        curretFilter.append(Category.roadTax.rawValue)
                     } else {
                         isFilterSelected -= 1
-                        if let index = curretFilter.firstIndex(of: Category.roadTax.rawValue) { curretFilter.remove(at: index) }
+//                        if let index = curretFilter.firstIndex(of: Category.roadTax.rawValue) { curretFilter.remove(at: index) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $roadTaxIsPressed))
@@ -223,10 +224,10 @@ struct FiltersRow: View {
 
                     if finesIsPressed == true {
                         isFilterSelected += 1
-                        curretFilter.append(Category.fines.rawValue)
+//                        curretFilter.append(Category.fines.rawValue)
                     } else {
                         isFilterSelected -= 1
-                        if let index = curretFilter.firstIndex(of: Category.fines.rawValue) { curretFilter.remove(at: index) }
+//                        if let index = curretFilter.firstIndex(of: Category.fines.rawValue) { curretFilter.remove(at: index) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $finesIsPressed))
@@ -236,10 +237,10 @@ struct FiltersRow: View {
                     parkingIsPressed.toggle()
                     if parkingIsPressed == true {
                         isFilterSelected += 1
-                        curretFilter.append(Category.parking.rawValue)
+//                        curretFilter.append(Category.parking.rawValue)
                     } else {
                         isFilterSelected -= 1
-                        if let index = curretFilter.firstIndex(of: Category.parking.rawValue) { curretFilter.remove(at: index) }
+//                        if let index = curretFilter.firstIndex(of: Category.parking.rawValue) { curretFilter.remove(at: index) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $parkingIsPressed))
@@ -249,10 +250,10 @@ struct FiltersRow: View {
                     otherIsPressed.toggle()
                     if otherIsPressed == true {
                         isFilterSelected += 1
-                        curretFilter.append(Category.other.rawValue)
+//                        curretFilter.append(Category.other.rawValue)
                     } else {
                         isFilterSelected -= 1
-                        if let index = curretFilter.firstIndex(of: Category.other.rawValue) { curretFilter.remove(at: index) }
+//                        if let index = curretFilter.firstIndex(of: Category.other.rawValue) { curretFilter.remove(at: index) }
                     }
                 }
                 .buttonStyle(FilterButton(isPressed: $otherIsPressed))

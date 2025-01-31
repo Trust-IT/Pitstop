@@ -46,7 +46,11 @@ struct TopNav: View {
                     .opacity(fadeOutOpacity())
                 })
                 .disabled(fadeOutOpacity() < 0.35)
-                .confirmationDialog(String(localized: "Select a vehicle"), isPresented: $showingAllCars, titleVisibility: .hidden) {
+                .confirmationDialog(
+                    String(localized: "Select a vehicle"),
+                    isPresented: $showingAllCars,
+                    titleVisibility: .hidden
+                ) {
                     ForEach(vehicles, id: \.uuid) { vehicle in
                         Button(vehicle.name) {
                             vehicleManager.setCurrentVehicle(vehicle)

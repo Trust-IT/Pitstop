@@ -9,21 +9,20 @@ import Foundation
 import SwiftUI
 
 struct AnalyticsView: View {
-    @State private var selectedTimeFrame: AnalyticsTimeFrame = .month
-    @State private var selectedTab: AnalyticsTabs = .overview
+    @EnvironmentObject var vehicleManager: VehicleManager
+    @EnvironmentObject private var navManager: NavigationManager
+    @State private var selectedTab: AnalyticsTabs = .yearly
 
     var body: some View {
-        NavigationView {
+        NavigationStack(path: $navManager.routes) {
             VStack {
                 ScrollView {
                     Spacer()
                     switch selectedTab {
-                    case .overview:
-                        Text("Overview")
-                    case .fuel:
-                        FuelAnalyticsView()
-                    case .odometer:
-                        Text("Odometer")
+                    case .yearly:
+                        YearAnalyticsView()
+                    case .lastMonth:
+                        MonthlyAnalyticsView()
                     }
                     Spacer()
                 }
@@ -35,13 +34,14 @@ struct AnalyticsView: View {
                     .padding(10)
                     .background(.ultraThinMaterial)
             }
+            .navigationDestination(for: Route.self) { route in
+                route
+                    .toolbar(.hidden, for: .tabBar)
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Text("Analytics")
                         .font(Typography.headerXL)
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    TimeFrameSelector(selectedTimeFrame: $selectedTimeFrame)
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {}, label: {
@@ -61,51 +61,17 @@ struct AnalyticsView: View {
     }
 }
 
-private struct TimeFrameSelector: View {
-    @Binding var selectedTimeFrame: AnalyticsTimeFrame
-
-    var body: some View {
-        ZStack {
-            Rectangle()
-                .fill(Palette.white)
-                .cornerRadius(37)
-                .frame(width: 125, height: UIScreen.main.bounds.height * 0.04)
-                .shadowGrey()
-            Menu {
-                Picker(selection: $selectedTimeFrame, label: Text("")) {
-                    ForEach(AnalyticsTimeFrame.allCases) { time in
-                        Text(time.rawValue.capitalized).tag(time)
-                    }
-                }
-            } label: {
-                HStack {
-                    Text(selectedTimeFrame.rawValue.capitalized)
-                        .foregroundColor(Palette.black)
-                        .font(Typography.ControlS)
-                    Image("arrowDown")
-                        .foregroundColor(Palette.black)
-                }
-            }
-            .padding()
-        }
-    }
-}
-
 #Preview {
     AnalyticsView()
-}
-
-enum AnalyticsTimeFrame: String, CaseIterable, Identifiable {
-    case month = "Per month"
-    case year = "Yearly"
-
-    var id: Self { self }
+        .environmentObject(VehicleManager())
+        .environmentObject(NavigationManager())
+        .environment(AppState())
+        .environment(SceneDelegate())
 }
 
 enum AnalyticsTabs: String, CaseIterable, Identifiable {
-    case overview = "Overview"
-    case fuel = "Fuel"
-    case odometer = "Odometer"
+    case yearly = "Yearly"
+    case lastMonth = "Last 30 days"
 
     var id: Self { self }
 }

@@ -86,10 +86,11 @@ struct YearAnalyticsView: View {
             .background(Palette.greyBackground)
         } else {
             VStack(spacing: 15) {
+                Spacer()
                 Text("⚠️ WARNING ⚠️")
                     .foregroundStyle(Palette.black)
                     .font(Typography.headerXL)
-                Image(.bestBoy)
+                Image(.page4)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 300)

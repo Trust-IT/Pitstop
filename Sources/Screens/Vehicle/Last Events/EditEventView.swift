@@ -65,8 +65,7 @@ struct EditEventView: View {
             presentationMode.wrappedValue.dismiss()
         }, label: {
             HStack {
-                Image("arrowLeft")
-                Text("Back")
+                Text("Cancel")
                     .font(Typography.headerM)
             }
             .accentColor(Palette.greyHard)
@@ -90,7 +89,7 @@ struct EditEventView: View {
                     .init(
                         title: String(localized: "Cost"),
                         icon: .other,
-                        color: Palette.colorViolet
+                        color: Palette.greyLight
                     )
                 )
                 Spacer()
@@ -108,7 +107,7 @@ struct EditEventView: View {
                     input: .init(
                         title: String(localized: "Day"),
                         icon: .day,
-                        color: Palette.colorGreen
+                        color: Palette.greyLight
                     )
                 )
                 Spacer()
@@ -126,7 +125,7 @@ struct EditEventView: View {
                     input: .init(
                         title: String(localized: "Odometer"),
                         icon: .odometer,
-                        color: Palette.colorBlue
+                        color: Palette.greyLight
                     )
                 )
                 Spacer()
@@ -144,7 +143,7 @@ struct EditEventView: View {
                     input: .init(
                         title: String(localized: "Fuel type"),
                         icon: .fuelType,
-                        color: Palette.colorOrange
+                        color: Palette.greyLight
                     )
                 )
                 Spacer()
@@ -160,8 +159,8 @@ struct EditEventView: View {
                 CategoryRow(
                     input: .init(
                         title: String(localized: "Price/Liter"),
-                        icon: fuelExpense.pricePerUnit.isZero ? .priceLiter : .priceLiterColored,
-                        color: fuelExpense.pricePerUnit.isZero ? Palette.greyLight : Palette.colorYellow
+                        icon: .priceLiter,
+                        color: Palette.greyLight
                     )
                 )
                 Spacer()
@@ -178,8 +177,8 @@ struct EditEventView: View {
                 CategoryRow(
                     input: .init(
                         title: String(localized: "Liters"),
-                        icon: fuelExpense.quantity.isZero ? .liters : .literColored,
-                        color: fuelExpense.quantity.isZero ? Palette.greyLight : Palette.colorOrange
+                        icon: .liters,
+                        color: Palette.greyLight
                     )
                 )
                 Spacer()

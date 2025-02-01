@@ -23,6 +23,9 @@ enum Route {
     case reminderList
     case expiredReminder(input: Reminder)
 
+    // Documents
+    case docScanner
+
     // Settings
     case tos
     case aboutUs

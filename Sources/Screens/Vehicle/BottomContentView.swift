@@ -10,6 +10,7 @@ import SwiftData
 import SwiftUI
 
 struct BottomContentView: View {
+    @EnvironmentObject private var navManager: NavigationManager
     @EnvironmentObject var vehicleManager: VehicleManager
     @Environment(\.modelContext) private var modelContext
 
@@ -26,8 +27,15 @@ struct BottomContentView: View {
     @State private var selectedDocument: Document = .mock()
 
     @State private var selectedFuelExpense: FuelExpense = .mock()
+    @State private var selectedDocumentType: DocumentPickerType?
 
     @State private var newNumberAlert: AlertConfig = .init(
+        enableBackgroundBlur: false,
+        disableOutsideTap: false,
+        transitionType: .slide
+    )
+
+    @State private var showDocumentPicker: AlertConfig = .init(
         enableBackgroundBlur: false,
         disableOutsideTap: false,
         transitionType: .slide
@@ -93,7 +101,7 @@ struct BottomContentView: View {
                             }
                         }
                         Button(action: {
-                            presentImporter.toggle()
+                            showDocumentPicker.present()
                         }, label: {
                             addComponent(title: "Add document")
                         })
@@ -178,6 +186,28 @@ struct BottomContentView: View {
                 .environment(\.modelContext, modelContext)
                 .environmentObject(vehicleManager)
         }
+        .alert(config: $showDocumentPicker) {
+            ConfirmationDialog(
+                items: DocumentPickerType.allCases,
+                message: "Select how to upload your document",
+                onTap: { value in
+                    selectedDocumentType = value
+                    showDocumentPicker.dismiss()
+                },
+                onCancel: {
+                    showDocumentPicker.dismiss()
+                }
+            )
+        }
+        .onChange(of: selectedDocumentType) { _, newValue in
+            guard let newValue else { return }
+            switch newValue {
+            case .files:
+                presentImporter.toggle()
+            case .photo:
+                navManager.push(.docScanner)
+            }
+        }
     }
 
     @ViewBuilder
@@ -259,6 +289,13 @@ struct BottomContentView: View {
             // TODO: Implement proper error handling
             print("Error when processing document: \(error)")
         }
+    }
+
+    enum DocumentPickerType: String, CaseIterable, Identifiable {
+        var id: Self { self }
+
+        case files = "Files"
+        case photo = "Photo"
     }
 }
 

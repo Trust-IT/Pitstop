@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct DocumentScannerView: View {
-    @State private var scannedImages: [UIImage] = [UIImage(systemName: "pencil")!, UIImage(systemName: "person.crop.circle")!, UIImage(systemName: "photo")!]
-    @State private var isShowingVNDocumentCameraView = false
+    @State private var scannedImages: [UIImage] = []
+    @State private var showCameraPicker = false
     let columns = [GridItem(.adaptive(minimum: 100))]
 
     var body: some View {
         ScrollView(.vertical) {
             LazyVGrid(columns: columns, spacing: 20) {
                 Button(action: {
-                    showVNDocumentCameraView()
+                    showCameraPicker.toggle()
                 }, label: {
                     Image(systemName: "camera.fill")
                         .resizable()
@@ -39,17 +39,19 @@ struct DocumentScannerView: View {
                     }
                 }
             }
+            .padding(.top, 16)
             .padding()
+            Spacer()
+            if !scannedImages.isEmpty {
+                Button("Save scans as PDF") {}
+                    .buttonStyle(Primary())
+            }
         }
         .background(Palette.greyBackground)
         .navigationTitle("Select Documents")
-        .sheet(isPresented: $isShowingVNDocumentCameraView) {
+        .sheet(isPresented: $showCameraPicker) {
             DocumentCameraVCRepresentable(scanResult: $scannedImages)
         }
-    }
-
-    private func showVNDocumentCameraView() {
-        isShowingVNDocumentCameraView = true
     }
 }
 

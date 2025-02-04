@@ -195,6 +195,7 @@ struct BottomContentView: View {
                     showDocumentPicker.dismiss()
                 },
                 onCancel: {
+                    selectedDocumentType = nil
                     showDocumentPicker.dismiss()
                 }
             )
@@ -204,8 +205,10 @@ struct BottomContentView: View {
             switch newValue {
             case .files:
                 presentImporter.toggle()
+                selectedDocumentType = nil
             case .photo:
                 navManager.push(.docScanner)
+                selectedDocumentType = nil
             }
         }
     }

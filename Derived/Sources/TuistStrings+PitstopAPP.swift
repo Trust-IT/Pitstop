@@ -13,10 +13,6 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name
 public enum PitstopAPPStrings: Sendable {
-  /// 100
-  public static let _100 = PitstopAPPStrings.tr("Localizable", "100")
-  /// 1000
-  public static let _1000 = PitstopAPPStrings.tr("Localizable", "1000")
   /// Aggiungi altre info
   public static let addMoreInfo = PitstopAPPStrings.tr("Localizable", "Add more info")
   /// Tutti i costi
@@ -25,8 +21,6 @@ public enum PitstopAPPStrings: Sendable {
   public static let analytics = PitstopAPPStrings.tr("Localizable", "Analytics")
   /// Brand
   public static let brand = PitstopAPPStrings.tr("Localizable", "Brand")
-  /// Annulla
-  public static let cancel = PitstopAPPStrings.tr("Localizable", "Cancel")
   /// Costi
   public static let costs = PitstopAPPStrings.tr("Localizable", "Costs")
   /// Documenti
@@ -69,8 +63,6 @@ public enum PitstopAPPStrings: Sendable {
   public static let removeAllExpenses = PitstopAPPStrings.tr("Localizable", "Remove all expenses")
   /// Rimuovi tutti i veicoli
   public static let removeAllVehicles = PitstopAPPStrings.tr("Localizable", "Remove all vehicles")
-  /// Salva
-  public static let save = PitstopAPPStrings.tr("Localizable", "Save")
   /// Impostazioni
   public static let settings = PitstopAPPStrings.tr("Localizable", "Settings")
   /// Nome del veicolo
@@ -81,18 +73,71 @@ public enum PitstopAPPStrings: Sendable {
   }
   /// Registrazione veicolo
   public static let vehicleRegistration = PitstopAPPStrings.tr("Localizable", "Vehicle registration")
-  /// Scalda il motore
-  public static let warmUpYourEngine = PitstopAPPStrings.tr("Localizable", "Warm up your engine")
   /// Ora sei pronto a far partire il motore \ned ottimizzare le tue spese
   public static let youAreSetToStartYourEngineAndOptimizeYourSpendings = PitstopAPPStrings.tr("Localizable", "You are set to start your engine and optimize \n your spendings")
-  /// Il tuo veicolo è pronto!
-  public static let yourVehicleIsReady = PitstopAPPStrings.tr("Localizable", "Your vehicle is ready!")
 
   public enum Common: Sendable {
   /// Cancel
     public static let cancel = PitstopAPPStrings.tr("Localizable", "common.cancel")
     /// Save
     public static let save = PitstopAPPStrings.tr("Localizable", "common.save")
+  }
+
+  public enum Onb: Sendable {
+  /// Activate notifications
+    public static let activateNotifications = PitstopAPPStrings.tr("Localizable", "onb.activateNotifications")
+    /// Add a new vehicle
+    public static let addNewVehicle = PitstopAPPStrings.tr("Localizable", "onb.addNewVehicle")
+    /// Add vehicle
+    public static let addVehicle = PitstopAPPStrings.tr("Localizable", "onb.addVehicle")
+    /// Brand
+    public static let brand = PitstopAPPStrings.tr("Localizable", "onb.brand")
+    /// Don’t miss anything important
+    public static let dontMiss = PitstopAPPStrings.tr("Localizable", "onb.dontMiss")
+    /// Fuel Type
+    public static let fuelType = PitstopAPPStrings.tr("Localizable", "onb.fuelType")
+    /// Gear up for a simple way of trackng your vehicle costs
+    public static let gearUp = PitstopAPPStrings.tr("Localizable", "onb.gearUp")
+    /// Hop in and insert some key details
+    public static let hopIn = PitstopAPPStrings.tr("Localizable", "onb.hopIn")
+    /// Later
+    public static let later = PitstopAPPStrings.tr("Localizable", "onb.later")
+    /// Model
+    public static let model = PitstopAPPStrings.tr("Localizable", "onb.model")
+    /// Add more info
+    public static let moreInfo = PitstopAPPStrings.tr("Localizable", "onb.moreInfo")
+    /// Next
+    public static let next = PitstopAPPStrings.tr("Localizable", "onb.next")
+    /// Odometer
+    public static let odometer = PitstopAPPStrings.tr("Localizable", "onb.odometer")
+    /// Previously 0 km
+    public static let odometerPlaceholder = PitstopAPPStrings.tr("Localizable", "onb.odometerPlaceholder")
+    /// Okayyyy let's go
+    public static let okLetsGo = PitstopAPPStrings.tr("Localizable", "onb.okLetsGo")
+    /// Plate number
+    public static let plateNumber = PitstopAPPStrings.tr("Localizable", "onb.plateNumber")
+    /// Let us remind you key dates about your vehicle’s maintenance status and deadlines
+    public static let reminderInfo = PitstopAPPStrings.tr("Localizable", "onb.reminderInfo")
+    /// Secondary fuel type
+    public static let secondFuelType = PitstopAPPStrings.tr("Localizable", "onb.secondFuelType")
+    /// Select a fuel type
+    public static let selectFuelType = PitstopAPPStrings.tr("Localizable", "onb.selectFuelType")
+    /// You are set to start your engine and optimize your spendings
+    public static let startEngine = PitstopAPPStrings.tr("Localizable", "onb.startEngine")
+    /// Keep all of your vehicle info at hand
+    public static let vehicleInfo = PitstopAPPStrings.tr("Localizable", "onb.vehicleInfo")
+    /// Vehicle name
+    public static let vehicleName = PitstopAPPStrings.tr("Localizable", "onb.vehicleName")
+    /// Your vehicle is ready!
+    public static let vehicleReady = PitstopAPPStrings.tr("Localizable", "onb.vehicleReady")
+    /// Vehicle registration
+    public static let vehicleRegistration = PitstopAPPStrings.tr("Localizable", "onb.vehicleRegistration")
+    /// Warm up your engine
+    public static let warmUpEngine = PitstopAPPStrings.tr("Localizable", "onb.warmUpEngine")
+    /// Write the odometer
+    public static let writeOdometer = PitstopAPPStrings.tr("Localizable", "onb.writeOdometer")
+    /// Write the plate number
+    public static let writePlate = PitstopAPPStrings.tr("Localizable", "onb.writePlate")
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length

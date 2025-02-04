@@ -17,10 +17,10 @@ struct OnbReadyView: View {
                 .padding(.top, 78)
             Spacer()
             VStack(spacing: 12) {
-                Text("Your vehicle is ready!")
+                Text(PitstopAPPStrings.Onb.vehicleReady)
                     .font(Typography.headerXL)
                     .foregroundColor(Palette.black)
-                Text("You are set to start your engine and optimize \n your spendings")
+                Text(PitstopAPPStrings.Onb.startEngine)
                     .font(Typography.TextM)
                     .multilineTextAlignment(.center)
                     .foregroundColor(Palette.black)
@@ -30,7 +30,7 @@ struct OnbReadyView: View {
                 navManager.popAll()
                 shouldShowOnboarding = false
             }, label: {
-                Text("Okayyyy let's go")
+                Text(PitstopAPPStrings.Onb.okLetsGo)
             })
             .buttonStyle(Primary())
             .padding(.bottom, 32)

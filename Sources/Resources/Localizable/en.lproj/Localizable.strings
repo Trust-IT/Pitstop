@@ -3,14 +3,37 @@
 "common.save" = "Save";
 "common.cancel" = "Cancel";
 
+// MARK: ONBOARDING
+
+"onb.warmUpEngine" = "Warm up your engine";
+"onb.gearUp" = "Gear up for a simple way of trackng your vehicle costs";
+"onb.addNewVehicle" = "Add a new vehicle";
+"onb.vehicleRegistration" = "Vehicle registration";
+"onb.hopIn" = "Hop in and insert some key details";
+"onb.vehicleName" = "Vehicle name";
+"onb.brand" = "Brand";
+"onb.model" = "Model";
+"onb.fuelType" = "Fuel Type";
+"onb.next" = "Next";
+"onb.moreInfo" = "Add more info";
+"onb.vehicleInfo" = "Keep all of your vehicle info at hand";
+"onb.plateNumber" = "Plate number";
+"onb.odometer" = "Odometer";
+"onb.secondFuelType" = "Secondary fuel type";
+"onb.addVehicle" = "Add vehicle";
+"onb.selectFuelType" = "Select a fuel type";
+"onb.writePlate" = "Write the plate number";
+"onb.writeOdometer" = "Write the odometer";
+"onb.odometerPlaceholder" = "Previously 0 km";
+"onb.dontMiss" = "Don’t miss anything important";
+"onb.reminderInfo" = "Let us remind you key dates about your vehicle’s maintenance status and deadlines";
+"onb.activateNotifications" = "Activate notifications";
+"onb.later" = "Later";
+"onb.vehicleReady" = "Your vehicle is ready!";
+"onb.startEngine" = "You are set to start your engine and optimize your spendings";
+"onb.okLetsGo" = "Okayyyy let's go";
 
 // TODO: Categorize
-
-/* No comment provided by engineer. */
-"100" = "100";
-
-/* No comment provided by engineer. */
-"1000" = "1000";
 
 /* No comment provided by engineer. */
 "Add more info" = "Aggiungi altre info";
@@ -100,12 +123,4 @@
 "Vehicle registration" = "Registrazione veicolo";
 
 /* No comment provided by engineer. */
-"Warm up your engine" = "Scalda il motore";
-
-/* No comment provided by engineer. */
 "You are set to start your engine and optimize \n your spendings" = "Ora sei pronto a far partire il motore \ned ottimizzare le tue spese";
-
-/* No comment provided by engineer. */
-"Your vehicle is ready!" = "Il tuo veicolo è pronto!";
-
-

@@ -3,17 +3,40 @@
 "common.save" = "Salva";
 "common.cancel" = "Annulla";
 
+// MARK: ONBOARDING
+
+"onb.warmUpEngine" = "Scalda il motore";
+"onb.gearUp" = "Preparati a un modo semplice per tracciare le spese del tuo veicolo";
+"onb.addNewVehicle" = "Aggiungi un nuovo veicolo";
+"onb.vehicleRegistration" = "Registrazione del veicolo";
+"onb.hopIn" = "Sali a bordo e inserisci i dettagli fondamentali";
+"onb.vehicleName" = "Nome del veicolo";
+"onb.brand" = "Marca";
+"onb.model" = "Modello";
+"onb.fuelType" = "Tipo di carburante";
+"onb.next" = "Avanti";
+"onb.moreInfo" = "Aggiungi più informazioni";
+"onb.vehicleInfo" = "Conserva tutte le informazioni del tuo veicolo a portata di mano";
+"onb.plateNumber" = "Numero di targa";
+"onb.odometer" = "Contachilometri";
+"onb.secondFuelType" = "Tipologia di carburante secondario";
+"onb.addVehicle" = "Aggiungi veicolo";
+"onb.selectFuelType" = "Seleziona un tipo di carburante";
+"onb.writePlate" = "Scrivi il numero di targa";
+"onb.writeOdometer" = "Scrivi il valore del contachilometri";
+"onb.odometerPlaceholder" = "Precedentemente 0 km";
+"onb.dontMiss" = "Non perderti nulla di importante";
+"onb.reminderInfo" = "Permettici di ricordarti le date importanti sulla manutenzione e le scadenze del tuo veicolo";
+"onb.activateNotifications" = "Attiva le notifiche";
+"onb.later" = "Più tardi";
+"onb.vehicleReady" = "Il tuo veicolo è pronto!";
+"onb.startEngine" = "Ora sei pronto a far partire il motore ed ottimizzare le tue spese";
+"onb.okLetsGo" = "Vamosssss";
 
 // TODO: Categorize
 
 /* No comment provided by engineer. */
 "/day" = "/giorno";
-
-/* No comment provided by engineer. */
-"100" = "100";
-
-/* No comment provided by engineer. */
-"1000" = "1000";
 
 /* No comment provided by engineer. */
 "About us" = "About us";
@@ -382,19 +405,4 @@
 "View reminder" = "Visualizza promemoria";
 
 /* No comment provided by engineer. */
-"Warm up your engine" = "Scalda il motore";
-
-/* No comment provided by engineer. */
-"Write the odometer" = "Scrivi l'odometro";
-
-/* No comment provided by engineer. */
-"Write the plate number" = "Scrivi il numero di targa";
-
-/* No comment provided by engineer. */
-"You are set to start your engine and optimize \n your spendings" = "Ora sei pronto a far partire il motore \ned ottimizzare le tue spese";
-
-/* No comment provided by engineer. */
 "You have a new " = "Hai un nuovo ";
-
-/* No comment provided by engineer. */
-"Your vehicle is ready!" = "Il tuo veicolo è pronto!";

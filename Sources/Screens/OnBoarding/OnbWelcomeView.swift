@@ -14,10 +14,10 @@ struct OnbWelcomeView: View {
         VStack(alignment: .center) {
             Spacer(minLength: 60)
             VStack(spacing: 12) {
-                Text("Warm up your engine")
+                Text(PitstopAPPStrings.Onb.warmUpEngine)
                     .font(Typography.headerXL)
                     .foregroundColor(Palette.black)
-                Text("Gear up for a simple way of managing your \nvehicle and cutting costs")
+                Text(PitstopAPPStrings.Onb.gearUp)
                     .font(Typography.TextM)
                     .multilineTextAlignment(.center)
                     .foregroundColor(Palette.black)
@@ -30,7 +30,7 @@ struct OnbWelcomeView: View {
                     navManager.push(.onboardingRegistration)
                 }
             }, label: {
-                Text("Add a new vehicle")
+                Text(PitstopAPPStrings.Onb.addNewVehicle)
             })
             .buttonStyle(Primary())
             .padding(.bottom, 32)

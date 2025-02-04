@@ -43,10 +43,10 @@ struct OnbMoreInfoView: View {
         VStack {
             Spacer(minLength: 60)
             VStack(spacing: 12) {
-                Text("Add more info")
+                Text(PitstopAPPStrings.Onb.moreInfo)
                     .font(Typography.headerXL)
                     .foregroundColor(Palette.black)
-                Text("Keep all of your vehicle info at hand")
+                Text(PitstopAPPStrings.Onb.vehicleInfo)
                     .font(Typography.TextM)
                     .multilineTextAlignment(.center)
                     .foregroundColor(Palette.black)
@@ -55,8 +55,8 @@ struct OnbMoreInfoView: View {
                 Button(action: {
                     showPlateInput.present()
                 }, label: {
-                    moreInfoCard(text: "Plate number",
-                                 bgColor: Palette.colorOrange,
+                    moreInfoCard(text: PitstopAPPStrings.Onb.plateNumber,
+                                 bgColor: appState.currentTheme.colors.background,
                                  iconName: .star)
                 })
                 if !plate.isEmpty {
@@ -65,8 +65,8 @@ struct OnbMoreInfoView: View {
                 Button(action: {
                     showOdometerInput.present()
                 }, label: {
-                    moreInfoCard(text: "Odometer",
-                                 bgColor: Palette.colorBlue,
+                    moreInfoCard(text: PitstopAPPStrings.Onb.odometer,
+                                 bgColor: appState.currentTheme.colors.background,
                                  iconName: .odometer)
                 })
                 if odometer != 0.0 {
@@ -75,8 +75,8 @@ struct OnbMoreInfoView: View {
                 Button(action: {
                     showSecondaryFuelSelection.present()
                 }, label: {
-                    moreInfoCard(text: "Second fuel type",
-                                 bgColor: Palette.colorYellow,
+                    moreInfoCard(text: PitstopAPPStrings.Onb.secondFuelType,
+                                 bgColor: appState.currentTheme.colors.background,
                                  iconName: .fuel)
                 })
                 if let secondaryFuelType {
@@ -94,7 +94,7 @@ struct OnbMoreInfoView: View {
                     navManager.push(.onboardingNotification)
                 }
             }, label: {
-                Text("Add vehicle")
+                Text(PitstopAPPStrings.Onb.addVehicle)
             })
             .buttonStyle(Primary())
             .padding(.bottom, 32)
@@ -109,7 +109,7 @@ struct OnbMoreInfoView: View {
         .alert(config: $showSecondaryFuelSelection) {
             ConfirmationDialog(
                 items: FuelType.allCases,
-                message: "Select a fuel type",
+                message: PitstopAPPStrings.Onb.selectFuelType,
                 onTap: { value in
                     secondaryFuelType = value
                     showSecondaryFuelSelection.dismiss()
@@ -162,7 +162,7 @@ private extension OnbMoreInfoView {
                         .frame(width: 32, height: 32)
                     Image(iconName)
                         .resizable()
-                        .foregroundColor(Color(rgb: 0x9A7EFF))
+                        .tint(appState.currentTheme.accentColor)
                         .frame(width: 16, height: 16)
                 }
                 Text(text)
@@ -203,7 +203,7 @@ private extension OnbMoreInfoView {
             VStack(spacing: 16) {
                 HStack {
                     Spacer()
-                    Text("Write the plate number")
+                    Text(PitstopAPPStrings.Onb.writePlate)
                         .foregroundColor(Palette.black)
                         .font(Typography.headerM)
                         .padding(.leading, 40)
@@ -250,7 +250,7 @@ private extension OnbMoreInfoView {
             VStack(spacing: 16) {
                 HStack {
                     Spacer()
-                    Text("Write the odometer")
+                    Text(PitstopAPPStrings.Onb.writeOdometer)
                         .foregroundColor(Palette.black)
                         .font(Typography.headerM)
                         .padding(.leading, 40)
@@ -269,7 +269,7 @@ private extension OnbMoreInfoView {
                     })
                 }
                 VStack(spacing: 12) {
-                    TextField("Previously 0 km", value: $odometer, formatter: NumberFormatter())
+                    TextField(PitstopAPPStrings.Onb.odometerPlaceholder, value: $odometer, formatter: NumberFormatter())
                         .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .odometer))
                         .keyboardType(.decimalPad)
                         .padding(.horizontal, 16)

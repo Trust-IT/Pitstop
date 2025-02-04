@@ -23,31 +23,31 @@ struct OnbRegistrationView: View {
         VStack {
             Spacer(minLength: 60)
             VStack(spacing: 12) {
-                Text("Vehicle registration")
+                Text(PitstopAPPStrings.Onb.vehicleRegistration)
                     .font(Typography.headerXL)
                     .foregroundColor(Palette.black)
-                Text("Hop in and insert some key details")
+                Text(PitstopAPPStrings.Onb.hopIn)
                     .font(Typography.TextM)
                     .multilineTextAlignment(.center)
                     .foregroundColor(Palette.black)
             }
             VStack(spacing: 20) {
-                TextField("Vehicle name", text: $inputData.name)
+                TextField(PitstopAPPStrings.Onb.vehicleName, text: $inputData.name)
                     .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .vehicleName))
                     .onSubmit {
                         focusedField = .brand
                     }
-                TextField("Brand", text: $inputData.brand)
+                TextField(PitstopAPPStrings.Onb.brand, text: $inputData.brand)
                     .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .brand))
                     .onSubmit {
                         focusedField = .model
                     }
-                TextField("Model", text: $inputData.model)
+                TextField(PitstopAPPStrings.Onb.model, text: $inputData.model)
                     .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .model))
                     .onSubmit {
                         focusedField = .fuelType
                     }
-                TextField("Fuel Type", text: fuelTypeBinding)
+                TextField(PitstopAPPStrings.Onb.fuelType, text: fuelTypeBinding)
                     .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .fuelType))
                     .disabled(true)
                     .onTapGesture {
@@ -57,7 +57,7 @@ struct OnbRegistrationView: View {
                     .alert(config: $showMainFuelSelection) {
                         ConfirmationDialog(
                             items: FuelType.allCases,
-                            message: "Select a fuel type",
+                            message: PitstopAPPStrings.Onb.selectFuelType,
                             onTap: { fuel in
                                 inputData.fuelType = fuel
                                 focusedField = nil
@@ -80,7 +80,7 @@ struct OnbRegistrationView: View {
                     navManager.push(.onboardingMoreInfo(input: inputData))
                 }
             }, label: {
-                Text("Next")
+                Text(PitstopAPPStrings.Onb.next)
             })
             .buttonStyle(Primary())
             .padding(.bottom, 32)

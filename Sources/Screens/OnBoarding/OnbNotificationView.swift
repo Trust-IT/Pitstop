@@ -14,11 +14,11 @@ struct OnbNotificationView: View {
         VStack(alignment: .center) {
             Spacer()
             VStack(spacing: 12) {
-                Text("Don’t miss anything \nimportant")
+                Text(PitstopAPPStrings.Onb.dontMiss)
                     .font(Typography.headerXL)
                     .multilineTextAlignment(.center)
                     .foregroundColor(Palette.black)
-                Text("Let us remind you key dates about your \nvehicle’s maintenance status and deadlines")
+                Text(PitstopAPPStrings.Onb.reminderInfo)
                     .font(Typography.TextM)
                     .multilineTextAlignment(.center)
                     .foregroundColor(Palette.black)
@@ -39,13 +39,13 @@ struct OnbNotificationView: View {
                     }
                     navManager.push(.onboardingReady)
                 }, label: {
-                    Text("Activate notifications")
+                    Text(PitstopAPPStrings.Onb.activateNotifications)
                 })
                 .buttonStyle(Primary())
                 Button(action: {
                     navManager.push(.onboardingReady)
                 }, label: {
-                    Text("Later")
+                    Text(PitstopAPPStrings.Onb.later)
                 })
                 .buttonStyle(Secondary())
             }

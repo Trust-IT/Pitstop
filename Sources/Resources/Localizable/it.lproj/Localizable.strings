@@ -1,10 +1,11 @@
-/* 
-  Localizable1.strings
-  Hurricane
+// MARK: COMMON
 
-  Created by Francesco Puzone on 14/06/22.
-  
-*/
+"common.save" = "Salva";
+"common.cancel" = "Annulla";
+
+
+// TODO: Categorize
+
 /* No comment provided by engineer. */
 "/day" = "/giorno";
 
@@ -79,9 +80,6 @@
 
 /* No comment provided by engineer. */
 "Brand" = "Brand";
-
-/* No comment provided by engineer. */
-"Cancel" = "Annulla";
 
 /* No comment provided by engineer. */
 "Category" = "Categoria";
@@ -319,9 +317,6 @@
 
 /* No comment provided by engineer. */
 "Road tax" = "Tassa di circolazione";
-
-/* No comment provided by engineer. */
-"Save" = "Salva";
 
 /* No comment provided by engineer. */
 "Second fuel type" = "Carburante alternativo";

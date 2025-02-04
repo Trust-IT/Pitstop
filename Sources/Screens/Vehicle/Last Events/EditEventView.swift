@@ -65,7 +65,7 @@ struct EditEventView: View {
             presentationMode.wrappedValue.dismiss()
         }, label: {
             HStack {
-                Text("Cancel")
+                Text(PitstopAPPStrings.Common.cancel)
                     .font(Typography.headerM)
             }
             .accentColor(Palette.greyHard)

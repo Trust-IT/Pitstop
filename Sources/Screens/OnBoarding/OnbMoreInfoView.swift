@@ -225,7 +225,7 @@ private extension OnbMoreInfoView {
                     TextField("DX390XX", text: $plateNumber)
                         .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .plate))
                         .padding(.horizontal, 16)
-                    Button("Save") {
+                    Button(PitstopAPPStrings.Common.save) {
                         showPlateInput.dismiss()
                     }
                     .buttonStyle(Primary())
@@ -273,7 +273,7 @@ private extension OnbMoreInfoView {
                         .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .odometer))
                         .keyboardType(.decimalPad)
                         .padding(.horizontal, 16)
-                    Button("Save") {
+                    Button(PitstopAPPStrings.Common.save) {
                         showOdometerInput.dismiss()
                     }
                     .buttonStyle(Primary())

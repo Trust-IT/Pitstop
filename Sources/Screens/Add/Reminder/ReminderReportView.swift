@@ -54,7 +54,7 @@ struct ReminderReportView: View {
                 Button(action: {
                     createReminderNotification()
                 }, label: {
-                    Text(String(localized: "Save"))
+                    Text(PitstopAPPStrings.Common.save)
                         .font(Typography.headerM)
                         .foregroundStyle(appState.currentTheme.accentColor)
                 })

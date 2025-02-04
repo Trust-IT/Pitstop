@@ -56,7 +56,7 @@ struct TopNav: View {
                             vehicleManager.setCurrentVehicle(vehicle)
                         }
                     }
-                    Button("Cancel", role: .cancel) {}
+                    Button(PitstopAPPStrings.Common.cancel, role: .cancel) {}
                         .background(.black)
                         .foregroundColor(.red)
                 }

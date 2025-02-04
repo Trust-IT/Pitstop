@@ -67,7 +67,7 @@ struct ConfirmationDialog<T>: View where
             )
             .padding(.horizontal, 16)
 
-            Button("Cancel") {
+            Button(PitstopAPPStrings.Common.cancel) {
                 onCancel()
             }
             .buttonStyle(Primary(height: 58, cornerRadius: 13))

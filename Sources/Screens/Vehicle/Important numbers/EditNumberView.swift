@@ -106,7 +106,7 @@ struct EditNumberView: View {
                     updateNumber()
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
-                    Text("Save")
+                    Text(PitstopAPPStrings.Common.save)
                         .font(Typography.headerM)
                 })
                 .disabled(isDisabled)

@@ -171,7 +171,7 @@ struct EditVehicleView: View {
                     updateVehicle(vehicle)
                     navManager.pop()
                 }, label: {
-                    Text(String(localized: "Save"))
+                    Text(PitstopAPPStrings.Common.save)
                         .font(Typography.headerM)
                         .foregroundStyle(appState.currentTheme.accentColor)
                 })

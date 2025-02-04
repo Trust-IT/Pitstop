@@ -73,7 +73,7 @@ struct ReminderView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
+                    Button(PitstopAPPStrings.Common.cancel) {
                         presentationMode.wrappedValue.dismiss()
                     }
                     .font(Typography.headerM)

@@ -59,7 +59,7 @@ struct EditReminderView: View {
                 createNotification(from: reminder)
                 presentationMode.wrappedValue.dismiss()
             }, label: {
-                Text(String(localized: "Save"))
+                Text(PitstopAPPStrings.Common.save)
                     .font(Typography.headerM)
             })
         )

@@ -20,6 +20,6 @@ struct CustomList<Content: View>: View {
                 .padding(EdgeInsets(top: 3, leading: 0, bottom: 3, trailing: 0))
                 .setRowSeparatorStyle()
         }
-        .clearListBackground()
+        .scrollContentBackground(.hidden)
     }
 }

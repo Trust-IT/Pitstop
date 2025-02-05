@@ -49,7 +49,7 @@ struct EditEventView: View {
                 Alert(
                     title: Text(String(localized: "Are you sure you want to delete this report?")),
                     message: Text(String(localized: "This action cannot be undone")),
-                    primaryButton: .destructive(Text(String(localized: "Delete"))) {
+                    primaryButton: .destructive(Text(PitstopAPPStrings.Common.delete)) {
                         fuelExpense.delete(context: modelContext)
                         vehicleManager.currentVehicle.fuelExpenses.removeAll { $0.id == fuelExpense.id }
                         presentationMode.wrappedValue.dismiss()

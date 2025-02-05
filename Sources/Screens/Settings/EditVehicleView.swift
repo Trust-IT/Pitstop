@@ -61,25 +61,25 @@ struct EditVehicleView: View {
         VStack(spacing: 16) {
             ScrollView {
                 VStack(spacing: 20) {
-                    TextField(String(localized: "Vehicle name"), text: $name)
+                    TextField(PitstopAPPStrings.Onb.vehicleName, text: $name)
                         .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .vehicleName))
                         .onSubmit {
                             focusedField = .brand
                         }
 
-                    TextField(String(localized: "Brand"), text: $brand)
+                    TextField(PitstopAPPStrings.Onb.brand, text: $brand)
                         .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .brand))
                         .onSubmit {
                             focusedField = .model
                         }
 
-                    TextField(String(localized: "Model"), text: $model)
+                    TextField(PitstopAPPStrings.Onb.model, text: $model)
                         .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .model))
                         .onSubmit {
                             focusedField = .plate
                         }
 
-                    TextField(String(localized: "Plate"), text: $plate)
+                    TextField(PitstopAPPStrings.Onb.plateNumber, text: $plate)
                         .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .plate))
                         .onSubmit {
                             focusedField = nil
@@ -106,7 +106,7 @@ struct EditVehicleView: View {
                             )
                         }
 
-                    TextField("Secondary Fuel Type", text: fuelTypeBinding(for: $secondaryFuelType))
+                    TextField(PitstopAPPStrings.Onb.secondFuelType, text: fuelTypeBinding(for: $secondaryFuelType))
                         .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .fuelType))
                         .disabled(true)
                         .onTapGesture {
@@ -152,7 +152,7 @@ struct EditVehicleView: View {
             Alert(
                 title: Text("Are you sure you want to delete this vehicle?"),
                 message: Text("This action cannot be undone"),
-                primaryButton: .destructive(Text(String(localized: "Delete"))) {
+                primaryButton: .destructive(Text(PitstopAPPStrings.Common.delete)) {
                     modelContext.delete(vehicle)
                     vehicleManager.setCurrentVehicle(vehicles.first ?? .mock())
                     navManager.pop()

@@ -95,7 +95,7 @@ struct SettingsView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Text("Settings")
+                    Text(PitstopAPPStrings.Common.settings)
                         .foregroundColor(Palette.black)
                         .font(Typography.headerXL)
                 }

@@ -77,7 +77,7 @@ struct EditNumberView: View {
                     Alert(
                         title: Text("Are you sure you want to delete this contact?"),
                         message: Text("This action cannot be undone"),
-                        primaryButton: .destructive(Text(String(localized: "Delete"))) {
+                        primaryButton: .destructive(Text(PitstopAPPStrings.Common.delete)) {
                             number.delete(context: modelContext)
                             presentationMode.wrappedValue.dismiss()
                         },

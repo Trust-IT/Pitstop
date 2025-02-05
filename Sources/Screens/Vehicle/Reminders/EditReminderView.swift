@@ -86,7 +86,7 @@ struct EditReminderView: View {
             Alert(
                 title: Text(String(localized: "Are you sure you want to delete this reminder?")),
                 message: Text(String(localized: "This action cannot be undone")),
-                primaryButton: .destructive(Text(String(localized: "Delete"))) {
+                primaryButton: .destructive(Text(PitstopAPPStrings.Common.delete)) {
                     removeNotification(for: reminder)
                     deleteReminder(reminder)
                     presentationMode.wrappedValue.dismiss()

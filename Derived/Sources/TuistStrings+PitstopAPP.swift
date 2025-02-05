@@ -77,10 +77,18 @@ public enum PitstopAPPStrings: Sendable {
   public static let youAreSetToStartYourEngineAndOptimizeYourSpendings = PitstopAPPStrings.tr("Localizable", "You are set to start your engine and optimize \n your spendings")
 
   public enum Common: Sendable {
-  /// Cancel
+  /// Add
+    public static let add = PitstopAPPStrings.tr("Localizable", "common.add")
+    /// Analytics
+    public static let analytics = PitstopAPPStrings.tr("Localizable", "common.analytics")
+    /// Cancel
     public static let cancel = PitstopAPPStrings.tr("Localizable", "common.cancel")
     /// Save
     public static let save = PitstopAPPStrings.tr("Localizable", "common.save")
+    /// Settings
+    public static let settings = PitstopAPPStrings.tr("Localizable", "common.settings")
+    /// Vehicle
+    public static let vehicle = PitstopAPPStrings.tr("Localizable", "common.vehicle")
   }
 
   public enum Onb: Sendable {

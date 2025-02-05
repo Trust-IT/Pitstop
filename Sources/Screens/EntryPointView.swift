@@ -15,25 +15,25 @@ struct EntryPointView: View {
         TabView(selection: $navManager.selectedTab) {
             VehicleView()
                 .tabItem {
-                    Label("Vehicle", image: .carIcon)
+                    Label(PitstopAPPStrings.Common.vehicle, image: .carIcon)
                 }
                 .tag(TabBarItem.vehicle)
 
             AnalyticsView()
                 .tabItem {
-                    Label("Analytics", image: .chartIcon)
+                    Label(PitstopAPPStrings.Common.analytics, image: .chartIcon)
                 }
                 .tag(TabBarItem.analytics)
 
             SettingsView()
                 .tabItem {
-                    Label("Settings", image: .settingsIcon)
+                    Label(PitstopAPPStrings.Common.settings, image: .settingsIcon)
                 }
                 .tag(TabBarItem.settings)
 
             Text("If you see this, then something is broken")
                 .tabItem {
-                    Label("Add", image: .plusIcon)
+                    Label(PitstopAPPStrings.Common.add, image: .plusIcon)
                 }
                 .tag(TabBarItem.add)
         }

@@ -2,6 +2,10 @@
 
 "common.save" = "Salva";
 "common.cancel" = "Annulla";
+"common.vehicle" = "Veicolo";
+"common.analytics" = "Statistiche";
+"common.settings" = "Impostazioni";
+"common.add" = "Aggiungi";
 
 // MARK: ONBOARDING
 

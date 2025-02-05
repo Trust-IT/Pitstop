@@ -16,8 +16,13 @@ enum Route {
     case onboardingReady
 
     // Vehicle
-    case reminderReport // OLD
+    case reminderReport
     case fuelReport(input: FuelExpense)
+
+    // Reminder
+    case reminderList
+    case editReminder(input: Binding<Reminder>)
+    case expiredReminder(input: Binding<Reminder>)
 
     // Settings
     case tos
@@ -50,6 +55,12 @@ extension Route: Equatable {
             true
         case let (.fuelReport(leftData), .fuelReport(rightData)):
             leftData == rightData
+        case (.reminderList, .reminderList):
+            true
+        case let (.editReminder(leftData), .editReminder(rightData)):
+            leftData.wrappedValue == rightData.wrappedValue
+        case let (.expiredReminder(leftData), .expiredReminder(rightData)):
+            leftData.wrappedValue == rightData.wrappedValue
         case (.aboutUs, .aboutUs):
             true
         case let (.editVehicle(leftData), .editVehicle(rightData)):
@@ -77,6 +88,12 @@ extension Route: View {
             ReminderReportView()
         case let .fuelReport(fuelData):
             FuelReportView(fuelExpense: fuelData)
+        case .reminderList:
+            RemindersListView()
+        case let .editReminder(input: reminder):
+            EditReminderView(reminder: reminder)
+        case let .expiredReminder(input: reminder):
+            ExpiredReminderView(reminder: reminder)
         case .tos:
             HTMLView(htmlFileName: "TermsOfService")
         case .aboutUs:

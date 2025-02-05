@@ -1,5 +1,5 @@
 //
-//  ReminderView.swift
+//  RemindersListView.swift
 //  Hurricane
 //
 //  Created by Ivan Voloshchuk on 03/06/22.
@@ -8,12 +8,9 @@
 import SwiftData
 import SwiftUI
 
-struct ReminderView: View {
+struct RemindersListView: View {
+    @EnvironmentObject var navManager: NavigationManager
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.presentationMode) private var presentationMode
-
-    @State private var showEditReminder = false
-    @State private var showExpiredReminder = false
 
     static var currentDate: Date { Date.now }
 
@@ -42,8 +39,9 @@ struct ReminderView: View {
                             items: reminders,
                             areItemsExpired: false,
                             onItemTap: { reminder in
+                                // TODO: Simplify this
                                 selectedReminder = reminder
-                                showEditReminder.toggle()
+                                navManager.push(.editReminder(input: $selectedReminder))
                             }
                         )
 
@@ -52,21 +50,11 @@ struct ReminderView: View {
                             items: expiredReminders,
                             areItemsExpired: true,
                             onItemTap: { reminder in
+                                // TODO: Simplify this
                                 selectedReminder = reminder
-                                showExpiredReminder.toggle()
+                                navManager.push(.expiredReminder(input: $selectedReminder))
                             }
                         )
-
-                        // FIXME: - REFACTOR NAVIGATION
-
-                        NavigationLink(
-                            destination: EditReminderView(reminder: $selectedReminder),
-                            isActive: $showEditReminder
-                        ) {}
-                        NavigationLink(
-                            destination: ExpiredReminderView(reminder: $selectedReminder),
-                            isActive: $showExpiredReminder
-                        ) {}
                     }
                 }
             }
@@ -74,7 +62,7 @@ struct ReminderView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(PitstopAPPStrings.Common.cancel) {
-                        presentationMode.wrappedValue.dismiss()
+                        navManager.pop()
                     }
                     .font(Typography.headerM)
                     .foregroundColor(Palette.greyHard)
@@ -100,7 +88,7 @@ struct ReminderView: View {
     }
 }
 
-private extension ReminderView {
+private extension RemindersListView {
     @ViewBuilder
     func reminderSection(
         title: String,
@@ -182,7 +170,7 @@ private extension ReminderView {
     }
 }
 
-private extension ReminderView {
+private extension RemindersListView {
     func deleteExpiredReminders() {
         for reminder in expiredReminders {
             modelContext.delete(reminder)

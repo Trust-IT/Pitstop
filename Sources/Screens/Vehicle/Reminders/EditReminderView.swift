@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct EditReminderView: View {
+    @EnvironmentObject var navManager: NavigationManager
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.presentationMode) private var presentationMode
 
     @FocusState var focusedField: FocusFieldReminder?
     @State private var showDeleteAlert = false
@@ -38,26 +38,13 @@ struct EditReminderView: View {
             reminderInformation()
         }
         .background(Palette.greyBackground)
-        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(
-            leading:
-            Button(action: {
-                presentationMode.wrappedValue.dismiss()
-            }, label: {
-                HStack {
-                    Image("arrowLeft")
-
-                    Text(String(localized: "Back"))
-                        .font(Typography.headerM)
-                }
-            })
-            .accentColor(Palette.greyHard),
             trailing:
             Button(action: {
                 updateReminder(reminder)
                 createNotification(from: reminder)
-                presentationMode.wrappedValue.dismiss()
+                navManager.pop()
             }, label: {
                 Text(PitstopAPPStrings.Common.save)
                     .font(Typography.headerM)
@@ -89,7 +76,7 @@ struct EditReminderView: View {
                 primaryButton: .destructive(Text(PitstopAPPStrings.Common.delete)) {
                     removeNotification(for: reminder)
                     deleteReminder(reminder)
-                    presentationMode.wrappedValue.dismiss()
+                    navManager.pop()
                 },
                 secondaryButton: .cancel()
             )

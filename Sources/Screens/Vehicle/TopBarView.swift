@@ -10,9 +10,9 @@ import SwiftUI
 
 struct TopNav: View {
     @EnvironmentObject var vehicleManager: VehicleManager
+    @EnvironmentObject var navManager: NavigationManager
 
     @State private var showingAllCars = false
-    @State private var showReminders = false
 
     var offset: CGFloat
     let maxHeight: CGFloat
@@ -65,7 +65,7 @@ struct TopNav: View {
                 HStack {
                     ZStack {
                         Button(action: {
-                            showReminders.toggle()
+                            navManager.present(.reminderList)
                         }, label: {
                             ZStack {
                                 Circle()
@@ -100,8 +100,10 @@ struct TopNav: View {
                 })
             .padding(.bottom, 15)
         )
-        .sheet(isPresented: $showReminders) {
-            ReminderView()
+        .sheet(isPresented: $navManager.isPresented) {
+            if let presentedRoute = navManager.presentedRoute {
+                ModalNavigationContainerView(route: presentedRoute)
+            }
         }
         .interactiveDismissDisabled()
     }

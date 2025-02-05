@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ExpiredReminderView: View {
-    @Environment(\.presentationMode) private var presentationMode
+    @EnvironmentObject var navManager: NavigationManager
     @Binding var reminder: Reminder
 
     var body: some View {
@@ -17,22 +17,7 @@ struct ExpiredReminderView: View {
                 .disabled(true)
         }
         .background(Palette.greyBackground)
-        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarItems(
-            leading:
-            Button(action: {
-                presentationMode.wrappedValue.dismiss()
-            }, label: {
-                HStack {
-                    Image("arrowLeft")
-
-                    Text(String(localized: "Back"))
-                        .font(Typography.headerM)
-                }
-            })
-            .accentColor(Palette.greyHard)
-        )
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Text(reminder.title)

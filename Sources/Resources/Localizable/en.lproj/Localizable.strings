@@ -7,6 +7,8 @@
 "common.settings" = "Settings";
 "common.add" = "Add";
 "common.delete" = "Delete";
+"common.future" = "Future";
+"common.expired" = "Expired";
 
 // MARK: ONBOARDING
 
@@ -37,3 +39,10 @@
 "onb.vehicleReady" = "Your vehicle is ready!";
 "onb.startEngine" = "You are set to start your engine and optimize your spendings";
 "onb.okLetsGo" = "Okayyyy let's go";
+
+// MARK: REMINDERS
+
+"reminder.title" = "Reminders";
+"reminder.empty" = "There are no rmeinders now";
+"reminder.clear" = "Clear expired";
+

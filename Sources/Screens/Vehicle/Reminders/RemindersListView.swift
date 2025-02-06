@@ -28,61 +28,45 @@ struct RemindersListView: View {
     @State var selectedReminder: Reminder = .mock()
 
     var body: some View {
-        NavigationView {
-            ZStack {
-                Palette.greyBackground
-                    .ignoresSafeArea()
-                VStack {
-                    ScrollView(.vertical, showsIndicators: false) {
-                        reminderSection(
-                            title: "Future",
-                            items: reminders,
-                            areItemsExpired: false,
-                            onItemTap: { reminder in
-                                // TODO: Simplify this
-                                selectedReminder = reminder
-                                navManager.push(.editReminder(input: $selectedReminder))
-                            }
-                        )
-
-                        reminderSection(
-                            title: "Expired",
-                            items: expiredReminders,
-                            areItemsExpired: true,
-                            onItemTap: { reminder in
-                                // TODO: Simplify this
-                                selectedReminder = reminder
-                                navManager.push(.expiredReminder(input: $selectedReminder))
-                            }
-                        )
+        VStack {
+            ScrollView(.vertical, showsIndicators: false) {
+                reminderSection(
+                    title: PitstopAPPStrings.Common.future,
+                    items: reminders,
+                    areItemsExpired: false,
+                    onItemTap: { reminder in
+                        // TODO: Simplify this
+                        selectedReminder = reminder
+                        navManager.push(.editReminder(input: $selectedReminder))
                     }
-                }
+                )
+
+                reminderSection(
+                    title: PitstopAPPStrings.Common.expired,
+                    items: expiredReminders,
+                    areItemsExpired: true,
+                    onItemTap: { reminder in
+                        // TODO: Simplify this
+                        selectedReminder = reminder
+                        navManager.push(.expiredReminder(input: $selectedReminder))
+                    }
+                )
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(PitstopAPPStrings.Common.cancel) {
-                        navManager.pop()
-                    }
+            .padding(.top, 16)
+            if !expiredReminders.isEmpty {
+                Button(PitstopAPPStrings.Reminder.clear) {
+                    deleteExpiredReminders()
+                }
+                .buttonStyle(Primary())
+            }
+        }
+        .background(Palette.greyBackground.ignoresSafeArea())
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(PitstopAPPStrings.Reminder.title)
                     .font(Typography.headerM)
-                    .foregroundColor(Palette.greyHard)
-                }
-
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    if !expiredReminders.isEmpty {
-                        Button("Clear expired") {
-                            deleteExpiredReminders()
-                        }
-                        .font(Typography.headerM)
-                        .foregroundColor(Palette.greyHard)
-                    }
-                }
-
-                ToolbarItem(placement: .principal) {
-                    Text("Reminders")
-                        .font(Typography.headerM)
-                        .foregroundColor(Palette.black)
-                }
+                    .foregroundColor(Palette.black)
             }
         }
     }
@@ -111,7 +95,7 @@ private extension RemindersListView {
             }
             if items.isEmpty {
                 HStack {
-                    Text("There are no reminders now")
+                    Text(PitstopAPPStrings.Reminder.empty)
                         .font(Typography.TextM)
                         .foregroundColor(Palette.greyMiddle)
                     Spacer()
@@ -184,10 +168,13 @@ private extension RemindersListView {
     }
 }
 
-// FIXME: Preview
-
-// struct RemindersList_Previews: PreviewProvider {
-//    static var previews: some View {
-//        RemindersList()
-//    }
-// }
+#Preview {
+    @Previewable @State var navManager = NavigationManager()
+    NavigationStack(path: $navManager.routes) {
+        RemindersListView()
+            .environmentObject(VehicleManager())
+            .environmentObject(navManager)
+            .environment(AppState())
+            .environment(SceneDelegate())
+    }
+}

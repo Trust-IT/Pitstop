@@ -7,6 +7,8 @@
 "common.settings" = "Impostazioni";
 "common.add" = "Aggiungi";
 "common.delete" = "Cancella";
+"common.future" = "Prossimamente";
+"common.expired" = "Scaduti";
 
 // MARK: ONBOARDING
 
@@ -37,3 +39,9 @@
 "onb.vehicleReady" = "Il tuo veicolo è pronto!";
 "onb.startEngine" = "Ora sei pronto a far partire il motore ed ottimizzare le tue spese";
 "onb.okLetsGo" = "Vamosssss";
+
+// MARK: REMINDERS
+
+"reminder.title" = "Promemoria";
+"reminder.empty" = "Non ci sono promemoria per adesso";
+"reminder.clear" = "Cancella i promemoria scaduti";

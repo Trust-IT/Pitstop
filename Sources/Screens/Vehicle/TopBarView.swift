@@ -36,7 +36,7 @@ struct TopNav: View {
                             .foregroundColor(Palette.blackHeader)
                             .font(Typography.headerXL)
                             .opacity(fadeOutOpacity())
-                        Image("arrowLeft")
+                        Image(.arrowLeft)
                             .resizable()
                             .foregroundColor(Palette.blackHeader)
                             .frame(width: 10, height: 14)
@@ -65,7 +65,7 @@ struct TopNav: View {
                 HStack {
                     ZStack {
                         Button(action: {
-                            navManager.present(.reminderList)
+                            navManager.push(.reminderList)
                         }, label: {
                             ZStack {
                                 Circle()

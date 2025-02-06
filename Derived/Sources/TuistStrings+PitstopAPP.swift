@@ -23,6 +23,10 @@ public enum PitstopAPPStrings: Sendable {
     public static let cancel = PitstopAPPStrings.tr("Localizable", "common.cancel")
     /// Delete
     public static let delete = PitstopAPPStrings.tr("Localizable", "common.delete")
+    /// Expired
+    public static let expired = PitstopAPPStrings.tr("Localizable", "common.expired")
+    /// Future
+    public static let future = PitstopAPPStrings.tr("Localizable", "common.future")
     /// Save
     public static let save = PitstopAPPStrings.tr("Localizable", "common.save")
     /// Settings
@@ -86,6 +90,15 @@ public enum PitstopAPPStrings: Sendable {
     public static let writeOdometer = PitstopAPPStrings.tr("Localizable", "onb.writeOdometer")
     /// Write the plate number
     public static let writePlate = PitstopAPPStrings.tr("Localizable", "onb.writePlate")
+  }
+
+  public enum Reminder: Sendable {
+  /// Clear expired
+    public static let clear = PitstopAPPStrings.tr("Localizable", "reminder.clear")
+    /// There are no rmeinders now
+    public static let empty = PitstopAPPStrings.tr("Localizable", "reminder.empty")
+    /// Reminders
+    public static let title = PitstopAPPStrings.tr("Localizable", "reminder.title")
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length

@@ -14,6 +14,23 @@ import Foundation
 // swiftlint:disable nesting type_body_length type_name
 public enum PitstopAPPStrings: Sendable {
 
+  public enum Category: Sendable {
+  /// Fine
+    public static let fines = PitstopAPPStrings.tr("Localizable", "category.fines")
+    /// Insurance
+    public static let insurance = PitstopAPPStrings.tr("Localizable", "category.insurance")
+    /// Maintenance
+    public static let maintenance = PitstopAPPStrings.tr("Localizable", "category.maintenance")
+    /// Other
+    public static let other = PitstopAPPStrings.tr("Localizable", "category.other")
+    /// Parking
+    public static let parking = PitstopAPPStrings.tr("Localizable", "category.parking")
+    /// Road Tax
+    public static let roadTax = PitstopAPPStrings.tr("Localizable", "category.roadTax")
+    /// Toll
+    public static let tolls = PitstopAPPStrings.tr("Localizable", "category.tolls")
+  }
+
   public enum Common: Sendable {
   /// Add
     public static let add = PitstopAPPStrings.tr("Localizable", "common.add")
@@ -23,6 +40,10 @@ public enum PitstopAPPStrings: Sendable {
     public static let attention = PitstopAPPStrings.tr("Localizable", "common.attention")
     /// Cancel
     public static let cancel = PitstopAPPStrings.tr("Localizable", "common.cancel")
+    /// Category
+    public static let category = PitstopAPPStrings.tr("Localizable", "common.category")
+    /// Day
+    public static let day = PitstopAPPStrings.tr("Localizable", "common.day")
     /// Delete
     public static let delete = PitstopAPPStrings.tr("Localizable", "common.delete")
     /// Error
@@ -31,10 +52,16 @@ public enum PitstopAPPStrings: Sendable {
     public static let expired = PitstopAPPStrings.tr("Localizable", "common.expired")
     /// Future
     public static let future = PitstopAPPStrings.tr("Localizable", "common.future")
+    /// Note
+    public static let note = PitstopAPPStrings.tr("Localizable", "common.note")
+    /// Odometer
+    public static let odometer = PitstopAPPStrings.tr("Localizable", "common.odometer")
     /// Save
     public static let save = PitstopAPPStrings.tr("Localizable", "common.save")
     /// Settings
     public static let settings = PitstopAPPStrings.tr("Localizable", "common.settings")
+    /// Title
+    public static let title = PitstopAPPStrings.tr("Localizable", "common.title")
     /// This action cannot be undone
     public static let undone = PitstopAPPStrings.tr("Localizable", "common.undone")
     /// Vehicle
@@ -66,8 +93,6 @@ public enum PitstopAPPStrings: Sendable {
     public static let moreInfo = PitstopAPPStrings.tr("Localizable", "onb.moreInfo")
     /// Next
     public static let next = PitstopAPPStrings.tr("Localizable", "onb.next")
-    /// Odometer
-    public static let odometer = PitstopAPPStrings.tr("Localizable", "onb.odometer")
     /// Previously 0 km
     public static let odometerPlaceholder = PitstopAPPStrings.tr("Localizable", "onb.odometerPlaceholder")
     /// Okayyyy let's go
@@ -99,8 +124,10 @@ public enum PitstopAPPStrings: Sendable {
   }
 
   public enum Reminder: Sendable {
-  /// Clear expired
+  /// Clear expired reminder
     public static let clear = PitstopAPPStrings.tr("Localizable", "reminder.clear")
+    /// Clear all expired reminders
+    public static let clearAll = PitstopAPPStrings.tr("Localizable", "reminder.clearAll")
     /// Are you sure you want to delete this reminder?
     public static let delete = PitstopAPPStrings.tr("Localizable", "reminder.delete")
     /// There are no rmeinders now

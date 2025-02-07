@@ -32,15 +32,16 @@ enum Palette {
     static let greenAccent = Color(rgb: 0x4CD38C)
     static let yellowAccent = Color(rgb: 0xE8CA51)
     static let blueAccent = Color(rgb: 0x54B2FF)
+    static let orangeAccent = Color(rgb: 0xE59D49)
 
     static let colorMainBlue = Color(rgb: 0xADE0FF)
     static let colorMainGreen = Color(rgb: 0x94F3C7)
     static let colorMainYellow = Color(rgb: 0xFBE989)
     static let colorMainViolet = Color(rgb: 0xCDBCFF)
-    static let greenHighlight = Color(rgb: 0x37E391)
-    static let blueLine = Color(rgb: 0x4761FE)
 
     // Chart:
+    static let greenHighlight = Color(rgb: 0x37E391)
+    static let blueLine = Color(rgb: 0x4761FE)
     static let chartGreen = Color(rgb: 0xA1DEC0)
 }
 

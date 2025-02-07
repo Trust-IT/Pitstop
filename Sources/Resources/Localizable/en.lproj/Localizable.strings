@@ -12,7 +12,11 @@
 "common.error" = "Error";
 "common.attention" = "Attention";
 "common.undone" = "This action cannot be undone";
-
+"common.note" = "Note";
+"common.category" = "Category";
+"common.title" = "Title";
+"common.day" = "Day";
+"common.odometer" = "Odometer";
 
 // MARK: ONBOARDING
 
@@ -29,7 +33,6 @@
 "onb.moreInfo" = "Add more info";
 "onb.vehicleInfo" = "Keep all of your vehicle info at hand";
 "onb.plateNumber" = "Plate number";
-"onb.odometer" = "Odometer";
 "onb.secondFuelType" = "Secondary fuel type";
 "onb.addVehicle" = "Add vehicle";
 "onb.selectFuelType" = "Select a fuel type";
@@ -48,8 +51,18 @@
 
 "reminder.title" = "Reminders";
 "reminder.empty" = "There are no rmeinders now";
-"reminder.clear" = "Clear expired";
+"reminder.clearAll" = "Clear all expired reminders";
+"reminder.clear" = "Clear expired reminder";
 "reminder.delete" = "Are you sure you want to delete this reminder?";
 "reminder.enableNotification" = "Enable the notifications in the settings before creating a reminder";
 "reminder.new" = "New reminder";
 
+// MARK: CATEGORIES
+
+"category.maintenance" = "Maintenance";
+"category.insurance" = "Insurance";
+"category.roadTax" = "Road Tax";
+"category.tolls" = "Toll";
+"category.fines" = "Fine";
+"category.parking" = "Parking";
+"category.other" = "Other";

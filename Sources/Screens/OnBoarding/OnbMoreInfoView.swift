@@ -65,7 +65,7 @@ struct OnbMoreInfoView: View {
                 Button(action: {
                     showOdometerInput.present()
                 }, label: {
-                    moreInfoCard(text: PitstopAPPStrings.Onb.odometer,
+                    moreInfoCard(text: PitstopAPPStrings.Common.odometer,
                                  bgColor: appState.currentTheme.colors.background,
                                  iconName: .odometer)
                 })

@@ -36,23 +36,4 @@ enum ServiceCategory: String, Codable, CaseIterable, Identifiable {
             .other
         }
     }
-
-    var color: Color {
-        switch self {
-        case .maintenance:
-            Palette.colorGreen
-        case .insurance:
-            Palette.colorOrange
-        case .roadTax:
-            Palette.colorOrange
-        case .tolls:
-            Palette.colorOrange
-        case .fines:
-            Palette.colorOrange
-        case .parking:
-            Palette.colorViolet
-        case .other:
-            Palette.colorViolet
-        }
-    }
 }

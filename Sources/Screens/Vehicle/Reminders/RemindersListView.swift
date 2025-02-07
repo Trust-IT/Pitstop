@@ -25,7 +25,6 @@ struct RemindersListView: View {
         sort: [SortDescriptor(\Reminder.date, order: .forward)]
     )
     var expiredReminders: [Reminder]
-    @State var selectedReminder: Reminder = .mock()
 
     var body: some View {
         VStack {
@@ -44,17 +43,17 @@ struct RemindersListView: View {
                     items: expiredReminders,
                     areItemsExpired: true,
                     onItemTap: { reminder in
-                        // TODO: Simplify this
-                        selectedReminder = reminder
-                        navManager.push(.expiredReminder(input: $selectedReminder))
+                        navManager.push(.expiredReminder(input: reminder))
                     }
                 )
             }
             .padding(.top, 16)
             if !expiredReminders.isEmpty {
-                Button(PitstopAPPStrings.Reminder.clear) {
+                Button(action: {
                     deleteExpiredReminders()
-                }
+                }, label: {
+                    DeleteButton(title: PitstopAPPStrings.Reminder.clearAll)
+                })
                 .buttonStyle(Primary())
             }
         }
@@ -120,10 +119,10 @@ private extension RemindersListView {
                 ZStack {
                     Circle()
                         .frame(width: 32, height: 32)
-                        .foregroundColor(expired ? Palette.greyInput : item.category.color)
+                        .foregroundColor(expired ? Palette.greyLight : Palette.colorOrange)
                     Image(item.category.icon)
                         .resizable()
-                        .saturation(expired ? 0 : 1)
+                        .tint(expired ? Palette.greyInput : Palette.orangeAccent)
                         .frame(width: 16, height: 16)
                 }
                 VStack(alignment: .leading) {

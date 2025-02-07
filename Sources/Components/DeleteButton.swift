@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct DeleteButton: View {
-    let title: LocalizedStringKey
+    let title: String
 
     var body: some View {
         HStack {
             Spacer()
-            Image("deleteIcon")
+            Image(.deleteIcon)
                 .resizable()
                 .foregroundColor(Palette.white)
                 .frame(width: 14, height: 14)

@@ -12,6 +12,11 @@
 "common.error" = "Errore";
 "common.attention" = "Attenzione";
 "common.undone" = "Questa azione non può essere annullata";
+"common.note" = "Note";
+"common.category" = "Categoria";
+"common.title" = "Titolo";
+"common.day" = "Giorno";
+"common.odometer" = "Contachilometri";
 
 // MARK: ONBOARDING
 
@@ -28,7 +33,6 @@
 "onb.moreInfo" = "Aggiungi più informazioni";
 "onb.vehicleInfo" = "Conserva tutte le informazioni del tuo veicolo a portata di mano";
 "onb.plateNumber" = "Numero di targa";
-"onb.odometer" = "Contachilometri";
 "onb.secondFuelType" = "Tipologia di carburante secondario";
 "onb.addVehicle" = "Aggiungi veicolo";
 "onb.selectFuelType" = "Seleziona un tipo di carburante";
@@ -47,7 +51,18 @@
 
 "reminder.title" = "Promemoria";
 "reminder.empty" = "Non ci sono promemoria per adesso";
-"reminder.clear" = "Cancella i promemoria scaduti";
+"reminder.clearAll" = "Elimina tutti i promemoria scaduti";
+"reminder.clear" = "Elimina il promemoria scaduto";
 "reminder.delete" = "Sei sicuro di voler eliminare questo promemoria?";
 "reminder.enableNotification" = "Abilita le notifiche nelle impostazioni prima di creare un promemoria";
 "reminder.new" = "Nuovo promemoria";
+
+// MARK: CATEGORIES
+
+"category.maintenance" = "Manutenzione";
+"category.insurance" = "Assicurazione";
+"category.roadTax" = "Tassa di circolazione";
+"category.tolls" = "Pedaggio";
+"category.fines" = "Multa";
+"category.parking" = "Parcheggio";
+"category.other" = "Altro";

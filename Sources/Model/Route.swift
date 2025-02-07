@@ -21,7 +21,7 @@ enum Route {
 
     // Reminder
     case reminderList
-    case expiredReminder(input: Binding<Reminder>)
+    case expiredReminder(input: Reminder)
 
     // Settings
     case tos
@@ -58,7 +58,7 @@ extension Route: Equatable {
         case (.reminderList, .reminderList):
             true
         case let (.expiredReminder(leftData), .expiredReminder(rightData)):
-            leftData.wrappedValue == rightData.wrappedValue
+            leftData == rightData
         case (.aboutUs, .aboutUs):
             true
         case let (.editVehicle(leftData), .editVehicle(rightData)):

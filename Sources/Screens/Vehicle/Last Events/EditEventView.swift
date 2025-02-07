@@ -105,7 +105,7 @@ struct EditEventView: View {
             HStack {
                 CategoryRow(
                     input: .init(
-                        title: String(localized: "Day"),
+                        title: PitstopAPPStrings.Common.day,
                         icon: .day,
                         color: Palette.greyLight
                     )
@@ -123,7 +123,7 @@ struct EditEventView: View {
             HStack {
                 CategoryRow(
                     input: .init(
-                        title: String(localized: "Odometer"),
+                        title: PitstopAPPStrings.Common.odometer,
                         icon: .odometer,
                         color: Palette.greyLight
                     )

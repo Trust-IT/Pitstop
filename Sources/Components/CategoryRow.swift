@@ -16,11 +16,11 @@ struct CategoryRow: View {
             ZStack {
                 Circle()
                     .frame(width: 32, height: 32)
-                    .foregroundStyle(input.color)
+                    .foregroundStyle(input.isDisabled ? Palette.greyLight : input.color)
                 Image(input.icon)
                     .resizable()
                     .frame(width: 16, height: 16)
-                    .foregroundStyle(appState.currentTheme.accentColor)
+                    .foregroundStyle(input.isDisabled ? Palette.greyInput : appState.currentTheme.accentColor)
             }
             Text(input.title)
                 .font(Typography.headerM)
@@ -31,5 +31,6 @@ struct CategoryRow: View {
         var title: String
         var icon: ImageResource
         var color: Color
+        var isDisabled: Bool = false
     }
 }

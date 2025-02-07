@@ -35,9 +35,7 @@ struct RemindersListView: View {
                     items: reminders,
                     areItemsExpired: false,
                     onItemTap: { reminder in
-                        // TODO: Simplify this
-                        selectedReminder = reminder
-                        navManager.push(.editReminder(input: $selectedReminder))
+                        navManager.push(.reminderReport(input: reminder, isEdit: true))
                     }
                 )
 

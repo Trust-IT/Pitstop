@@ -9,6 +9,10 @@
 "common.delete" = "Delete";
 "common.future" = "Future";
 "common.expired" = "Expired";
+"common.error" = "Error";
+"common.attention" = "Attention";
+"common.undone" = "This action cannot be undone";
+
 
 // MARK: ONBOARDING
 
@@ -45,4 +49,7 @@
 "reminder.title" = "Reminders";
 "reminder.empty" = "There are no rmeinders now";
 "reminder.clear" = "Clear expired";
+"reminder.delete" = "Are you sure you want to delete this reminder?";
+"reminder.enableNotification" = "Enable the notifications in the settings before creating a reminder";
+"reminder.new" = "New reminder";
 

@@ -19,10 +19,14 @@ public enum PitstopAPPStrings: Sendable {
     public static let add = PitstopAPPStrings.tr("Localizable", "common.add")
     /// Analytics
     public static let analytics = PitstopAPPStrings.tr("Localizable", "common.analytics")
+    /// Attention
+    public static let attention = PitstopAPPStrings.tr("Localizable", "common.attention")
     /// Cancel
     public static let cancel = PitstopAPPStrings.tr("Localizable", "common.cancel")
     /// Delete
     public static let delete = PitstopAPPStrings.tr("Localizable", "common.delete")
+    /// Error
+    public static let error = PitstopAPPStrings.tr("Localizable", "common.error")
     /// Expired
     public static let expired = PitstopAPPStrings.tr("Localizable", "common.expired")
     /// Future
@@ -31,6 +35,8 @@ public enum PitstopAPPStrings: Sendable {
     public static let save = PitstopAPPStrings.tr("Localizable", "common.save")
     /// Settings
     public static let settings = PitstopAPPStrings.tr("Localizable", "common.settings")
+    /// This action cannot be undone
+    public static let undone = PitstopAPPStrings.tr("Localizable", "common.undone")
     /// Vehicle
     public static let vehicle = PitstopAPPStrings.tr("Localizable", "common.vehicle")
   }
@@ -95,8 +101,14 @@ public enum PitstopAPPStrings: Sendable {
   public enum Reminder: Sendable {
   /// Clear expired
     public static let clear = PitstopAPPStrings.tr("Localizable", "reminder.clear")
+    /// Are you sure you want to delete this reminder?
+    public static let delete = PitstopAPPStrings.tr("Localizable", "reminder.delete")
     /// There are no rmeinders now
     public static let empty = PitstopAPPStrings.tr("Localizable", "reminder.empty")
+    /// Enable the notifications in the settings before creating a reminder
+    public static let enableNotification = PitstopAPPStrings.tr("Localizable", "reminder.enableNotification")
+    /// New reminder
+    public static let new = PitstopAPPStrings.tr("Localizable", "reminder.new")
     /// Reminders
     public static let title = PitstopAPPStrings.tr("Localizable", "reminder.title")
   }

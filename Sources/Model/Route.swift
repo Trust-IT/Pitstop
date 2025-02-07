@@ -16,12 +16,11 @@ enum Route {
     case onboardingReady
 
     // Vehicle
-    case reminderReport
+    case reminderReport(input: Reminder, isEdit: Bool)
     case fuelReport(input: FuelExpense)
 
     // Reminder
     case reminderList
-    case editReminder(input: Binding<Reminder>)
     case expiredReminder(input: Binding<Reminder>)
 
     // Settings
@@ -49,16 +48,15 @@ extension Route: Equatable {
             true
         case (.onboardingReady, .onboardingReady):
             true
-        case (.reminderReport, .reminderReport):
-            true
+        case let (.reminderReport(leftInput, leftIsEdit),
+                  .reminderReport(rightInput, rightIsEdit)):
+            leftInput == rightInput && leftIsEdit == rightIsEdit
         case (.tos, .tos):
             true
         case let (.fuelReport(leftData), .fuelReport(rightData)):
             leftData == rightData
         case (.reminderList, .reminderList):
             true
-        case let (.editReminder(leftData), .editReminder(rightData)):
-            leftData.wrappedValue == rightData.wrappedValue
         case let (.expiredReminder(leftData), .expiredReminder(rightData)):
             leftData.wrappedValue == rightData.wrappedValue
         case (.aboutUs, .aboutUs):
@@ -84,14 +82,12 @@ extension Route: View {
             OnbNotificationView()
         case .onboardingReady:
             OnbReadyView()
-        case .reminderReport:
-            ReminderReportView()
+        case let .reminderReport(reminder, isEdit):
+            ReminderReportView(reminder: reminder, isEditMode: isEdit)
         case let .fuelReport(fuelData):
             FuelReportView(fuelExpense: fuelData)
         case .reminderList:
             RemindersListView()
-        case let .editReminder(input: reminder):
-            EditReminderView(reminder: reminder)
         case let .expiredReminder(input: reminder):
             ExpiredReminderView(reminder: reminder)
         case .tos:

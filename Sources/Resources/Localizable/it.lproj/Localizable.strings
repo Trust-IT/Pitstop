@@ -9,6 +9,9 @@
 "common.delete" = "Cancella";
 "common.future" = "Prossimamente";
 "common.expired" = "Scaduti";
+"common.error" = "Errore";
+"common.attention" = "Attenzione";
+"common.undone" = "Questa azione non può essere annullata";
 
 // MARK: ONBOARDING
 
@@ -45,3 +48,6 @@
 "reminder.title" = "Promemoria";
 "reminder.empty" = "Non ci sono promemoria per adesso";
 "reminder.clear" = "Cancella i promemoria scaduti";
+"reminder.delete" = "Sei sicuro di voler eliminare questo promemoria?";
+"reminder.enableNotification" = "Abilita le notifiche nelle impostazioni prima di creare un promemoria";
+"reminder.new" = "Nuovo promemoria";

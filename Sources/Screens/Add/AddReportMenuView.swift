@@ -45,7 +45,7 @@ struct AddReportMenuView: View {
             })
             Button(action: {
                 isPresented.toggle()
-                navManager.push(.reminderReport)
+                navManager.push(.reminderReport(input: .mock(), isEdit: false))
             }, label: {
                 HStack {
                     ZStack {

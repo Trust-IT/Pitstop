@@ -100,12 +100,6 @@ struct TopNav: View {
                 })
             .padding(.bottom, 15)
         )
-        .sheet(isPresented: $navManager.isPresented) {
-            if let presentedRoute = navManager.presentedRoute {
-                ModalNavigationContainerView(route: presentedRoute)
-            }
-        }
-        .interactiveDismissDisabled()
     }
 
     // Opacity to let appear items in the top bar

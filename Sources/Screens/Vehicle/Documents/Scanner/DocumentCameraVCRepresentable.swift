@@ -34,7 +34,10 @@ struct DocumentCameraVCRepresentable: UIViewControllerRepresentable {
 
         /// Tells the delegate that the user successfully saved a scanned document from the document camera.
         @MainActor
-        func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
+        func documentCameraViewController(
+            _ controller: VNDocumentCameraViewController,
+            didFinishWith scan: VNDocumentCameraScan
+        ) {
             controller.dismiss(animated: true, completion: nil)
             scanResult = (0 ..< scan.pageCount).compactMap { scan.imageOfPage(at: $0) }
         }
@@ -47,7 +50,10 @@ struct DocumentCameraVCRepresentable: UIViewControllerRepresentable {
 
         /// Tells the delegate that document scanning failed while the camera view controller was active.
         @MainActor
-        func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
+        func documentCameraViewController(
+            _ controller: VNDocumentCameraViewController,
+            didFailWithError error: Error
+        ) {
             print("Document scanner error: \(error.localizedDescription)")
             controller.dismiss(animated: true, completion: nil)
         }

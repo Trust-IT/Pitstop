@@ -56,6 +56,8 @@ public enum PitstopAPPStrings: Sendable {
     public static let note = PitstopAPPStrings.tr("Localizable", "common.note")
     /// Odometer
     public static let odometer = PitstopAPPStrings.tr("Localizable", "common.odometer")
+    /// Rename
+    public static let rename = PitstopAPPStrings.tr("Localizable", "common.rename")
     /// Save
     public static let save = PitstopAPPStrings.tr("Localizable", "common.save")
     /// Settings
@@ -64,8 +66,20 @@ public enum PitstopAPPStrings: Sendable {
     public static let title = PitstopAPPStrings.tr("Localizable", "common.title")
     /// This action cannot be undone
     public static let undone = PitstopAPPStrings.tr("Localizable", "common.undone")
+    /// Untitled
+    public static let untitled = PitstopAPPStrings.tr("Localizable", "common.untitled")
     /// Vehicle
     public static let vehicle = PitstopAPPStrings.tr("Localizable", "common.vehicle")
+  }
+
+  public enum Document: Sendable {
+  /// Rename document
+    public static let rename = PitstopAPPStrings.tr("Localizable", "document.rename")
+
+    public enum Rename: Sendable {
+    /// Title
+      public static let placeholder = PitstopAPPStrings.tr("Localizable", "document.rename.placeholder")
+    }
   }
 
   public enum Onb: Sendable {

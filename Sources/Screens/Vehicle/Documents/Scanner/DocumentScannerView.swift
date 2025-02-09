@@ -15,6 +15,14 @@ struct DocumentScannerView: View {
     @State private var showCameraPicker = false
     let columns = [GridItem(.adaptive(minimum: 100))]
 
+    @State private var renameDocumentAlert: AlertConfig = .init(
+        enableBackgroundBlur: false,
+        disableOutsideTap: false,
+        transitionType: .slide
+    )
+
+    @State private var documentTitle: String = PitstopAPPStrings.Common.untitled
+
     var body: some View {
         VStack {
             ScrollView(.vertical) {
@@ -49,18 +57,35 @@ struct DocumentScannerView: View {
             }
             Spacer()
             if !scannedImages.isEmpty {
-                Button("Save scans as PDF") {
-                    // TODO: Add alert to input title
-                    persistDocument(withTitle: "RNDM \(Int.random(in: 1 ... 100))")
+                Button(PitstopAPPStrings.Common.save) {
+                    persistDocument(withTitle: documentTitle)
                 }
                 .buttonStyle(Primary())
             }
         }
         .padding(.top, 16)
         .background(Palette.greyBackground)
-        .navigationTitle("Select Documents")
+        .navigationTitle(documentTitle)
         .sheet(isPresented: $showCameraPicker) {
             DocumentCameraVCRepresentable(scanResult: $scannedImages)
+        }
+        .toolbar {
+            ToolbarTitleMenu {
+                Button(PitstopAPPStrings.Common.rename) {
+                    renameDocumentAlert.present()
+                }
+                .buttonStyle(Primary())
+            }
+        }
+        .alert(config: $renameDocumentAlert) {
+            AlertInputView(
+                title: PitstopAPPStrings.Document.rename,
+                placeholder: PitstopAPPStrings.Document.Rename.placeholder,
+                alert: $renameDocumentAlert,
+                action: { input in
+                    documentTitle = input
+                }
+            )
         }
     }
 

@@ -17,6 +17,8 @@
 "common.title" = "Title";
 "common.day" = "Day";
 "common.odometer" = "Odometer";
+"common.rename" = "Rename";
+"common.untitled" = "Untitled";
 
 // MARK: ONBOARDING
 
@@ -66,3 +68,8 @@
 "category.fines" = "Fine";
 "category.parking" = "Parking";
 "category.other" = "Other";
+
+// MARK: DOCUMENTS
+"document.rename" = "Rename document";
+"document.rename.placeholder" = "Title";
+

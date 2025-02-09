@@ -14,7 +14,7 @@ struct AlertInputView: View {
     let title: String
     let placeholder: String
     @Binding var alert: AlertConfig
-    let action: () -> Void
+    let action: (String) -> Void
 
     var body: some View {
         VStack(spacing: 25) {
@@ -43,7 +43,7 @@ struct AlertInputView: View {
                     .textFieldStyle(BoxTextFieldStyle(focusedField: $focusState, field: .input))
                     .padding(.horizontal, 16)
                 Button(PitstopAPPStrings.Common.save) {
-                    action()
+                    action(input)
                     alert.dismiss()
                 }
                 .buttonStyle(Primary())
@@ -66,7 +66,13 @@ struct AlertInputView: View {
 #Preview {
     VStack {
         Spacer()
-        AlertInputView(title: "Default", placeholder: "Text", alert: .constant(.init()), action: {})
+        AlertInputView(
+            title: "Default",
+            placeholder: "Text",
+            alert: .constant(.init()),
+            action: { _ in
+            }
+        )
         Spacer()
     }
     .frame(maxWidth: .infinity)

@@ -285,8 +285,9 @@ struct BottomContentView: View {
 
         do {
             let data = try Data(contentsOf: url)
-            let documentTitle = url.lastPathComponent.replacingOccurrences(of: ".pdf", with: "")
-            let newDocument = Document(data: data, title: documentTitle, fileURL: url)
+            let documentTitle = url.deletingPathExtension().lastPathComponent
+
+            let newDocument = Document(data: data, title: documentTitle)
             try newDocument.saveToModelContext(context: modelContext)
         } catch {
             // TODO: Implement proper error handling

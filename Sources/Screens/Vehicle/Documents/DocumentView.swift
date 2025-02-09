@@ -15,9 +15,9 @@ struct DocumentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                if let url = document.fileURL {
-                    PDFRepresentedView(url)
-                }
+                // MARK: For now it handles only data
+
+                PDFRepresentedView(data: document.data)
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(

@@ -9,10 +9,12 @@ import PDFKit
 import SwiftUI
 
 struct PDFRepresentedView: UIViewRepresentable {
-    let url: URL
+    let url: URL?
+    let data: Data?
 
-    init(_ url: URL) {
+    init(url: URL? = nil, data: Data? = nil) {
         self.url = url
+        self.data = data
     }
 
     func makeUIView(context _: Context) -> PDFView {
@@ -20,13 +22,29 @@ struct PDFRepresentedView: UIViewRepresentable {
         pdfView.translatesAutoresizingMaskIntoConstraints = false
         pdfView.autoScales = true // Automatically scales content to fit the view
 
-        pdfView.document = PDFDocument(url: url)
+        loadDocument(for: pdfView)
 
         return pdfView
     }
 
     func updateUIView(_ pdfView: PDFView, context _: Context) {
-        pdfView.document = PDFDocument(url: url)
+        loadDocument(for: pdfView)
+    }
+
+    private func loadDocument(for pdfView: PDFView) {
+        if let url {
+            if let document = PDFDocument(url: url) {
+                pdfView.document = document
+            } else {
+                print("⚠️ Failed to load PDF from \(url)")
+            }
+        } else if let data {
+            if let document = PDFDocument(data: data) {
+                pdfView.document = document
+            } else {
+                print("⚠️ Failed to load PDF from \(data)")
+            }
+        }
     }
 }
 

@@ -30,6 +30,7 @@ struct DocumentScannerView: View {
                                     .fill(Palette.greyInput.opacity(0.5))
                                     .frame(width: 100, height: 100)
                             }
+                            .frame(width: 100, height: 100)
                     })
                     .buttonStyle(.plain)
 
@@ -39,6 +40,7 @@ struct DocumentScannerView: View {
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 100, height: 100)
+                                .border(Palette.black, width: 1)
                                 .clipped()
                         }
                     }
@@ -66,12 +68,9 @@ struct DocumentScannerView: View {
         guard let data = PDFCreator.createPDF(from: scannedImages) else {
             return
         }
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let fileURL = documentsDirectory.appendingPathComponent(UUID().uuidString + ".pdf")
 
         do {
-            try data.write(to: fileURL)
-            let document = Document(data: data, title: title, fileURL: fileURL)
+            let document = Document(data: data, title: title)
             try document.saveToModelContext(context: modelContext)
             navManager.pop()
         } catch {

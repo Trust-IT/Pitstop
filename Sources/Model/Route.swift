@@ -93,6 +93,8 @@ extension Route: View {
             RemindersListView()
         case let .expiredReminder(input: reminder):
             ExpiredReminderView(reminder: reminder)
+        case .docScanner:
+            DocumentScannerView()
         case .tos:
             HTMLView(htmlFileName: "TermsOfService")
         case .aboutUs:

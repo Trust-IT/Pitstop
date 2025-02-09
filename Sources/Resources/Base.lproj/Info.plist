@@ -6,5 +6,7 @@
 	<string>Stay up to date with deadlines and the maintenance status of your vehicle</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera permission is needed to scan the documents</string>
 </dict>
 </plist>

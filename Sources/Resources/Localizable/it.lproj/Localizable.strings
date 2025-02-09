@@ -17,6 +17,8 @@
 "common.title" = "Titolo";
 "common.day" = "Giorno";
 "common.odometer" = "Contachilometri";
+"common.rename" = "Rinomina";
+"common.untitled" = "Senza titolo";
 
 // MARK: ONBOARDING
 
@@ -66,3 +68,7 @@
 "category.fines" = "Multa";
 "category.parking" = "Parcheggio";
 "category.other" = "Altro";
+
+// MARK: DOCUMENTS
+"document.rename" = "Renomina il documento";
+"document.rename.placeholder" = "Titolo";

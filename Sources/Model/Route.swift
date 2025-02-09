@@ -23,6 +23,9 @@ enum Route {
     case reminderList
     case expiredReminder(input: Reminder)
 
+    // Documents
+    case docScanner
+
     // Settings
     case tos
     case aboutUs
@@ -90,6 +93,8 @@ extension Route: View {
             RemindersListView()
         case let .expiredReminder(input: reminder):
             ExpiredReminderView(reminder: reminder)
+        case .docScanner:
+            DocumentScannerView()
         case .tos:
             HTMLView(htmlFileName: "TermsOfService")
         case .aboutUs:

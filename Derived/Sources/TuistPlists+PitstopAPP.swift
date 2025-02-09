@@ -13,6 +13,7 @@ import Foundation
 
 // swiftlint:disable identifier_name line_length number_separator type_body_length
 public enum Info: Sendable {
+    public static let nsCameraUsageDescription: String = "Camera permission is needed to scan the documents"
     public static let nsUserNotificationsUsageDescription: String = "Stay up to date with deadlines and the maintenance status of your vehicle"
     public static let uiViewControllerBasedStatusBarAppearance: Bool = true
 }

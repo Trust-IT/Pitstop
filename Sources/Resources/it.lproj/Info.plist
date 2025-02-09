@@ -6,5 +6,7 @@
 	<string>Resta aggiornato sulle scadenze e sullo stato di manutenzione del tuo veicolo</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>I permessi della fotocamera sono necessari per scannerizzare i documenti</string>
 </dict>
 </plist>

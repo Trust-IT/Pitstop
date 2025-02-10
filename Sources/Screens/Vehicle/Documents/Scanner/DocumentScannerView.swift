@@ -16,7 +16,7 @@ struct DocumentScannerView: View {
     let columns = [GridItem(.adaptive(minimum: 100))]
 
     @State private var renameDocumentAlert: AlertConfig = .init(
-        enableBackgroundBlur: false,
+        enableBackgroundBlur: true,
         disableOutsideTap: false,
         transitionType: .slide
     )

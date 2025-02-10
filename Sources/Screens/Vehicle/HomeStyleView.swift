@@ -28,8 +28,8 @@ struct HomeStyleView: View {
                         .background(appState.currentTheme.colors.background)
                         .overlay(
                             // TOP NAV BAR
-                            TopNav(offset: offset, maxHeight: maxHeight, topEdge: topEdge)
-                                .padding(.horizontal)
+                            TopBarView(offset: offset, maxHeight: maxHeight, topEdge: topEdge)
+                                .padding(.horizontal, 16)
                                 .frame(height: 60)
                                 .padding(.top, topEdge + 10),
                             alignment: .top

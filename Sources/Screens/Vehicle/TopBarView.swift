@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct TopNav: View {
+struct TopBarView: View {
     @EnvironmentObject var vehicleManager: VehicleManager
     @EnvironmentObject var navManager: NavigationManager
 
@@ -27,7 +27,7 @@ struct TopNav: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
+            HStack(alignment: .center) {
                 Button(action: {
                     showingAllCars.toggle()
                 }, label: {
@@ -42,43 +42,31 @@ struct TopNav: View {
                             .frame(width: 10, height: 14)
                             .rotationEffect(showingAllCars ? Angle(degrees: 180) : Angle(degrees: 270))
                     }
-                    .padding(.leading, -1)
-                    .opacity(fadeOutOpacity())
-                })
-                .disabled(fadeOutOpacity() < 0.35)
-                .confirmationDialog(
-                    String(localized: "Select a vehicle"),
-                    isPresented: $showingAllCars,
-                    titleVisibility: .hidden
-                ) {
-                    ForEach(vehicles, id: \.uuid) { vehicle in
-                        Button(vehicle.name) {
-                            vehicleManager.setCurrentVehicle(vehicle)
-                        }
-                    }
-                    Button(PitstopAPPStrings.Common.cancel, role: .cancel) {}
-                        .background(.black)
-                        .foregroundColor(.red)
-                }
 
+                })
                 Spacer()
-                HStack {
-                    ZStack {
-                        Button(action: {
-                            navManager.push(.reminderList)
-                        }, label: {
-                            ZStack {
-                                Circle()
-                                    .foregroundColor(Palette.whiteHeader)
-                                    .frame(width: UIScreen.main.bounds.width * 0.09, height: UIScreen.main.bounds.height * 0.04)
-                                    .shadowGrey()
-                                Image(.bellHome)
-                            }
-                        })
+                Button(action: {
+                    navManager.push(.reminderList)
+                }, label: {
+                    HStack {
+                        Text(PitstopAPPStrings.Reminder.title)
+                            .foregroundStyle(Palette.blackHeader)
+                            .font(Typography.ControlS)
+                        Image(.bellHome)
+                            .tint(Palette.blackHeader)
                     }
-                }
-                .padding(.top, 2)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 36)
+                            .foregroundColor(Palette.whiteHeader)
+                            .shadowGrey()
+                    )
+                })
             }
+            .opacity(fadeOutOpacity())
+            .disabled(fadeOutOpacity() < 0.35)
+
             Text(brandModelString)
                 .foregroundColor(Palette.blackHeader)
                 .font(Typography.TextM)
@@ -100,6 +88,20 @@ struct TopNav: View {
                 })
             .padding(.bottom, 15)
         )
+        .confirmationDialog(
+            String(localized: "Select a vehicle"),
+            isPresented: $showingAllCars,
+            titleVisibility: .hidden
+        ) {
+            ForEach(vehicles, id: \.uuid) { vehicle in
+                Button(vehicle.name) {
+                    vehicleManager.setCurrentVehicle(vehicle)
+                }
+            }
+            Button(PitstopAPPStrings.Common.cancel, role: .cancel) {}
+                .background(.black)
+                .foregroundColor(.red)
+        }
     }
 
     // Opacity to let appear items in the top bar

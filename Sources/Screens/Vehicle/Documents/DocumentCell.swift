@@ -33,21 +33,24 @@ struct DocumentCell: View {
                     .foregroundColor(Palette.black)
                     .font(Typography.ControlS)
             }
-            .padding()
-            .frame(
-                width: UIScreen.main.bounds.width * 0.38,
-                height: UIScreen.main.bounds.height * 0.13
-            )
+            .padding(8)
+//            .padding()
+//            .frame(
+//                width: UIScreen.main.bounds.width * 0.38,
+//                height: UIScreen.main.bounds.height * 0.13
+//            )
             .background {
                 Rectangle()
                     .cornerRadius(8)
                     .foregroundColor(Palette.white)
                     .shadowGrey()
             }
+            .frame(minHeight: 96)
         }
     }
 }
 
 #Preview {
     DocumentCell(title: "Document", onTap: {})
+        .background(Color.red)
 }

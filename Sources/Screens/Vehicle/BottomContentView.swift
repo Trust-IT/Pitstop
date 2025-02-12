@@ -102,7 +102,7 @@ struct BottomContentView: View {
                         Button(action: {
                             newNumberAlert.present()
                         }, label: {
-                            addComponent(title: "Add contact")
+                            AddElementView(label: "Add contact")
                         })
                     }
                     Spacer(minLength: 16)
@@ -136,6 +136,7 @@ struct BottomContentView: View {
         }
     }
 
+    // TODO: EXTRACT TO GENERIC COMPONENT FOR NUMBERS AND DOCUMENTS
     @ViewBuilder
     func importantNumbersComponent(title: String, number: String) -> some View {
         ZStack {
@@ -167,24 +168,6 @@ struct BottomContentView: View {
             }
             .padding(.leading, -34)
             .padding(.top, -2)
-        }
-    }
-
-    @ViewBuilder
-    func addComponent(title: LocalizedStringKey) -> some View {
-        ZStack {
-            Rectangle()
-                .cornerRadius(8)
-                .frame(width: UIScreen.main.bounds.width * 0.38, height: UIScreen.main.bounds.height * 0.13)
-                .foregroundColor(Palette.white)
-                .shadowGrey()
-            VStack(alignment: .center, spacing: 10) {
-                Image(.plus)
-                    .foregroundColor(Palette.greyMiddle)
-                Text(title)
-                    .foregroundColor(Palette.greyMiddle)
-                    .font(Typography.ControlS)
-            }
         }
     }
 }

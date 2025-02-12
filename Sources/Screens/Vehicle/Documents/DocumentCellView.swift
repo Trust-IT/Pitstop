@@ -35,7 +35,11 @@ struct DocumentCellView: View {
                             showPDF.toggle()
                         }
                     }
-                    addDocumentCell()
+                    Button(action: {
+                        showDocumentPicker.present()
+                    }, label: {
+                        AddElementView(label: "Add document")
+                    })
                 }
                 Spacer(minLength: 16)
             }
@@ -89,33 +93,6 @@ struct DocumentCellView: View {
 
         case files = "Files"
         case photo = "Photo"
-    }
-}
-
-// MARK: UI
-
-private extension DocumentCellView {
-    func addDocumentCell() -> Button<some View> {
-        Button(action: {
-            showDocumentPicker.present()
-        }, label: {
-            VStack(alignment: .center, spacing: 10) {
-                Image(.plus)
-                    .foregroundColor(Palette.greyMiddle)
-                Text("Add document")
-                    .foregroundColor(Palette.greyMiddle)
-                    .font(Typography.ControlS)
-            }
-            .padding(.vertical, 32)
-            .padding(.horizontal, 16)
-            .background(
-                Rectangle()
-                    .cornerRadius(8)
-                    .foregroundColor(Palette.white)
-                    .shadowGrey()
-            )
-            .frame(minHeight: 96)
-        })
     }
 }
 

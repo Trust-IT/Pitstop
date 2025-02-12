@@ -17,25 +17,8 @@ struct BottomContentView: View {
     @State private var viewAllNumbers = false
     @State private var viewAllEvents = false
     @State private var showEventEdit = false
-
-    @State private var showingOptions = false
-
-    @State private var presentImporter = false
-    @State private var showPDF = false
-
-    @Query var documents: [Document]
-    @State private var selectedDocument: Document = .mock()
-
     @State private var selectedFuelExpense: FuelExpense = .mock()
-    @State private var selectedDocumentType: DocumentPickerType?
-
     @State private var newNumberAlert: AlertConfig = .init(
-        enableBackgroundBlur: false,
-        disableOutsideTap: false,
-        transitionType: .slide
-    )
-
-    @State private var showDocumentPicker: AlertConfig = .init(
         enableBackgroundBlur: false,
         disableOutsideTap: false,
         transitionType: .slide
@@ -66,7 +49,7 @@ struct BottomContentView: View {
                 }
                 .padding()
             } else {
-                ForEach(vehicleManager.currentVehicle.sortedFuelExpenses.prefix(3), id: \.id) { fuelExpense in
+                ForEach(vehicleManager.currentVehicle.sortedFuelExpenses.prefix(4), id: \.id) { fuelExpense in
                     Button(action: {
                         selectedFuelExpense = fuelExpense
                         showEventEdit.toggle()
@@ -90,39 +73,7 @@ struct BottomContentView: View {
             .padding(.top, 10)
             .padding(.bottom, -10)
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                VStack {
-                    Spacer(minLength: 12)
-                    HStack {
-                        ForEach(documents, id: \.uuid) { document in
-                            DocumentCell(title: document.title) {
-                                selectedDocument = document
-                                showPDF.toggle()
-                            }
-                        }
-                        Button(action: {
-                            showDocumentPicker.present()
-                        }, label: {
-                            addComponent(title: "Add document")
-                        })
-                    }
-                    Spacer(minLength: 16)
-                }
-                .fileImporter(
-                    isPresented: $presentImporter,
-                    allowedContentTypes: [.pdf]
-                ) { result in
-                    handleFileImport(result: result)
-                }
-            }
-            .safeAreaInset(edge: .trailing, spacing: 0) {
-                Spacer()
-                    .frame(width: 16)
-            }
-            .safeAreaInset(edge: .leading, spacing: 0) {
-                Spacer()
-                    .frame(width: 16)
-            }
+            DocumentRowView()
 
             titleSection(
                 sectionTitle: "Useful contacts",
@@ -145,13 +96,13 @@ struct BottomContentView: View {
                             Button(action: {
                                 UIApplication.shared.open(URL(string: "tel://" + number.telephone)!)
                             }, label: {
-                                importantNumbersComponent(title: number.title, number: number.telephone)
+                                ElementCellView(title: number.title, subtitle: number.telephone, icon: .wrench)
                             })
                         }
                         Button(action: {
                             newNumberAlert.present()
                         }, label: {
-                            addComponent(title: "Add contact")
+                            AddElementView(label: "Add contact")
                         })
                     }
                     Spacer(minLength: 16)
@@ -178,128 +129,11 @@ struct BottomContentView: View {
             ImportantNumbersView()
                 .interactiveDismissDisabled(true)
         }
-        .fullScreenCover(isPresented: $showPDF) {
-            DocumentView(document: $selectedDocument)
-        }
         .alert(config: $newNumberAlert) {
             AddNumberView(alert: $newNumberAlert)
                 .environment(\.modelContext, modelContext)
                 .environmentObject(vehicleManager)
         }
-        .alert(config: $showDocumentPicker) {
-            ConfirmationDialog(
-                items: DocumentPickerType.allCases,
-                message: "Select how to upload your document",
-                onTap: { value in
-                    selectedDocumentType = value
-                    showDocumentPicker.dismiss()
-                },
-                onCancel: {
-                    selectedDocumentType = nil
-                    showDocumentPicker.dismiss()
-                }
-            )
-        }
-        .onChange(of: selectedDocumentType) { _, newValue in
-            guard let newValue else { return }
-            switch newValue {
-            case .files:
-                presentImporter.toggle()
-                selectedDocumentType = nil
-            case .photo:
-                navManager.push(.docScanner)
-                selectedDocumentType = nil
-            }
-        }
-    }
-
-    @ViewBuilder
-    func importantNumbersComponent(title: String, number: String) -> some View {
-        ZStack {
-            Rectangle()
-                .cornerRadius(8)
-                .foregroundColor(Palette.white)
-                .shadowGrey()
-                .frame(width: UIScreen.main.bounds.width * 0.38, height: UIScreen.main.bounds.height * 0.13)
-            VStack(alignment: .leading, spacing: 22) {
-                ZStack {
-                    Circle()
-                        .frame(width: 24, height: 24)
-                        .foregroundColor(Palette.greyLight)
-                    Image(.wrench)
-                        .resizable()
-                        .frame(width: 14, height: 14)
-                        .foregroundColor(Palette.black)
-                }
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(title)
-                        .foregroundColor(Palette.black)
-                        .font(Typography.ControlS)
-                    Text(number)
-                        .foregroundColor(Palette.greyMiddle)
-                        .font(Typography.TextM)
-                        .lineLimit(1)
-                        .frame(width: UIScreen.main.bounds.width * 0.25, alignment: .leading)
-                }
-            }
-            .padding(.leading, -34)
-            .padding(.top, -2)
-        }
-    }
-
-    @ViewBuilder
-    func addComponent(title: LocalizedStringKey) -> some View {
-        ZStack {
-            Rectangle()
-                .cornerRadius(8)
-                .frame(width: UIScreen.main.bounds.width * 0.38, height: UIScreen.main.bounds.height * 0.13)
-                .foregroundColor(Palette.white)
-                .shadowGrey()
-            VStack(alignment: .center, spacing: 10) {
-                Image(.plus)
-                    .foregroundColor(Palette.greyMiddle)
-                Text(title)
-                    .foregroundColor(Palette.greyMiddle)
-                    .font(Typography.ControlS)
-            }
-        }
-    }
-
-    private func handleFileImport(result: Result<URL, Error>) {
-        switch result {
-        case let .success(url):
-            processSelectedFile(url: url)
-        case let .failure(error):
-            // TODO: Implement proper error handling
-            print("File selection failed: \(error)")
-        }
-    }
-
-    private func processSelectedFile(url: URL) {
-        guard url.startAccessingSecurityScopedResource() else {
-            print("Failed to access security-scoped resource.")
-            return
-        }
-
-        defer { url.stopAccessingSecurityScopedResource() }
-
-        do {
-            let data = try Data(contentsOf: url)
-            let documentTitle = url.deletingPathExtension().lastPathComponent
-
-            let newDocument = Document(data: data, title: documentTitle)
-            try newDocument.saveToModelContext(context: modelContext)
-        } catch {
-            // TODO: Implement proper error handling
-            print("Error when processing document: \(error)")
-        }
-    }
-
-    enum DocumentPickerType: String, CaseIterable, Identifiable {
-        var id: Self { self }
-
-        case files = "Files"
-        case photo = "Photo"
     }
 }
 
@@ -346,15 +180,15 @@ struct CategoryComponent: View {
 
     var body: some View {
         HStack {
-//            ZStack {
-//                Circle()
-//                    .frame(width: 32, height: 32)
-//                    .foregroundColor(appState.currentTheme.colors.background)
-//                Image(category.icon)
-//                    .resizable()
-//                    .frame(width: 16, height: 16)
-//                    .tint(appState.currentTheme.accentColor)
-//            }
+            ZStack {
+                Circle()
+                    .frame(width: 32, height: 32)
+                    .foregroundColor(Palette.greyLight)
+                Image(category.icon)
+                    .resizable()
+                    .frame(width: 16, height: 16)
+                    .tint(Palette.black)
+            }
             VStack(alignment: .leading) {
                 HStack {
                     Text(category.label)

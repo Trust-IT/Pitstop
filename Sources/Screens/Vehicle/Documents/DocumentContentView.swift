@@ -1,5 +1,5 @@
 //
-//  DocumentView.swift
+//  DocumentContentView.swift
 //  Hurricane
 //
 //  Created by Ivan Voloshchuk on 11/06/22.
@@ -8,7 +8,7 @@
 import PDFKit
 import SwiftUI
 
-struct DocumentView: View {
+struct DocumentContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var document: Document
     @Environment(\.presentationMode) private var presentationMode

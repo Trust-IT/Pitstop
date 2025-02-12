@@ -1,5 +1,5 @@
 //
-//  DocumentCellView.swift
+//  DocumentRowView.swift
 //  Pitstop-APP
 //
 //  Created by Ivan Voloshchuk on 11/02/25.
@@ -8,7 +8,7 @@
 import SwiftData
 import SwiftUI
 
-struct DocumentCellView: View {
+struct DocumentRowView: View {
     @EnvironmentObject private var navManager: NavigationManager
     @Environment(\.modelContext) private var modelContext
 
@@ -30,10 +30,12 @@ struct DocumentCellView: View {
                 Spacer(minLength: 12)
                 HStack {
                     ForEach(documents, id: \.uuid) { document in
-                        DocumentCell(title: document.title) {
+                        Button(action: {
                             selectedDocument = document
                             showPDF.toggle()
-                        }
+                        }, label: {
+                            ElementCellView(title: document.title, icon: .documents)
+                        })
                     }
                     Button(action: {
                         showDocumentPicker.present()
@@ -59,7 +61,7 @@ struct DocumentCellView: View {
                 .frame(width: 16)
         }
         .fullScreenCover(isPresented: $showPDF) {
-            DocumentView(document: $selectedDocument)
+            DocumentContentView(document: $selectedDocument)
         }
         .alert(config: $showDocumentPicker) {
             ConfirmationDialog(
@@ -98,7 +100,7 @@ struct DocumentCellView: View {
 
 // MARK: METHODS
 
-private extension DocumentCellView {
+private extension DocumentRowView {
     func handleFileImport(result: Result<URL, Error>) {
         switch result {
         case let .success(url):
@@ -131,7 +133,7 @@ private extension DocumentCellView {
 }
 
 #Preview {
-    DocumentCellView()
+    DocumentRowView()
         .background(Color.red)
         .environmentObject(VehicleManager())
         .environmentObject(NavigationManager())

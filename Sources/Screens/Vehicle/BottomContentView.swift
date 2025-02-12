@@ -49,7 +49,7 @@ struct BottomContentView: View {
                 }
                 .padding()
             } else {
-                ForEach(vehicleManager.currentVehicle.sortedFuelExpenses.prefix(3), id: \.id) { fuelExpense in
+                ForEach(vehicleManager.currentVehicle.sortedFuelExpenses.prefix(4), id: \.id) { fuelExpense in
                     Button(action: {
                         selectedFuelExpense = fuelExpense
                         showEventEdit.toggle()
@@ -73,7 +73,7 @@ struct BottomContentView: View {
             .padding(.top, 10)
             .padding(.bottom, -10)
 
-            DocumentCellView()
+            DocumentRowView()
 
             titleSection(
                 sectionTitle: "Useful contacts",
@@ -96,7 +96,7 @@ struct BottomContentView: View {
                             Button(action: {
                                 UIApplication.shared.open(URL(string: "tel://" + number.telephone)!)
                             }, label: {
-                                importantNumbersComponent(title: number.title, number: number.telephone)
+                                ElementCellView(title: number.title, subtitle: number.telephone, icon: .wrench)
                             })
                         }
                         Button(action: {
@@ -133,41 +133,6 @@ struct BottomContentView: View {
             AddNumberView(alert: $newNumberAlert)
                 .environment(\.modelContext, modelContext)
                 .environmentObject(vehicleManager)
-        }
-    }
-
-    // TODO: EXTRACT TO GENERIC COMPONENT FOR NUMBERS AND DOCUMENTS
-    @ViewBuilder
-    func importantNumbersComponent(title: String, number: String) -> some View {
-        ZStack {
-            Rectangle()
-                .cornerRadius(8)
-                .foregroundColor(Palette.white)
-                .shadowGrey()
-                .frame(width: UIScreen.main.bounds.width * 0.38, height: UIScreen.main.bounds.height * 0.13)
-            VStack(alignment: .leading, spacing: 22) {
-                ZStack {
-                    Circle()
-                        .frame(width: 24, height: 24)
-                        .foregroundColor(Palette.greyLight)
-                    Image(.wrench)
-                        .resizable()
-                        .frame(width: 14, height: 14)
-                        .foregroundColor(Palette.black)
-                }
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(title)
-                        .foregroundColor(Palette.black)
-                        .font(Typography.ControlS)
-                    Text(number)
-                        .foregroundColor(Palette.greyMiddle)
-                        .font(Typography.TextM)
-                        .lineLimit(1)
-                        .frame(width: UIScreen.main.bounds.width * 0.25, alignment: .leading)
-                }
-            }
-            .padding(.leading, -34)
-            .padding(.top, -2)
         }
     }
 }
@@ -215,15 +180,15 @@ struct CategoryComponent: View {
 
     var body: some View {
         HStack {
-//            ZStack {
-//                Circle()
-//                    .frame(width: 32, height: 32)
-//                    .foregroundColor(appState.currentTheme.colors.background)
-//                Image(category.icon)
-//                    .resizable()
-//                    .frame(width: 16, height: 16)
-//                    .tint(appState.currentTheme.accentColor)
-//            }
+            ZStack {
+                Circle()
+                    .frame(width: 32, height: 32)
+                    .foregroundColor(Palette.greyLight)
+                Image(category.icon)
+                    .resizable()
+                    .frame(width: 16, height: 16)
+                    .tint(Palette.black)
+            }
             VStack(alignment: .leading) {
                 HStack {
                     Text(category.label)

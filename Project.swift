@@ -33,6 +33,7 @@ let project = Project(
                 "Sources/Assets.xcassets/**",
                 "Sources/Preview Content/**"
             ],
+            entitlements: "Pitstop-APP.entitlements",
             scripts: [
                 .pre(
                     script: "Scripts/swiftformat.sh",

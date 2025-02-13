@@ -37,15 +37,25 @@ struct DocumentContentView: View {
                         .foregroundColor(Palette.black)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
-                        modelContext.delete(document)
-                        presentationMode.wrappedValue.dismiss()
-                    }, label: {
-                        Image(.deleteIcon)
-                            .resizable()
-                            .frame(width: 20, height: 22)
-                            .foregroundStyle(Palette.black)
-                    })
+                    HStack {
+                        if let pdf = PDFDocument(document: document) {
+                            ShareLink(item: pdf, preview: SharePreview(document.title)) {
+                                Image(systemName: "square.and.arrow.up.fill")
+                                    .resizable()
+                                    .frame(width: 16, height: 22)
+                                    .foregroundStyle(Palette.black)
+                            }
+                        }
+                        Button(action: {
+                            modelContext.delete(document)
+                            presentationMode.wrappedValue.dismiss()
+                        }, label: {
+                            Image(.deleteIcon)
+                                .resizable()
+                                .frame(width: 20, height: 22)
+                                .foregroundStyle(Palette.black)
+                        })
+                    }
                 }
             }
         }

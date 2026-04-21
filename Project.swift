@@ -21,7 +21,7 @@ let project = Project(
             bundleId: "com.academy.pitstopD",
             deploymentTargets:
             .iOS(
-                "17.0"
+                "18.0"
             ),
             infoPlist:
             .file(

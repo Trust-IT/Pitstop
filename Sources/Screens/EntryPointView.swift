@@ -48,11 +48,12 @@ struct EntryPointView: View {
                 .presentationDetents([.fraction(0.35)])
                 .presentationDragIndicator(.visible)
         }
-        .onAppear {
-            UITabBar.appearance().unselectedItemTintColor = Palette.greyEBEBEB.uiColor
-            UITabBarItem.appearance().badgeColor = Palette.black.uiColor
-            UITabBar.appearance().backgroundColor = Palette.white.uiColor
-        }
+        // TODO: IVAN Remove this and use native colors
+//        .onAppear {
+//            UITabBar.appearance().unselectedItemTintColor = Palette.greyEBEBEB.uiColor
+//            UITabBarItem.appearance().badgeColor = Palette.black.uiColor
+//            UITabBar.appearance().backgroundColor = Palette.white.uiColor
+//        }
         .tint(Palette.black)
     }
 }

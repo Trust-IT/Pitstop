@@ -30,7 +30,6 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
         window.isHidden = true
         window.isUserInteractionEnabled = false
         overlayWindow = window
-        print("Window")
     }
 
     func alert(

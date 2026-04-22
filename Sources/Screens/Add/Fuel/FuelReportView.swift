@@ -39,7 +39,7 @@ struct FuelReportView: View {
                     FuelInputTextField(
                         title: "Total",
                         placeholder: "\(fuelExpense.totalPrice)",
-                        measurement: "€",
+                        measurement: "€", // TODO: IVAN FIX AND USE APP STATE CURRENCY
                         icon: .category,
                         focusState: $focusState,
                         focus: .totalPrice,
@@ -48,7 +48,7 @@ struct FuelReportView: View {
                     FuelInputTextField(
                         title: "Odometer",
                         placeholder: "\(vehicleManager.currentVehicle.currentOdometer)",
-                        measurement: "Km",
+                        measurement: appState.measurementUnit.symbol,
                         icon: .odometer,
                         focusState: $focusState,
                         focus: .odometer,
@@ -57,7 +57,7 @@ struct FuelReportView: View {
                     FuelInputTextField(
                         title: "Liters",
                         placeholder: "\(fuelExpense.quantity)",
-                        measurement: "L",
+                        measurement: "L", // TODO: IVAN FIX AND USE APP STATE MEASURES
                         icon: .liters,
                         focusState: $focusState,
                         focus: .quantity,

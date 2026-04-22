@@ -14,30 +14,23 @@ struct EntryPointView: View {
 
     var body: some View {
         TabView(selection: $navManager.selectedTab) {
-            VehicleView()
-                .tabItem {
-                    Label(PitstopAPPStrings.Common.vehicle, image: .carIcon)
-                }
-                .tag(TabBarItem.vehicle)
+            Tab(PitstopAPPStrings.Common.vehicle, image: PitstopAPPAsset.Assets.carIcon.name, value: TabBarItem.vehicle) {
+                VehicleView()
+            }
 
-            AnalyticsView()
-                .tabItem {
-                    Label(PitstopAPPStrings.Common.analytics, image: .chartIcon)
-                }
-                .tag(TabBarItem.analytics)
+            Tab(PitstopAPPStrings.Common.analytics, image: PitstopAPPAsset.Assets.chartIcon.name, value: TabBarItem.analytics) {
+                AnalyticsView()
+            }
 
-            SettingsView()
-                .tabItem {
-                    Label(PitstopAPPStrings.Common.settings, image: .settingsIcon)
-                }
-                .tag(TabBarItem.settings)
+            Tab(PitstopAPPStrings.Common.settings, image: PitstopAPPAsset.Assets.settingsIcon.name, value: TabBarItem.settings) {
+                SettingsView()
+            }
 
-            Text("If you see this, then something is broken")
-                .tabItem {
-                    Label(PitstopAPPStrings.Common.add, image: .plusIcon)
-                }
-                .tag(TabBarItem.add)
+            Tab(PitstopAPPStrings.Common.add, image: PitstopAPPAsset.Assets.plusIcon.name, value: TabBarItem.add, role: .search) {
+                Text("If you see this, then something is broken")
+            }
         }
+        .tabBarMinimizeBehavior(.onScrollDown)
         .environment(appState)
         .onChange(of: navManager.selectedTab) { previousTab, currentTab in
             if currentTab == .add {
@@ -51,13 +44,7 @@ struct EntryPointView: View {
                 .presentationDetents([.fraction(0.35)])
                 .presentationDragIndicator(.visible)
         }
-        // TODO: IVAN Remove this and use native colors
-//        .onAppear {
-//            UITabBar.appearance().unselectedItemTintColor = Palette.greyEBEBEB.uiColor
-//            UITabBarItem.appearance().badgeColor = Palette.black.uiColor
-//            UITabBar.appearance().backgroundColor = Palette.white.uiColor
-//        }
-        .tint(Palette.black)
+        .tint(appState.currentTheme.accentColor)
     }
 }
 

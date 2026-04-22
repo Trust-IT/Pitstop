@@ -9,8 +9,8 @@ import Foundation
 import Observation
 
 @Observable class AppState {
-    private(set) var currency = "€"
     private(set) var unit = "km"
+    private(set) var currency: Locale.Currency = Locale.current.currency ?? Locale.Currency("EUR")
     private(set) var currentTheme: ThemeColors
 
     /// Checks if vehicle is added from the flow in settings

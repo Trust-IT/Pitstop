@@ -7,8 +7,30 @@
 import Foundation
 
 extension String {
-    func toFloat(using formatter: NumberFormatter = Money.decimalFormatter()) -> Float? {
+    func toFloat() -> Float? {
+        let formatter = NumberFormatter()
+        formatter.locale = .current
+        formatter.numberStyle = .decimal
         guard let number = formatter.number(from: self) else { return nil }
         return number.floatValue
+    }
+}
+
+extension Locale.Currency {
+    func format(_ value: some BinaryFloatingPoint) -> String {
+        Decimal(Double(value)).formatted(.currency(code: identifier))
+    }
+}
+
+extension UnitLength {
+    /// Formats a value stored in kilometers, converting to this unit for display.
+    func format(_ valueInKm: some BinaryFloatingPoint) -> String {
+        Measurement(value: Double(valueInKm), unit: UnitLength.kilometers)
+            .converted(to: self)
+            .formatted(.measurement(width: .abbreviated, usage: .road))
+    }
+
+    func format(_ valueInKm: some BinaryInteger) -> String {
+        format(Double(valueInKm))
     }
 }

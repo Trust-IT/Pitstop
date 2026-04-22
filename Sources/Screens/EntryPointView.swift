@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EntryPointView: View {
     @EnvironmentObject private var navManager: NavigationManager
+    @Environment(AppState.self) var appState: AppState
     @State private var isPresented = false
 
     var body: some View {
@@ -37,6 +38,7 @@ struct EntryPointView: View {
                 }
                 .tag(TabBarItem.add)
         }
+        .environment(appState)
         .onChange(of: navManager.selectedTab) { previousTab, currentTab in
             if currentTab == .add {
                 navManager.selectedTab = previousTab
@@ -44,7 +46,8 @@ struct EntryPointView: View {
             }
         }
         .sheet(isPresented: $isPresented) {
-            AddReportMenuView(isPresented: $isPresented)
+            AddReportMenuView(appState: appState, isPresented: $isPresented)
+                .environment(appState)
                 .presentationDetents([.fraction(0.35)])
                 .presentationDragIndicator(.visible)
         }

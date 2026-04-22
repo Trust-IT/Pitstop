@@ -107,6 +107,7 @@ struct SettingsView: View {
             }
             .navigationDestination(for: Route.self) { route in
                 route
+                    .environment(appState)
                     .toolbar(.hidden, for: .tabBar)
             }
         }

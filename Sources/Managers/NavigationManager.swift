@@ -69,15 +69,19 @@ class NavigationManager: ObservableObject {
 
 struct ModalNavigationContainerView: View {
     @EnvironmentObject var navManager: NavigationManager
+    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(AppState.self) var appState: AppState
     let route: Route
 
     var body: some View {
         NavigationStack(path: $navManager.modalRoutes) {
             VStack {
-                route.body
+                route
             }
             .navigationDestination(for: Route.self) { route in
-                route.body
+                route
+                    .environment(appState)
+                    .environmentObject(vehicleManager)
             }
         }
     }

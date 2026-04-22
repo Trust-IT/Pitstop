@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AddReportMenuView: View {
-    @Environment(AppState.self) var appState: AppState
+    let appState: AppState
     @EnvironmentObject private var navManager: NavigationManager
     @Binding var isPresented: Bool
 
@@ -105,9 +105,8 @@ struct AddReportMenuView: View {
 }
 
 #Preview {
-    AddReportMenuView(isPresented: .constant(true))
+    AddReportMenuView(appState: AppState(), isPresented: .constant(true))
         .environmentObject(NavigationManager())
         .environmentObject(VehicleManager())
-        .environment(AppState())
         .environment(SceneDelegate())
 }

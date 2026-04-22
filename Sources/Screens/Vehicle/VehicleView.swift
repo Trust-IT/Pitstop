@@ -9,6 +9,7 @@ import SwiftUI
 
 struct VehicleView: View {
     @Environment(\.modelContext) var modelContext
+    @Environment(AppState.self) var appState: AppState
     @EnvironmentObject var vehicleManager: VehicleManager
     @EnvironmentObject private var navManager: NavigationManager
 
@@ -24,11 +25,15 @@ struct VehicleView: View {
             }
             .navigationDestination(for: Route.self) { route in
                 route
+                    .environment(appState)
+                    .environmentObject(vehicleManager)
                     .toolbar(.hidden, for: .tabBar)
             }
             .fullScreenCover(isPresented: $navManager.isPresented) {
                 if let presentedRoute = navManager.presentedRoute {
                     ModalNavigationContainerView(route: presentedRoute)
+                        .environment(appState)
+                        .environmentObject(vehicleManager)
                 }
             }
             .onAppear {

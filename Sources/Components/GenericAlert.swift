@@ -32,8 +32,7 @@ struct AlertConfig {
         case opacity
     }
 
-    mutating
-    func present() {
+    mutating func present() {
         show = true
     }
 

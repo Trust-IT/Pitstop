@@ -11,6 +11,7 @@ import SwiftUI
 struct AnalyticsView: View {
     @EnvironmentObject var vehicleManager: VehicleManager
     @EnvironmentObject private var navManager: NavigationManager
+    @Environment(AppState.self) var appState: AppState
     @State private var selectedTab: AnalyticsTabs = .lastMonth
 
     var body: some View {
@@ -36,6 +37,7 @@ struct AnalyticsView: View {
             }
             .navigationDestination(for: Route.self) { route in
                 route
+                    .environment(appState)
                     .toolbar(.hidden, for: .tabBar)
             }
             .toolbar {

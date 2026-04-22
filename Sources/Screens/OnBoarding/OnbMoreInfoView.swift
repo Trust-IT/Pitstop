@@ -34,7 +34,7 @@ struct OnbMoreInfoView: View {
     )
 
     @State private var secondaryFuelType: FuelType?
-    @State private var odometer: Float = 0.0
+    @State private var odometer: Int = 0
     @State private var plate: String = ""
 
     let input: OnbVehicleInputData
@@ -69,7 +69,7 @@ struct OnbMoreInfoView: View {
                                  bgColor: appState.currentTheme.colors.background,
                                  iconName: .odometer)
                 })
-                if odometer != 0.0 {
+                if odometer != 0 {
                     cardInput(value: String(odometer))
                 }
                 Button(action: {
@@ -128,7 +128,7 @@ struct OnbMoreInfoView: View {
             model: input.model,
             mainFuelType: input.fuelType,
             secondaryFuelType: secondaryFuelType,
-            odometer: odometer,
+            initialOdometer: odometer,
             plate: plate
         )
         do {
@@ -242,7 +242,7 @@ private extension OnbMoreInfoView {
     }
 
     struct OdometerInputAlert: View {
-        @Binding var odometer: Float
+        @Binding var odometer: Int
         @Binding var showOdometerInput: AlertConfig
         @FocusState private var focusedField: FocusFieldAlertOB?
 
@@ -269,9 +269,9 @@ private extension OnbMoreInfoView {
                     })
                 }
                 VStack(spacing: 12) {
-                    TextField(PitstopAPPStrings.Onb.odometerPlaceholder, value: $odometer, formatter: NumberFormatter())
+                    TextField(PitstopAPPStrings.Onb.odometerPlaceholder, value: $odometer, format: .number)
                         .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .odometer))
-                        .keyboardType(.decimalPad)
+                        .keyboardType(.numberPad)
                         .padding(.horizontal, 16)
                     Button(PitstopAPPStrings.Common.save) {
                         showOdometerInput.dismiss()

@@ -86,10 +86,10 @@ struct MonthlyAnalyticsView: View {
                 .fill(Palette.white))
             .padding(.horizontal, 16)
             VStack(spacing: 16) {
-                fuelAnalyticsRow(category: "Total cost", amount: monthlyData.totalCost.description + appState.currency)
+                fuelAnalyticsRow(category: "Total cost", amount: appState.currency.format(monthlyData.totalCost))
                 Divider()
                     .overlay(Palette.greyLight)
-                fuelAnalyticsRow(category: "Average liter price", amount: monthlyData.averageCost.description + appState.currency)
+                fuelAnalyticsRow(category: "Average liter price", amount: appState.currency.format(monthlyData.averageCost))
                 Divider()
                     .overlay(Palette.greyLight)
                 fuelAnalyticsRow(category: "Refuels amount", amount: monthlyData.refuelsAmount.description)

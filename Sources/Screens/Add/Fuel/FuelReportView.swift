@@ -47,7 +47,7 @@ struct FuelReportView: View {
                     )
                     FuelInputTextField(
                         title: "Odometer",
-                        placeholder: "\(vehicleManager.currentVehicle.odometer)",
+                        placeholder: "\(vehicleManager.currentVehicle.currentOdometer)",
                         measurement: "Km",
                         icon: .odometer,
                         focusState: $focusState,
@@ -136,8 +136,6 @@ private extension FuelReportView {
         }
         updateFuelExpense(odometerValue: odometerValue, litersValue: litersValue)
 
-        if odometerValue > vehicleManager.currentVehicle.odometer { vehicleManager.currentVehicle.odometer = odometerValue
-        }
         vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
         navManager.pop()
     }

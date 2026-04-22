@@ -24,7 +24,7 @@ struct HeaderContent: View {
                             .foregroundColor(appState.currentTheme.colors.card)
                             .frame(width: UIScreen.main.bounds.width * 0.29, height: UIScreen.main.bounds.height * 0.09)
                         VStack(alignment: .center) {
-                            Text("\(vehicleManager.currentVehicle.calculateTotalFuelExpenses()) \(appState.currency)")
+                            Text(vehicleManager.currentVehicle.calculateTotalFuelExpenses(currency: appState.currency))
                                 .foregroundColor(Palette.blackHeader)
                                 .font(Typography.headerLM)
                             Text("All costs")
@@ -41,7 +41,7 @@ struct HeaderContent: View {
                             .foregroundColor(appState.currentTheme.colors.card)
                             .frame(width: UIScreen.main.bounds.width * 0.29, height: UIScreen.main.bounds.height * 0.09)
                         VStack(alignment: .center) {
-                            Text(String("\(Int64(vehicleManager.currentVehicle.odometer)) \(appState.unit)"))
+                            Text(appState.measurementUnit.format(vehicleManager.currentVehicle.currentOdometer))
                                 .foregroundColor(Palette.blackHeader)
                                 .font(Typography.headerLM)
                             Text("Odometer")
@@ -63,7 +63,7 @@ struct HeaderContent: View {
                                 Text("\(formattedEfficiency) / 100")
                                     .foregroundColor(Palette.blackHeader)
                                     .font(Typography.headerLM)
-                                Text(String(localized: "Efficiency") + " (L/\(appState.unit))")
+                                Text(String(localized: "Efficiency") + " (L/\(appState.measurementUnit.symbol))")
                                     .foregroundColor(Palette.blackHeader)
                                     .font(Typography.TextM)
                             }

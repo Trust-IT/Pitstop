@@ -195,7 +195,7 @@ struct CategoryComponent: View {
                         .foregroundColor(Palette.black)
                         .font(Typography.headerS)
                     Spacer()
-                    Text("-\(cost) \(appState.currency)")
+                    Text("-\(cost)")
                         .foregroundColor(Palette.greyHard)
                         .font(Typography.headerS)
                         .padding(.trailing, -10)

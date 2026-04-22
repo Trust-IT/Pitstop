@@ -93,7 +93,7 @@ struct EditEventView: View {
                     )
                 )
                 Spacer()
-                Text("\(fuelExpense.totalPrice) " + appState.currency)
+                Text(fuelExpense.totalPrice.description)
                     .font(Typography.headerM)
                     .foregroundColor(Palette.black)
             }
@@ -129,7 +129,7 @@ struct EditEventView: View {
                     )
                 )
                 Spacer()
-                Text("\(fuelExpense.odometer) " + appState.unit)
+                Text(appState.measurementUnit.format(fuelExpense.odometer))
                     .font(Typography.headerM)
                     .foregroundColor(Palette.black)
             }
@@ -164,7 +164,7 @@ struct EditEventView: View {
                     )
                 )
                 Spacer()
-                Text("\(fuelExpense.pricePerUnit) " + appState.currency)
+                Text(appState.currency.format(fuelExpense.pricePerUnit))
                     .font(Typography.headerM)
                     .foregroundColor(Palette.black)
             }
@@ -182,7 +182,7 @@ struct EditEventView: View {
                     )
                 )
                 Spacer()
-                Text("\(fuelExpense.quantity) " + appState.unit)
+                Text("\(fuelExpense.quantity) L")
                     .font(Typography.headerM)
                     .foregroundColor(Palette.black)
             }

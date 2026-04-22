@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class Vehicle: Identifiable {
+final class Vehicle {
     @Attribute(.unique)
     var uuid: UUID
 
@@ -18,7 +18,7 @@ final class Vehicle: Identifiable {
     var model: String
     var mainFuelType: FuelType
     var secondaryFuelType: FuelType?
-    var odometer: Float
+    var initialOdometer: Int
     var plate: String?
 
     @Relationship(deleteRule: .cascade, inverse: \Number.vehicle)
@@ -31,6 +31,12 @@ final class Vehicle: Identifiable {
         fuelExpenses.sorted { $0.date > $1.date }
     }
 
+    /// The live odometer reading, derived from the most recent fuel expense.
+    /// Falls back to `initialOdometer` when no expenses exist yet.
+    var currentOdometer: Int {
+        fuelExpenses.sorted { $0.date > $1.date }.first.map { Int($0.odometer) } ?? initialOdometer
+    }
+
     init(
         uuid: UUID = UUID(),
         name: String,
@@ -38,7 +44,7 @@ final class Vehicle: Identifiable {
         model: String,
         mainFuelType: FuelType = .gasoline,
         secondaryFuelType: FuelType? = nil,
-        odometer: Float,
+        initialOdometer: Int,
         plate: String? = nil
     ) {
         self.uuid = uuid
@@ -47,21 +53,8 @@ final class Vehicle: Identifiable {
         self.model = model
         self.mainFuelType = mainFuelType
         self.secondaryFuelType = secondaryFuelType
-        self.odometer = odometer
+        self.initialOdometer = initialOdometer
         self.plate = plate
-    }
-
-    // Custom decode method to handle relationships
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        uuid = try container.decode(UUID.self, forKey: .uuid)
-        name = try container.decode(String.self, forKey: .name)
-        brand = try container.decode(String.self, forKey: .brand)
-        model = try container.decode(String.self, forKey: .model)
-        mainFuelType = try container.decode(FuelType.self, forKey: .mainFuelType)
-        secondaryFuelType = try container.decodeIfPresent(FuelType.self, forKey: .secondaryFuelType)
-        odometer = try container.decode(Float.self, forKey: .odometer)
-        plate = try container.decodeIfPresent(String.self, forKey: .plate)
     }
 
     func saveToModelContext(context: ModelContext) throws {
@@ -71,73 +64,50 @@ final class Vehicle: Identifiable {
     }
 
     static func mock() -> Vehicle {
-        Vehicle(name: "Default car", brand: "Brand", model: "XYZ", odometer: 0.0)
+        Vehicle(name: "Default car", brand: "Brand", model: "XYZ", initialOdometer: 0)
     }
 }
 
 extension Vehicle {
-    func calculateTotalFuelExpenses() -> String {
-        let total = fuelExpenses.reduce(0.0) { $0 + $1.totalPrice.amount }
-        return total.description
+    func calculateTotalFuelExpenses(currency: Locale.Currency) -> String {
+        let total = fuelExpenses.reduce(Decimal(0)) { $0 + $1.totalPrice.amount }
+        return total.formatted(.currency(code: currency.identifier))
     }
 
     func calculateFuelEfficiency() -> Float? {
-        guard fuelExpenses.count > 1 else {
-            return nil // Not enough data to calculate efficiency
-        }
+        guard fuelExpenses.count > 1 else { return nil }
 
-        // Sort fuel expenses by odometer reading
         let sortedExpenses = fuelExpenses.sorted { $0.odometer < $1.odometer }
-
         var totalFuelConsumed: Float = 0
         var totalDistanceTraveled: Float = 0
 
         for i in 1 ..< sortedExpenses.count {
-            let previousExpense = sortedExpenses[i - 1]
-            let currentExpense = sortedExpenses[i]
-
-            // Calculate the distance traveled
-            let distance = currentExpense.odometer - previousExpense.odometer
+            let distance = sortedExpenses[i].odometer - sortedExpenses[i - 1].odometer
             if distance > 0 {
                 totalDistanceTraveled += distance
-                totalFuelConsumed += currentExpense.quantity
+                totalFuelConsumed += sortedExpenses[i].quantity
             }
         }
 
         guard totalDistanceTraveled > 0 else { return nil }
-
-        // Calculate efficiency
-        // Total Fuel Consumed (Liters) / Total Distance Traveled (Kilometers) * 100
         return (totalFuelConsumed / totalDistanceTraveled) * 100
     }
 
-    /// Checks if the odometer value is valid
-    /// - Parameters: odometer: The odometer value to check
-    /// - Parameters: designatedDate: The date for which the odometer value is being checked
-    /// - Returns: A boolean indicating if the odometer value is valid
     func isValidOdometer(_ odometer: Float, for designatedDate: Date) -> Bool {
         let sortedExpenses = fuelExpenses.sorted { $0.date < $1.date }
 
-        guard sortedExpenses.count > 0 else {
-            // No previous expenses, so the value is valid only if it's higher than the current odometer
-            return odometer > self.odometer
+        guard !sortedExpenses.isEmpty else {
+            return odometer > Float(initialOdometer)
         }
 
-        // Check if the designated date is before the first expense's date
         if let firstExpense = sortedExpenses.first, designatedDate < firstExpense.date {
-            // Odometer is valid only if it is not greater than the first recorded odometer
             return odometer <= firstExpense.odometer
         }
 
-        // Check the last recorded expense
         if let lastExpense = sortedExpenses.last, designatedDate > lastExpense.date {
-            // Ensure the odometer value is greater than the vehicle's current odometer
-            guard odometer > self.odometer else {
-                return false
-            }
+            guard odometer > Float(currentOdometer) else { return false }
         }
 
-        // Binary search for the current fuel expense date
         guard let index = sortedExpenses.firstIndex(where: { $0.date >= designatedDate }) else {
             if let lastExpense = sortedExpenses.last, lastExpense.odometer > odometer {
                 return false
@@ -148,34 +118,9 @@ extension Vehicle {
         let closestBefore = index > 0 ? sortedExpenses[index - 1] : nil
         let closestAfter = index < sortedExpenses.count - 1 ? sortedExpenses[index + 1] : nil
 
-        // Check if the odometer value is not lower than the previous
-        if let before = closestBefore, before.odometer > odometer {
-            return false
-        }
-
-        // Check if the odometer value is not higher than the next
-        if let after = closestAfter, after.odometer < odometer {
-            return false
-        }
+        if let before = closestBefore, before.odometer > odometer { return false }
+        if let after = closestAfter, after.odometer < odometer { return false }
 
         return true
-    }
-}
-
-extension Vehicle: Codable {
-    enum CodingKeys: String, CodingKey {
-        case uuid, name, brand, model, mainFuelType, secondaryFuelType, odometer, plate, year, expenses, numbers
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(uuid, forKey: .uuid)
-        try container.encode(name, forKey: .name)
-        try container.encode(brand, forKey: .brand)
-        try container.encode(model, forKey: .model)
-        try container.encode(mainFuelType, forKey: .mainFuelType)
-        try container.encode(secondaryFuelType, forKey: .secondaryFuelType)
-        try container.encode(odometer, forKey: .odometer)
-        try container.encode(plate, forKey: .plate)
     }
 }

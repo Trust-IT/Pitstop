@@ -9,8 +9,8 @@ import Foundation
 import Observation
 
 @Observable class AppState {
-    private(set) var unit = "km"
     private(set) var currency: Locale.Currency = Locale.current.currency ?? Locale.Currency("EUR")
+    private(set) var measurementUnit: UnitLength = Locale.current.measurementSystem == .metric ? .kilometers : .miles
     private(set) var currentTheme: ThemeColors
 
     /// Checks if vehicle is added from the flow in settings
@@ -31,5 +31,9 @@ import Observation
 
     func setAddingNewVehicle(_ value: Bool) {
         isAddingNewVehicle = value
+    }
+
+    func setMeasurementUnit(_ unit: UnitLength) {
+        measurementUnit = unit
     }
 }

@@ -58,7 +58,7 @@ enum TabBarItem: String {
 #Preview {
     EntryPointView()
         .environmentObject(NavigationManager())
-        .environmentObject(VehicleManager())
+        .environment(VehicleManager())
         .environment(AppState())
         .environment(SceneDelegate())
 }

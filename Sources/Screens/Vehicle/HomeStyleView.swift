@@ -112,7 +112,7 @@ struct OffsetModifier: ViewModifier {
         GeometryReader { proxy in
             let topEdge = proxy.safeAreaInsets.top
             HomeStyleView(topEdge: topEdge)
-                .environmentObject(VehicleManager())
+                .environment(VehicleManager())
                 .environmentObject(NavigationManager())
                 .environment(AppState())
                 .environment(SceneDelegate())

@@ -14,7 +14,7 @@ enum FocusFieldNumbers: Hashable {
 
 struct AddNumberView: View {
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @FocusState var focusedField: FocusFieldNumbers?
     @Binding var alert: AlertConfig
     @State private var numberName: String = ""

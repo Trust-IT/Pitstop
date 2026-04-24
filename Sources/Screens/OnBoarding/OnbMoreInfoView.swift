@@ -5,12 +5,13 @@
 //  Created by Ivan Voloshchuk on 16/01/25.
 //
 
+import OSLog
 import SwiftData
 import SwiftUI
 
 struct OnbMoreInfoView: View {
     @EnvironmentObject private var navManager: NavigationManager
-    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @Environment(\.modelContext) private var modelContext
     @Environment(AppState.self) private var appState
     @FocusState fileprivate var focusedField: FocusFieldAlertOB?
@@ -27,13 +28,6 @@ struct OnbMoreInfoView: View {
         transitionType: .slide
     )
 
-    @State private var showSecondaryFuelSelection: AlertConfig = .init(
-        enableBackgroundBlur: true,
-        disableOutsideTap: false,
-        transitionType: .slide
-    )
-
-    @State private var secondaryFuelType: FuelType?
     @State private var odometer: Int = 0
     @State private var plate: String = ""
 
@@ -72,16 +66,6 @@ struct OnbMoreInfoView: View {
                 if odometer != 0 {
                     cardInput(value: String(odometer))
                 }
-                Button(action: {
-                    showSecondaryFuelSelection.present()
-                }, label: {
-                    moreInfoCard(text: PitstopAPPStrings.Onb.secondFuelType,
-                                 bgColor: appState.currentTheme.colors.background,
-                                 iconName: .fuel)
-                })
-                if let secondaryFuelType {
-                    cardInput(value: secondaryFuelType.rawValue)
-                }
             }
             .padding(.horizontal, 16)
             .padding(.top, 56)
@@ -106,19 +90,6 @@ struct OnbMoreInfoView: View {
         .alert(config: $showOdometerInput) {
             OdometerInputAlert(odometer: $odometer, showOdometerInput: $showOdometerInput)
         }
-        .alert(config: $showSecondaryFuelSelection) {
-            ConfirmationDialog(
-                items: FuelType.allCases,
-                message: PitstopAPPStrings.Onb.selectFuelType,
-                onTap: { value in
-                    secondaryFuelType = value
-                    showSecondaryFuelSelection.dismiss()
-                },
-                onCancel: {
-                    showSecondaryFuelSelection.dismiss()
-                }
-            )
-        }
     }
 
     private func addVehicle() {
@@ -127,16 +98,15 @@ struct OnbMoreInfoView: View {
             brand: input.brand,
             model: input.model,
             mainFuelType: input.fuelType,
-            secondaryFuelType: secondaryFuelType,
             initialOdometer: odometer,
             plate: plate
         )
         do {
             try vehicle.saveToModelContext(context: modelContext)
         } catch {
-            print("[Debug] Onboarding add vehicle: \(error)")
+            Logger.persistence.error("Onboarding add vehicle: \(error)")
         }
-        vehicleManager.setCurrentVehicle(vehicle)
+        vehicleManager.setCurrentVehicle(vehicle, modelContext: modelContext)
     }
 }
 
@@ -298,6 +268,6 @@ private extension OnbMoreInfoView {
 #Preview {
     OnbMoreInfoView(input: OnbVehicleInputData())
         .environmentObject(NavigationManager())
-        .environmentObject(VehicleManager())
+        .environment(VehicleManager())
         .environment(AppState())
 }

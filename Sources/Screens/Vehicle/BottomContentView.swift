@@ -11,7 +11,7 @@ import SwiftUI
 
 struct BottomContentView: View {
     @EnvironmentObject private var navManager: NavigationManager
-    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @Environment(\.modelContext) private var modelContext
 
     @State private var viewAllNumbers = false
@@ -49,7 +49,7 @@ struct BottomContentView: View {
                 }
                 .padding()
             } else {
-                ForEach(vehicleManager.currentVehicle.sortedFuelExpenses.prefix(4), id: \.id) { fuelExpense in
+                ForEach(vehicleManager.sortedExpenses.prefix(4), id: \.id) { fuelExpense in
                     Button(action: {
                         selectedFuelExpense = fuelExpense
                         showEventEdit.toggle()
@@ -132,7 +132,7 @@ struct BottomContentView: View {
         .alert(config: $newNumberAlert) {
             AddNumberView(alert: $newNumberAlert)
                 .environment(\.modelContext, modelContext)
-                .environmentObject(vehicleManager)
+                .environment(vehicleManager)
         }
     }
 }

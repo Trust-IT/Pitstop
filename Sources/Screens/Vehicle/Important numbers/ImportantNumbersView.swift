@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ImportantNumbersView: View {
-    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @Environment(\.presentationMode) private var presentationMode
 
     var body: some View {

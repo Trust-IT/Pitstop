@@ -5,6 +5,7 @@
 //  Created by Ivan Voloshchuk on 17/01/25.
 //
 
+import OSLog
 import SwiftUI
 
 struct OnbNotificationView: View {
@@ -34,7 +35,7 @@ struct OnbNotificationView: View {
                         do {
                             _ = try await NotificationManager.shared.requestAuthNotifications()
                         } catch {
-                            print("Error requesting notifications: \(error)")
+                            Logger.notifications.error("Error requesting notifications: \(error)")
                         }
                     }
                     navManager.push(.onboardingReady)

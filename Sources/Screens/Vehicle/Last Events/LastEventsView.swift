@@ -11,7 +11,7 @@ import SwiftUI
 // TODO: Implement categorization for months + show expense for each month
 // Watch LastEventsListView for reference
 struct LastEventsView: View {
-    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @Environment(AppState.self) var appState: AppState
     @Environment(\.presentationMode) private var presentationMode
 
@@ -79,7 +79,7 @@ struct LastEventsView: View {
     }
 
     private func updateFuelExpenseList() {
-        fuelExpenses = vehicleManager.currentVehicle.sortedFuelExpenses
+        fuelExpenses = vehicleManager.sortedExpenses
     }
 }
 

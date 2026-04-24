@@ -10,7 +10,7 @@ import SwiftUI
 
 struct EditVehicleView: View {
     @EnvironmentObject private var navManager: NavigationManager
-    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @FocusState var focusedField: VehicleInfoFocusField?
     @Environment(\.modelContext) private var modelContext
     @Environment(AppState.self) var appState: AppState
@@ -20,17 +20,11 @@ struct EditVehicleView: View {
         disableOutsideTap: false,
         transitionType: .slide
     )
-    @State private var secondaryFuelPicker: AlertConfig = .init(
-        enableBackgroundBlur: true,
-        disableOutsideTap: false,
-        transitionType: .slide
-    )
     var isDisabled: Bool {
         name.isEmpty ||
             brand.isEmpty ||
             model.isEmpty ||
-            mainFuelType == .none ||
-            mainFuelType == secondaryFuelType
+            mainFuelType == .none
     }
 
     @State private var showDeleteAlert: Bool = false
@@ -45,7 +39,6 @@ struct EditVehicleView: View {
     @State private var model: String
     @State private var plate: String
     @State private var mainFuelType: FuelType
-    @State private var secondaryFuelType: FuelType
 
     init(vehicle: Vehicle) {
         self.vehicle = vehicle
@@ -54,7 +47,6 @@ struct EditVehicleView: View {
         _model = State(initialValue: vehicle.model)
         _plate = State(initialValue: vehicle.plate ?? "")
         _mainFuelType = State(initialValue: vehicle.mainFuelType)
-        _secondaryFuelType = State(initialValue: vehicle.secondaryFuelType ?? .none)
     }
 
     var body: some View {
@@ -105,34 +97,13 @@ struct EditVehicleView: View {
                                 }
                             )
                         }
-
-                    TextField(PitstopAPPStrings.Onb.secondFuelType, text: fuelTypeBinding(for: $secondaryFuelType))
-                        .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .fuelType))
-                        .disabled(true)
-                        .onTapGesture {
-                            focusedField = nil
-                            secondaryFuelPicker.present()
-                        }
-                        .alert(config: $secondaryFuelPicker) {
-                            ConfirmationDialog(
-                                items: FuelType.allCases,
-                                message: "Select a second fuel type",
-                                onTap: { fuel in
-                                    secondaryFuelType = fuel
-                                    secondaryFuelPicker.dismiss()
-                                },
-                                onCancel: {
-                                    secondaryFuelPicker.dismiss()
-                                }
-                            )
-                        }
                 }
                 .padding(.horizontal, 16)
             }
             Spacer()
             if vehicleManager.currentVehicle != vehicle {
                 Button("Set as current vehicle") {
-                    vehicleManager.setCurrentVehicle(vehicle)
+                    vehicleManager.setCurrentVehicle(vehicle, modelContext: modelContext)
                     navManager.pop()
                 }
                 .buttonStyle(Primary())
@@ -154,7 +125,7 @@ struct EditVehicleView: View {
                 message: Text("This action cannot be undone"),
                 primaryButton: .destructive(Text(PitstopAPPStrings.Common.delete)) {
                     modelContext.delete(vehicle)
-                    vehicleManager.setCurrentVehicle(vehicles.first ?? .mock())
+                    vehicleManager.setCurrentVehicle(vehicles.first ?? .mock(), modelContext: modelContext)
                     navManager.pop()
                 },
                 secondaryButton: .cancel()
@@ -189,7 +160,6 @@ private extension EditVehicleView {
         vehicle.model = model
         vehicle.plate = plate
         vehicle.mainFuelType = mainFuelType
-        vehicle.secondaryFuelType = secondaryFuelType
     }
 
     func fuelTypeBinding(for fuelType: Binding<FuelType>) -> Binding<String> {

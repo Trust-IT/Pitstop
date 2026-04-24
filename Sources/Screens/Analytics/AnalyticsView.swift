@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct AnalyticsView: View {
-    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @EnvironmentObject private var navManager: NavigationManager
     @Environment(AppState.self) var appState: AppState
     @State private var selectedTab: AnalyticsTabs = .lastMonth
@@ -38,6 +38,7 @@ struct AnalyticsView: View {
             .navigationDestination(for: Route.self) { route in
                 route
                     .environment(appState)
+                    .environment(vehicleManager)
                     .toolbar(.hidden, for: .tabBar)
             }
             .toolbar {
@@ -65,7 +66,7 @@ struct AnalyticsView: View {
 
 #Preview {
     AnalyticsView()
-        .environmentObject(VehicleManager())
+        .environment(VehicleManager())
         .environmentObject(NavigationManager())
         .environment(AppState())
         .environment(SceneDelegate())

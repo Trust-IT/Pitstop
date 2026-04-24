@@ -5,6 +5,7 @@
 //  Created by Ivan Voloshchuk on 01/02/25.
 //
 
+import OSLog
 import SwiftUI
 import UIKit
 import VisionKit
@@ -54,7 +55,7 @@ struct DocumentCameraVCRepresentable: UIViewControllerRepresentable {
             _ controller: VNDocumentCameraViewController,
             didFailWithError error: Error
         ) {
-            print("Document scanner error: \(error.localizedDescription)")
+            Logger.persistence.error("Document scanner error: \(error.localizedDescription)")
             controller.dismiss(animated: true, completion: nil)
         }
     }

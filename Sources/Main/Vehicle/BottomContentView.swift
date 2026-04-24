@@ -13,6 +13,7 @@ struct BottomContentView: View {
     @EnvironmentObject private var navManager: NavigationManager
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @Environment(\.modelContext) private var modelContext
+    @Environment(AppState.self) var appState: AppState
 
     @State private var viewAllNumbers = false
     @State private var viewAllEvents = false
@@ -57,7 +58,7 @@ struct BottomContentView: View {
                         CategoryComponent(
                             category: .fuel,
                             date: fuelExpense.date,
-                            cost: fuelExpense.totalPrice.description
+                            cost: appState.currency.format(fuelExpense.totalCost)
                         )
                     })
                 }

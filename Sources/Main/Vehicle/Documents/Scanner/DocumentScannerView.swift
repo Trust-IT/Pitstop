@@ -5,6 +5,7 @@
 //  Created by Ivan Voloshchuk on 01/02/25.
 //
 
+import OSLog
 import SwiftData
 import SwiftUI
 
@@ -99,7 +100,7 @@ struct DocumentScannerView: View {
             try document.saveToModelContext(context: modelContext)
             navManager.pop()
         } catch {
-            print("Error when saving document \(error)")
+            Logger.persistence.error("Error when saving document: \(error)")
         }
     }
 }

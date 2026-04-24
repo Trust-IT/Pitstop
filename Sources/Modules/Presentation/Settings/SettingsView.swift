@@ -94,13 +94,7 @@ struct SettingsView: View {
                 .listStyle(.insetGrouped)
                 Spacer()
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Text(PitstopAPPStrings.Common.settings)
-                        .foregroundColor(Palette.black)
-                        .font(Typography.headerXL)
-                }
-            }
+            .navigationTitle(PitstopAPPStrings.Common.settings)
             .background(Palette.greyBackground)
             .alert(config: $themePickerAlert) {
                 ThemePickerView(alert: $themePickerAlert)

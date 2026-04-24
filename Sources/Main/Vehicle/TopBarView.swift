@@ -9,8 +9,9 @@ import SwiftData
 import SwiftUI
 
 struct TopBarView: View {
-    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @EnvironmentObject var navManager: NavigationManager
+    @Environment(\.modelContext) private var modelContext
 
     @State private var showingAllCars = false
 
@@ -95,7 +96,7 @@ struct TopBarView: View {
         ) {
             ForEach(vehicles, id: \.uuid) { vehicle in
                 Button(vehicle.name) {
-                    vehicleManager.setCurrentVehicle(vehicle)
+                    vehicleManager.setCurrentVehicle(vehicle, modelContext: modelContext)
                 }
             }
             Button(PitstopAPPStrings.Common.cancel, role: .cancel) {}

@@ -24,7 +24,7 @@ struct HeaderContent: View {
                             .foregroundColor(appState.currentTheme.colors.card)
                             .frame(width: UIScreen.main.bounds.width * 0.29, height: UIScreen.main.bounds.height * 0.09)
                         VStack(alignment: .center) {
-                            Text(vehicleManager.currentVehicle.calculateTotalFuelExpenses(currency: appState.currency))
+                            Text(appState.currency.format(vehicleManager.totalFuelCost))
                                 .foregroundColor(Palette.blackHeader)
                                 .font(Typography.headerLM)
                             Text("All costs")
@@ -51,7 +51,7 @@ struct HeaderContent: View {
                     }
                 }).disabled(true)
 
-                if let efficiency = vehicleManager.currentVehicle.calculateFuelEfficiency() {
+                if let efficiency = vehicleManager.fuelEfficiency {
                     Button(action: {}, label: {
                         ZStack {
                             Rectangle()
@@ -63,7 +63,7 @@ struct HeaderContent: View {
                                 Text("\(formattedEfficiency) / 100")
                                     .foregroundColor(Palette.blackHeader)
                                     .font(Typography.headerLM)
-                                Text(String(localized: "Efficiency") + " (L/\(appState.measurementUnit.symbol))")
+                                Text(String(localized: "Efficiency") + " (\(appState.volumeUnit.symbol)/\(appState.measurementUnit.symbol))")
                                     .foregroundColor(Palette.blackHeader)
                                     .font(Typography.TextM)
                             }

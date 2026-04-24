@@ -5,6 +5,7 @@
 //  Created by Ivan Voloshchuk on 06/05/22.
 //
 
+import OSLog
 import SwiftUI
 
 struct ReminderReportView: View {
@@ -149,7 +150,7 @@ private extension ReminderReportView {
         do {
             try modelContext.save()
         } catch {
-            print("Failed to delete reminder: \(error)")
+            Logger.persistence.error("Failed to delete reminder: \(error)")
         }
     }
 }

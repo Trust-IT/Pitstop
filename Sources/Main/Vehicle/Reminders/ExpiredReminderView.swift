@@ -5,6 +5,7 @@
 //  Created by Ivan Voloshchuk on 11/06/22.
 //
 
+import OSLog
 import SwiftData
 import SwiftUI
 
@@ -121,7 +122,7 @@ private extension ExpiredReminderView {
         do {
             try modelContext.save()
         } catch {
-            print("Failed to delete reminder: \(error)")
+            Logger.persistence.error("Failed to delete reminder: \(error)")
         }
     }
 }

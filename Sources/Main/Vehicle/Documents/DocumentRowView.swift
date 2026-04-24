@@ -5,6 +5,7 @@
 //  Created by Ivan Voloshchuk on 11/02/25.
 //
 
+import OSLog
 import SwiftData
 import SwiftUI
 
@@ -107,13 +108,13 @@ private extension DocumentRowView {
             processSelectedFile(url: url)
         case let .failure(error):
             // TODO: Implement proper error handling
-            print("File selection failed: \(error)")
+            Logger.persistence.error("File selection failed: \(error)")
         }
     }
 
     func processSelectedFile(url: URL) {
         guard url.startAccessingSecurityScopedResource() else {
-            print("Failed to access security-scoped resource.")
+            Logger.persistence.warning("Failed to access security-scoped resource")
             return
         }
 
@@ -127,7 +128,7 @@ private extension DocumentRowView {
             try newDocument.saveToModelContext(context: modelContext)
         } catch {
             // TODO: Implement proper error handling
-            print("Error when processing document: \(error)")
+            Logger.persistence.error("Error when processing document: \(error)")
         }
     }
 }
@@ -135,7 +136,7 @@ private extension DocumentRowView {
 #Preview {
     DocumentRowView()
         .background(Color.red)
-        .environmentObject(VehicleManager())
+        .environment(VehicleManager())
         .environmentObject(NavigationManager())
         .environment(AppState())
         .environment(SceneDelegate())

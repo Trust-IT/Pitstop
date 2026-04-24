@@ -29,12 +29,11 @@ struct VehicleView: View {
                     .environment(vehicleManager)
                     .toolbar(.hidden, for: .tabBar)
             }
-            .fullScreenCover(isPresented: $navManager.isPresented) {
-                if let presentedRoute = navManager.presentedRoute {
-                    ModalNavigationContainerView(route: presentedRoute)
-                        .environment(appState)
-                        .environmentObject(vehicleManager)
-                }
+            .fullScreenCover(item: $navManager.presentedRoute) { presentedRoute in
+                ModalNavigationContainerView(route: presentedRoute)
+                    .environment(appState)
+                    .environment(vehicleManager)
+                    .environmentObject(navManager)
             }
             .onAppear {
                 if shouldShowOnboarding {

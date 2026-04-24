@@ -93,7 +93,7 @@ struct EditEventView: View {
                     )
                 )
                 Spacer()
-                Text(fuelExpense.totalPrice.description)
+                Text(appState.currency.format(fuelExpense.totalCost))
                     .font(Typography.headerM)
                     .foregroundColor(Palette.black)
             }
@@ -182,7 +182,7 @@ struct EditEventView: View {
                     )
                 )
                 Spacer()
-                Text("\(fuelExpense.quantity) L")
+                Text(appState.volumeUnit.format(fuelExpense.quantity))
                     .font(Typography.headerM)
                     .foregroundColor(Palette.black)
             }

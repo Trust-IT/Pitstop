@@ -169,7 +169,7 @@ private extension RemindersListView {
     @Previewable @State var navManager = NavigationManager()
     NavigationStack(path: $navManager.routes) {
         RemindersListView()
-            .environmentObject(VehicleManager())
+            .environment(VehicleManager())
             .environmentObject(navManager)
             .environment(AppState())
             .environment(SceneDelegate())

@@ -11,7 +11,7 @@ struct HeaderContent: View {
     @Binding var offset: CGFloat
     var maxHeight: CGFloat
 
-    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @Environment(AppState.self) var appState: AppState
 
     var body: some View {

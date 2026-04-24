@@ -5,13 +5,14 @@
 //  Created by Ivan Voloshchuk on 06/05/22.
 //
 
+import OSLog
 import SwiftData
 import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject private var navManager: NavigationManager
     @Environment(AppState.self) var appState: AppState
-    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @Environment(\.modelContext) private var modelContext
 
     @Query
@@ -108,6 +109,7 @@ struct SettingsView: View {
             .navigationDestination(for: Route.self) { route in
                 route
                     .environment(appState)
+                    .environment(vehicleManager)
                     .toolbar(.hidden, for: .tabBar)
             }
         }
@@ -124,9 +126,9 @@ private extension SettingsView {
         do {
             try modelContext.save()
         } catch {
-            print("Failed to delete vehicle: \(error)")
+            Logger.persistence.error("Failed to delete vehicle: \(error)")
         }
-        vehicleManager.setCurrentVehicle(vehicles.first ?? .mock())
+        vehicleManager.setCurrentVehicle(vehicles.first ?? .mock(), modelContext: modelContext)
     }
 }
 
@@ -134,5 +136,5 @@ private extension SettingsView {
     SettingsView()
         .environment(AppState())
         .environmentObject(NavigationManager())
-        .environmentObject(VehicleManager())
+        .environment(VehicleManager())
 }

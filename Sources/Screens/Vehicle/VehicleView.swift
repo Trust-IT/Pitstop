@@ -10,7 +10,7 @@ import SwiftUI
 struct VehicleView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(AppState.self) var appState: AppState
-    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @EnvironmentObject private var navManager: NavigationManager
 
     @AppStorage("shouldShowOnboarding") var shouldShowOnboarding: Bool = true
@@ -26,7 +26,7 @@ struct VehicleView: View {
             .navigationDestination(for: Route.self) { route in
                 route
                     .environment(appState)
-                    .environmentObject(vehicleManager)
+                    .environment(vehicleManager)
                     .toolbar(.hidden, for: .tabBar)
             }
             .fullScreenCover(isPresented: $navManager.isPresented) {
@@ -50,7 +50,7 @@ struct VehicleView: View {
 struct VehicleView_Previews: PreviewProvider {
     static var previews: some View {
         VehicleView()
-            .environmentObject(VehicleManager())
+            .environment(VehicleManager())
             .environmentObject(NavigationManager())
             .environment(AppState())
             .environment(SceneDelegate())

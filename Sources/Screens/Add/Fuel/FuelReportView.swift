@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FuelReportView: View {
-    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @EnvironmentObject private var navManager: NavigationManager
     @Environment(AppState.self) var appState: AppState
     @Environment(\.modelContext) private var modelContext
@@ -18,7 +18,6 @@ struct FuelReportView: View {
     @State private var odometer: String
     @State private var liters: String
     @State private var fuelType: FuelType = .diesel
-    @State private var secondaryFuelType: FuelType?
     @State private var selectedDate = Date()
     @State private var alert = AlertConfig(enableBackgroundBlur: true,
                                            disableOutsideTap: false)
@@ -75,12 +74,8 @@ struct FuelReportView: View {
         }
         .onAppear {
             focusState = .totalPrice
-
-            // Note: The vehicleManager is passed down when the body is called (as EnvObj),
-            // so it doesn't yet exist during the initialization phase, hence it cause runtime crash
-            // To fix this, we need to move the initialization of this values into the onAppear
+            // vehicleManager doesn't exist during init (EnvObj), so set fuelType here
             fuelType = vehicleManager.currentVehicle.mainFuelType
-            secondaryFuelType = vehicleManager.currentVehicle.secondaryFuelType
         }
         .alert(config: $alert) {
             VStack {
@@ -236,7 +231,7 @@ private extension FuelReportView {
     @Previewable @State var navManager = NavigationManager()
     NavigationStack(path: $navManager.routes) {
         FuelReportView(fuelExpense: FuelExpense.mock())
-            .environmentObject(VehicleManager())
+            .environment(VehicleManager())
             .environment(AppState())
             .environmentObject(NavigationManager())
             .environment(SceneDelegate())

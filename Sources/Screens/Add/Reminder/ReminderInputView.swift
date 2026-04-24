@@ -132,7 +132,7 @@ struct ReminderInputView: View {
     @Previewable @FocusState var reminderInputFocus: ReminderInputFocusField?
     ReminderInputView(reminder: .mock(), reminderInputFocus: $reminderInputFocus)
         .environmentObject(NavigationManager())
-        .environmentObject(VehicleManager())
+        .environment(VehicleManager())
         .environment(AppState())
         .environment(SceneDelegate())
 }

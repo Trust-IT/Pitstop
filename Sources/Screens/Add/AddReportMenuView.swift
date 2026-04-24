@@ -19,7 +19,7 @@ struct AddReportMenuView: View {
                 .foregroundStyle(Palette.black)
             Button(action: {
                 isPresented.toggle()
-                navManager.push(.fuelReport(input: .initialState()))
+                navManager.push(.fuelReport(input: .mock()))
             }, label: {
                 HStack {
                     ZStack {
@@ -107,6 +107,6 @@ struct AddReportMenuView: View {
 #Preview {
     AddReportMenuView(appState: AppState(), isPresented: .constant(true))
         .environmentObject(NavigationManager())
-        .environmentObject(VehicleManager())
+        .environment(VehicleManager())
         .environment(SceneDelegate())
 }

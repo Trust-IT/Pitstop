@@ -14,21 +14,21 @@ struct FuelReportView: View {
     @Environment(\.modelContext) private var modelContext
 
     @FocusState private var focusState: FuelInputFocusField?
-    @State private var totalPrice: String
-    @State private var odometer: String
-    @State private var liters: String
+    @State private var totalPrice: Decimal
+    @State private var odometer: Int
+    @State private var liters: Double
     @State private var fuelType: FuelType = .diesel
     @State private var selectedDate = Date()
     @State private var alert = AlertConfig(enableBackgroundBlur: true,
                                            disableOutsideTap: false)
-    @State private var showOdometerAlert = false
+    @State private var odometerError: OdometerValidationError?
 
     let fuelExpense: FuelExpense
     init(fuelExpense: FuelExpense) {
         self.fuelExpense = fuelExpense
-        totalPrice = fuelExpense.totalPrice.amount != 0 ? fuelExpense.totalPrice.description : ""
-        odometer = fuelExpense.odometer != 0 ? fuelExpense.odometer.description : ""
-        liters = fuelExpense.quantity != 0 ? fuelExpense.quantity.description : ""
+        _totalPrice = State(initialValue: fuelExpense.totalCost)
+        _odometer = State(initialValue: fuelExpense.odometer)
+        _liters = State(initialValue: Double(fuelExpense.quantity))
     }
 
     var body: some View {
@@ -37,12 +37,13 @@ struct FuelReportView: View {
                 VStack(spacing: 14) {
                     FuelInputTextField(
                         title: "Total",
-                        placeholder: "\(fuelExpense.totalPrice)",
-                        measurement: "€", // TODO: IVAN FIX AND USE APP STATE CURRENCY
+                        placeholder: appState.currency.format(fuelExpense.totalCost),
+                        measurement: appState.currency.identifier,
                         icon: .category,
                         focusState: $focusState,
                         focus: .totalPrice,
-                        text: $totalPrice
+                        value: $totalPrice,
+                        format: .number
                     )
                     FuelInputTextField(
                         title: "Odometer",
@@ -51,16 +52,19 @@ struct FuelReportView: View {
                         icon: .odometer,
                         focusState: $focusState,
                         focus: .odometer,
-                        text: $odometer
+                        value: $odometer,
+                        format: .number,
+                        keyboardType: .numberPad
                     )
                     FuelInputTextField(
                         title: "Liters",
                         placeholder: "\(fuelExpense.quantity)",
-                        measurement: "L", // TODO: IVAN FIX AND USE APP STATE MEASURES
+                        measurement: appState.volumeUnit.symbol,
                         icon: .liters,
                         focusState: $focusState,
                         focus: .quantity,
-                        text: $liters
+                        value: $liters,
+                        format: .number
                     )
                 }
             }
@@ -87,13 +91,15 @@ struct FuelReportView: View {
             .background(RoundedRectangle(cornerRadius: 16).fill(Palette.white))
             .padding()
         }
-        .alert("Attention",
-               isPresented: $showOdometerAlert,
-               actions: {},
-               message: { Text("The odometer value is lower than the last report") })
+        .navigationTitle("New report")
+        .alert(
+            "Invalid Odometer",
+            isPresented: Binding(get: { odometerError != nil }, set: { _ in odometerError = nil }),
+            actions: { Button("OK") { odometerError = nil } },
+            message: { Text(odometerError?.errorDescription ?? "") }
+        )
         .padding(.top, 50)
         .background(Palette.greyBackground.ignoresSafeArea(.all))
-        .navigationBarBackButtonHidden()
         .toolbar {
             navigationItems()
         }
@@ -111,101 +117,57 @@ private extension FuelReportView {
         }
     }
 
-    func changeFuelType() {
-        if fuelType == vehicleManager.currentVehicle.mainFuelType {
-            fuelType = secondaryFuelType ?? fuelType
-        } else {
-            fuelType = vehicleManager.currentVehicle.mainFuelType
-        }
-    }
-
     func saveExpense() {
-        guard let odometerValue = odometer.toFloat(),
-              let litersValue = liters.toFloat() else {
+        if let error = vehicleManager.validateOdometer(odometer, for: selectedDate) {
+            odometerError = error
             return
         }
-
-        guard vehicleManager.currentVehicle.isValidOdometer(odometerValue, for: selectedDate) else {
-            showOdometerAlert.toggle()
-            return
-        }
-        updateFuelExpense(odometerValue: odometerValue, litersValue: litersValue)
-
-        vehicleManager.currentVehicle.fuelExpenses.append(fuelExpense)
+        updateFuelExpense()
+        vehicleManager.refreshStats(modelContext: modelContext)
         navManager.pop()
     }
 
-    func updateFuelExpense(odometerValue: Float, litersValue: Float) {
-        fuelExpense.totalPrice = Money(stringValue: totalPrice)
-        fuelExpense.odometer = odometerValue
-        fuelExpense.quantity = litersValue
+    func updateFuelExpense() {
+        fuelExpense.totalCost = totalPrice
+        fuelExpense.odometer = odometer
+        fuelExpense.quantity = Float(liters)
         fuelExpense.fuelType = fuelType
         fuelExpense.date = selectedDate
+        modelContext.insert(fuelExpense)
         fuelExpense.vehicle = vehicleManager.currentVehicle
-        fuelExpense.insert(context: modelContext)
+        fuelExpense.save(context: modelContext)
     }
 
     var areFieldsValid: Bool {
-        guard let totalPriceValue = totalPrice.toFloat(),
-              let odometerValue = odometer.toFloat(),
-              let litersValue = liters.toFloat() else {
-            return false
-        }
-        return totalPriceValue > 0 && odometerValue > 0 && litersValue > 0
+        totalPrice > 0 && odometer > 0 && liters > 0
     }
 }
 
 private extension FuelReportView {
     @ToolbarContentBuilder
     func navigationItems() -> some ToolbarContent {
-        if let focus = focusState {
-            ToolbarItem(placement: .keyboard) {
-                HStack {
-                    Button(action: {
-                        focusState = nil
-                    }, label: {
-                        Image(systemName: "keyboard.chevron.compact.down")
-                    })
-                    Spacer()
-                    Button(action: {
-                        nextFieldFor(focus)
-                    }, label: {
-                        Text("Next")
-                            .foregroundStyle(Palette.black)
-                            .font(Typography.headerM)
-                    })
-                }
-            }
-        }
-        ToolbarItem(placement: .navigation) {
-            Button(action: {
-                navManager.pop()
-            }, label: {
-                Image(.arrowLeft)
-                    .resizable()
-                    .frame(width: 12, height: 16)
-                    .tint(Palette.black)
-            })
-        }
+        // TODO: CHECK IF REMOVE FOCUS STATE
+//        if let focus = focusState {
+//            ToolbarItem(placement: .keyboard) {
+//                HStack {
+//                    Button(action: {
+//                        focusState = nil
+//                    }, label: {
+//                        Image(systemName: "keyboard.chevron.compact.down")
+//                    })
+//                    Spacer()
+//                    Button(action: {
+//                        nextFieldFor(focus)
+//                    }, label: {
+//                        Text("Next")
+//                            .foregroundStyle(Palette.black)
+//                            .font(Typography.headerM)
+//                    })
+//                }
+//            }
+//        }
         ToolbarItemGroup(placement: .topBarTrailing) {
             HStack {
-                Button(action: {
-                    changeFuelType()
-                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-                }, label: {
-                    HStack {
-                        Image(.fuelType)
-                            .resizable()
-                            .frame(width: 16, height: 16)
-                            .tint(Palette.black)
-                        Text(fuelType.rawValue)
-                            .fixedSize()
-                    }
-                    .padding(8)
-                })
-                .disabled(secondaryFuelType == nil)
-                .buttonStyle(SecondaryCapsule())
-                .transaction { $0.animation = nil }
                 Button(action: {
                     focusState = nil
                     alert.present()

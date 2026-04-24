@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct FuelInputTextField: View {
+struct FuelInputTextField<V: Comparable & AdditiveArithmetic, F: ParseableFormatStyle>: View
+    where F.FormatInput == V, F.FormatOutput == String {
     @Environment(AppState.self) var appState: AppState
 
     let title: String
@@ -16,7 +17,12 @@ struct FuelInputTextField: View {
     let icon: ImageResource
     @FocusState.Binding var focusState: FuelInputFocusField?
     let focus: FuelInputFocusField
-    @Binding var text: String
+    @Binding var value: V
+    let format: F
+    var keyboardType: UIKeyboardType = .decimalPad
+
+    private var isEmpty: Bool { value == .zero }
+
     var body: some View {
         VStack(alignment: .leading) {
             Text(title)
@@ -26,18 +32,18 @@ struct FuelInputTextField: View {
             HStack {
                 ZStack {
                     Circle()
-                        .fill(text.isEmpty ? Palette.greyLight : appState.currentTheme.colors.background)
+                        .fill(isEmpty ? Palette.greyLight : appState.currentTheme.colors.background)
                         .frame(width: 32, height: 32)
                     Image(icon)
                         .resizable()
                         .frame(width: 16, height: 16)
-                        .foregroundStyle(text.isEmpty ? Palette.greyInput : appState.currentTheme.accentColor)
+                        .foregroundStyle(isEmpty ? Palette.greyInput : appState.currentTheme.accentColor)
                 }
-                TextField(placeholder, text: $text)
+                TextField(placeholder, value: $value, format: format)
                     .foregroundStyle(Palette.black)
                     .font(Typography.headerM)
                     .padding(.leading, 12)
-                    .keyboardType(.decimalPad)
+                    .keyboardType(keyboardType)
                     .focused($focusState, equals: focus)
                 Spacer()
                 Text(measurement)

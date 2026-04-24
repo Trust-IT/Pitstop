@@ -33,3 +33,12 @@ extension Money: CustomStringConvertible {
         amount.formatted(.currency(code: currency.identifier))
     }
 }
+
+extension Money: Equatable {}
+
+extension Money {
+    static func + (lhs: Money, rhs: Money) -> Money {
+        precondition(lhs.currency == rhs.currency, "Currency mismatch")
+        return Money(value: lhs.amount + rhs.amount, currency: lhs.currency)
+    }
+}

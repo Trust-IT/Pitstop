@@ -6,6 +6,7 @@
 //
 
 import NotificationCenter
+import OSLog
 import SwiftUI
 
 @Observable
@@ -35,7 +36,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        print("Notification received with identifier \(notification.request.identifier)")
+        Logger.notifications.info("Notification received with identifier \(notification.request.identifier)")
         completionHandler([.banner, .sound])
     }
 }

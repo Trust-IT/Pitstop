@@ -32,6 +32,10 @@ enum Route {
     case editVehicle(input: Vehicle)
 }
 
+extension Route: Identifiable {
+    var id: Int { hashValue }
+}
+
 extension Route: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(hashValue)

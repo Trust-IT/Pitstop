@@ -5,6 +5,7 @@
 //  Created by Ivan Voloshchuk on 12/06/22.
 //
 
+import OSLog
 import PDFKit
 import SwiftUI
 
@@ -36,13 +37,13 @@ struct PDFRepresentedView: UIViewRepresentable {
             if let document = PDFDocument(url: url) {
                 pdfView.document = document
             } else {
-                print("⚠️ Failed to load PDF from \(url)")
+                Logger.persistence.error("Failed to load PDF from url: \(url)")
             }
         } else if let data {
             if let document = PDFDocument(data: data) {
                 pdfView.document = document
             } else {
-                print("⚠️ Failed to load PDF from \(data)")
+                Logger.persistence.error("Failed to load PDF from data (\(data.count) bytes)")
             }
         }
     }

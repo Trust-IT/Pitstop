@@ -5,6 +5,7 @@
 //  Created by Ivan Voloshchuk on 28/12/24.
 //
 
+import OSLog
 import SwiftUI
 
 @Observable
@@ -53,7 +54,7 @@ class SceneDelegate: NSObject, UIWindowSceneDelegate {
             alertWindow.isHidden = false
             alertWindow.isUserInteractionEnabled = true
         } else {
-            print("Existing alert is still present")
+            Logger.navigation.warning("Existing alert is still present")
             viewcontroller.view.frame = alertWindow.rootViewController?.view.frame ?? .zero
             alerts.append(viewcontroller.view)
         }

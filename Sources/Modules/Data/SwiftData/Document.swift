@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 import SwiftData
 
 @Model class Document {
@@ -33,7 +34,7 @@ import SwiftData
     func saveToModelContext(context: ModelContext) throws {
         context.insert(self)
         try context.save()
-        print("Document saved successfully!")
+        Logger.persistence.debug("Document saved successfully")
     }
 
     static func mock() -> Document {

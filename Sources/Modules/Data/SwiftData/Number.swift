@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 import SwiftData
 
 @Model
@@ -38,11 +39,13 @@ final class Number: Identifiable {
     }
 
     func save(context: ModelContext) {
+        let phone = telephone
+        let name = vehicle?.name ?? "unknown"
         do {
             try context.save()
-            print("Number \(telephone) for \(String(describing: vehicle?.name)) saved successfully!")
+            Logger.persistence.debug("Number \(phone) for \(name) saved successfully")
         } catch {
-            print("Error saving number \(telephone) for \(String(describing: vehicle?.name)): \(error)")
+            Logger.persistence.error("Error saving Number \(phone) for \(name): \(error)")
         }
     }
 

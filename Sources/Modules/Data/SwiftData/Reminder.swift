@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 import SwiftData
 
 @Model
@@ -45,7 +46,7 @@ final class Reminder: Identifiable {
     func saveToModelContext(context: ModelContext) throws {
         context.insert(self)
         try context.save()
-        print("Reminder saved successfully!")
+        Logger.persistence.debug("Reminder saved successfully")
     }
 
     enum Typology: String, CaseIterable, Hashable {

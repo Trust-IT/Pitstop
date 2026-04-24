@@ -20,6 +20,10 @@ extension Locale.Currency {
     func format(_ value: some BinaryFloatingPoint) -> String {
         Decimal(Double(value)).formatted(.currency(code: identifier))
     }
+
+    func format(_ value: Decimal) -> String {
+        value.formatted(.currency(code: identifier))
+    }
 }
 
 extension UnitLength {
@@ -32,5 +36,14 @@ extension UnitLength {
 
     func format(_ valueInKm: some BinaryInteger) -> String {
         format(Double(valueInKm))
+    }
+}
+
+extension UnitVolume {
+    /// Formats a value stored in liters, converting to this unit for display.
+    func format(_ valueInLiters: some BinaryFloatingPoint) -> String {
+        Measurement(value: Double(valueInLiters), unit: UnitVolume.liters)
+            .converted(to: self)
+            .formatted(.measurement(width: .abbreviated))
     }
 }

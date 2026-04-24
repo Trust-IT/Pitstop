@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 import SwiftUI
 import WebKit
 
@@ -24,16 +25,18 @@ struct HTMLView: UIViewRepresentable {
 extension WKWebView {
     func load(_ htmlFileName: String) {
         guard !htmlFileName.isEmpty else {
-            return print("Empty file name")
+            Logger.navigation.warning("HTMLView: empty file name")
+            return
         }
         guard let filePath = Bundle.main.path(forResource: htmlFileName, ofType: "html") else {
-            return print("Error file path")
+            Logger.navigation.warning("HTMLView: file path not found for \(htmlFileName)")
+            return
         }
         do {
             let htmlString = try String(contentsOfFile: filePath, encoding: .utf8)
             loadHTMLString(htmlString, baseURL: URL(fileURLWithPath: filePath))
         } catch {
-            print("HTML error")
+            Logger.navigation.error("HTMLView: failed to load \(htmlFileName): \(error)")
         }
     }
 }

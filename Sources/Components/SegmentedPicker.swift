@@ -15,6 +15,8 @@ struct SegmentedPicker<T>: View where
     let style: SegmentedPickerStyle
     let onTap: () -> Void
 
+    @State private var haptic = UIImpactFeedbackGenerator(style: .soft)
+
     init(
         currentTab: Binding<T>,
         style: SegmentedPickerStyle = .defaultStyle,
@@ -52,9 +54,9 @@ struct SegmentedPicker<T>: View where
                 withAnimation(.easeInOut) {
                     currentTab = tab
                 }
-                let haptic = UIImpactFeedbackGenerator(style: .soft)
+
+                haptic.prepare()
                 haptic.impactOccurred()
-                onTap()
             }
     }
 }

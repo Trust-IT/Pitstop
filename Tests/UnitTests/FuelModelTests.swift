@@ -10,125 +10,114 @@ import Foundation
 import SwiftData
 import Testing
 
-@Suite("Fuel Model Odometer Tests")
-actor FuelModelTests {
-    var vehicle: Vehicle = .mock()
+@Suite("FuelExpense - pricePerUnit")
+struct FuelExpensePriceTests {
+    @Test func normalCase() {
+        let expense = FuelExpense(
+            totalCost: Decimal(string: "50.00")!,
+            quantity: 20.0,
+            odometer: 1000,
+            fuelType: .gasoline,
+            date: .now,
+            vehicle: nil
+        )
+        #expect(expense.pricePerUnit == Decimal(string: "2.5")!)
+    }
+
+    @Test func zeroQuantityReturnsZero() {
+        let expense = FuelExpense(totalCost: 50, quantity: 0, odometer: 1000, fuelType: .gasoline, date: .now, vehicle: nil)
+        #expect(expense.pricePerUnit == 0)
+    }
+
+    @Test func zeroCostReturnsZero() {
+        let expense = FuelExpense(totalCost: 0, quantity: 20, odometer: 1000, fuelType: .gasoline, date: .now, vehicle: nil)
+        #expect(expense.pricePerUnit == 0)
+    }
+}
+
+@Suite("VehicleManager - isValidOdometer")
+actor OdometerValidationTests {
     let context: ModelContext
+    let manager: VehicleManager
+    var vehicle: Vehicle
 
     init() async throws {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        do {
-            let modelContainer = try ModelContainer(
-                for: Vehicle.self,
-                FuelExpense.self,
-                configurations: config
-            )
-            context = ModelContext(modelContainer)
-        } catch {
-            fatalError("Could not initialize ModelContainer")
-        }
-//        Task {
-//            await populateVehicleWithFuelExpenses()
-//        }
-        populateVehicleWithFuelExpenses()
-    }
-
-    func populateVehicleWithFuelExpenses() {
-        // Create the vehicle entity
-        vehicle.odometer = 20000
-
-        // Create and add fuel expenses to the vehicle
-        let fuelExpenses = [
-            FuelExpense(
-                totalPrice: .init(value: 29.0),
-                quantity: 20.0,
-                pricePerUnit: 2.5,
-                odometer: 10000,
-                fuelType: .gasoline,
-                date: Date().addingTimeInterval(-86400),
-                vehicle: nil
-            ),
-            FuelExpense(
-                totalPrice: .init(value: 42.0),
-                quantity: 25.0,
-                pricePerUnit: 2.4,
-                odometer: 15000,
-                fuelType: .diesel,
-                date: Date().addingTimeInterval(-43200),
-                vehicle: nil
-            ),
-            FuelExpense(
-                totalPrice: .init(value: 420.0),
-                quantity: 25.0,
-                pricePerUnit: 2.4,
-                odometer: 15000,
-                fuelType: .diesel,
-                date: Date().addingTimeInterval(-26600),
-                vehicle: nil
-            ),
-            FuelExpense(
-                totalPrice: .init(value: 63.0),
-                quantity: 30.0,
-                pricePerUnit: 2.3,
-                odometer: 20000,
-                fuelType: .gasoline,
-                date: Date(),
-                vehicle: nil
-            )
-        ]
-
+        let container = try ModelContainer(for: Vehicle.self, FuelExpense.self, configurations: config)
+        context = ModelContext(container)
+        vehicle = Vehicle(name: "Test", brand: "Brand", model: "X", initialOdometer: 10000)
         context.insert(vehicle)
-//        try? context.save()
-        vehicle.fuelExpenses = []
-//        vehicle.fuelExpenses = fuelExpenses   // Note: if I try to do this, it crashes, idk why.
+        try context.save()
+        manager = VehicleManager()
+        manager.setCurrentVehicle(vehicle)
     }
 
-    // Test case 1: Valid odometer reading between two existing expenses
-    @Test func validOdometerBetweenExpenses() {
-        #expect(vehicle.isValidOdometer(17500, for: Date().addingTimeInterval(-21600)) == true)
+    private func addExpense(odometer: Int, daysOffset: Double) {
+        let date = Date().addingTimeInterval(daysOffset * 86400)
+        let exp = FuelExpense(totalCost: 50, quantity: 30, odometer: odometer, fuelType: .gasoline, date: date, vehicle: vehicle)
+        context.insert(exp)
+        #expect(!vehicle.fuelExpenses.isEmpty, "SwiftData inverse relationship not populated — odometer tests are meaningless")
     }
 
-    // Test case 2: Odometer reading lower than previous expense
-    @Test func odometerLowerThanPreviousExpense() async throws {
-//        populateVehicleWithFuelExpenses()
-        try #require(vehicle.isValidOdometer(14000, for: Date().addingTimeInterval(-21600)) == true)
+    // MARK: No expenses
+
+    @Test func noExpenses_aboveInitial_valid() {
+        #expect(manager.validateOdometer(10001, for: .now) == nil)
     }
 
-    // Test case 3: Odometer reading higher than next expense
-    @Test func odometerHigherThanNextExpense() async throws {
-//        populateVehicleWithFuelExpenses()
-        try #require(vehicle.isValidOdometer(25000, for: Date().addingTimeInterval(-21600)) == true)
+    @Test func noExpenses_equalOrBelowInitial_invalid() {
+        #expect(manager.validateOdometer(10000, for: .now) == .belowInitialOdometer(initial: 10000))
+        #expect(manager.validateOdometer(9999, for: .now) == .belowInitialOdometer(initial: 10000))
     }
 
-    // Test case 4: Odometer reading lower than last expense
-    @Test func odometerLowerThanLastExpense() async throws {
-//        populateVehicleWithFuelExpenses()
-        try #require(vehicle.isValidOdometer(19000, for: Date()) == true)
+    // MARK: Before first expense
+
+    @Test func beforeFirstExpense_odometerBelowFirst_valid() {
+        addExpense(odometer: 15000, daysOffset: -5)
+        let dateBefore = Date().addingTimeInterval(-10 * 86400)
+        #expect(manager.validateOdometer(12000, for: dateBefore) == nil)
     }
 
-    // Test case 5: Odometer higher than first expense
-    @Test func odometerHigherThanFirstExpense() async throws {
-        // 1 day before the first expense
-//        populateVehicleWithFuelExpenses()
-        try #require(vehicle.isValidOdometer(11000, for: Date().addingTimeInterval(-61600)) == true)
+    @Test func beforeFirstExpense_odometerAboveFirst_invalid() {
+        addExpense(odometer: 15000, daysOffset: -5)
+        let dateBefore = Date().addingTimeInterval(-10 * 86400)
+        #expect(manager.validateOdometer(16000, for: dateBefore) == .exceedsFirstEntry(first: 15000))
     }
 
-    // Test case 6: Odometer higher than first expense
-    @Test func odometerAsFirstExpense() async throws {
-//        populateVehicleWithFuelExpenses()
-        try #require(vehicle.isValidOdometer(11000, for: Date().addingTimeInterval(-90000)) == true)
+    // MARK: After last expense
+
+    @Test func afterLastExpense_higherOdometer_valid() {
+        addExpense(odometer: 15000, daysOffset: -5)
+        addExpense(odometer: 20000, daysOffset: -1)
+        #expect(manager.validateOdometer(21000, for: .now) == nil)
     }
 
-    // Test case 7: Odometer higher value between two equal odometer value
-    @Test func odometerBetweenDuplicateOdometerValues() async throws {
-//        vehicle.fuelExpenses.append(exp)
-        print(vehicle.fuelExpenses)
-        try #require(vehicle.isValidOdometer(16000, for: Date().addingTimeInterval(-35000)) == true)
+    @Test func afterLastExpense_lowerOdometer_invalid() {
+        addExpense(odometer: 15000, daysOffset: -5)
+        addExpense(odometer: 20000, daysOffset: -1)
+        #expect(manager.validateOdometer(19000, for: .now) == .belowCurrentOdometer(current: 20000))
     }
 
-    // Test case 8: Odometer inserted when no previous expenses
-    @Test func odometerWithNoExpenses() async throws {
-        try #require(vehicle.isValidOdometer(19000, for: Date()) == false)
-        try #require(vehicle.isValidOdometer(21000, for: Date()) == true)
+    // MARK: Between two expenses
+
+    @Test func betweenExpenses_validOdometer() {
+        addExpense(odometer: 10000, daysOffset: -10)
+        addExpense(odometer: 20000, daysOffset: -2)
+        let dateBetween = Date().addingTimeInterval(-6 * 86400)
+        #expect(manager.validateOdometer(15000, for: dateBetween) == nil)
+    }
+
+    @Test func betweenExpenses_odometerTooHigh_invalid() {
+        addExpense(odometer: 10000, daysOffset: -10)
+        addExpense(odometer: 20000, daysOffset: -2)
+        let dateBetween = Date().addingTimeInterval(-6 * 86400)
+        #expect(manager.validateOdometer(25000, for: dateBetween) == .exceedsNextEntry(next: 20000))
+    }
+
+    @Test func betweenExpenses_odometerTooLow_invalid() {
+        addExpense(odometer: 10000, daysOffset: -10)
+        addExpense(odometer: 20000, daysOffset: -2)
+        let dateBetween = Date().addingTimeInterval(-6 * 86400)
+        #expect(manager.validateOdometer(5000, for: dateBetween) == .belowPreviousEntry(previous: 10000))
     }
 }

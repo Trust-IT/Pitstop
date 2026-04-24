@@ -5,6 +5,7 @@
 //  Created by Ivan Voloshchuk on 03/06/22.
 //
 
+import OSLog
 @preconcurrency import UserNotifications
 
 actor NotificationManager {
@@ -56,9 +57,9 @@ actor NotificationManager {
 
         do {
             try await UNUserNotificationCenter.current().add(request)
-            print("Notification added successfully for reminder: \(reminder.title)")
+            Logger.notifications.debug("Notification added for reminder: \(reminder.title)")
         } catch {
-            print("Error adding notification request: \(error.localizedDescription)")
+            Logger.notifications.error("Error adding notification request: \(error.localizedDescription)")
         }
     }
 
@@ -69,7 +70,7 @@ actor NotificationManager {
         let identifiersToRemove = requests.filter { $0.identifier == reminder.uuid.uuidString }.map(\.identifier)
 
         center.removePendingNotificationRequests(withIdentifiers: identifiersToRemove)
-        print("Notifications unscheduled: \(identifiersToRemove)")
+        Logger.notifications.debug("Notifications unscheduled: \(identifiersToRemove)")
     }
 }
 

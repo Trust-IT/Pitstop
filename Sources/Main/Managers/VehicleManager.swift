@@ -263,7 +263,6 @@ import SwiftData
         return nil
     }
 
-
     private func calculateFuelEfficiency(
         previousOdometer: Int,
         currentOdometer: Int,

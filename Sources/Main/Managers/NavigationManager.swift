@@ -12,64 +12,46 @@ class NavigationManager: ObservableObject {
     @Published var routes = [Route]()
     @Published var modalRoutes = [Route]()
     @Published var presentedRoute: Route?
-    @Published var isPresented: Bool = false
-
     @Published var selectedTab: TabBarItem = .vehicle
 
-    /// Pushes a new route onto the stack
+    var isInModal: Bool { presentedRoute != nil }
+
     func push(_ route: Route) {
-        if isPresented {
+        if isInModal {
             modalRoutes.append(route)
         } else {
             routes.append(route)
         }
     }
 
-    /// Sets a new route as the only route in the stack
-    func set(_ route: Route) {
-        if isPresented {
-            modalRoutes = []
-            presentedRoute = route
-        } else {
-            routes = []
-            routes.append(route)
-        }
-    }
-
-    /// Presents a new route modally
     func present(_ route: Route) {
-        isPresented = true
         presentedRoute = route
         modalRoutes = []
     }
 
-    /// Dismisses all presented routes
     func popAll() {
-        if isPresented {
+        if isInModal {
             modalRoutes = []
-            isPresented = false
             presentedRoute = nil
         } else {
             routes = []
         }
     }
 
-    /// Pops the top route from the stack
     func pop() {
-        if isPresented, !modalRoutes.isEmpty {
-            _ = modalRoutes.popLast()
-        } else if isPresented, modalRoutes.isEmpty {
-            isPresented = false
+        if isInModal, !modalRoutes.isEmpty {
+            modalRoutes.removeLast()
+        } else if isInModal {
             presentedRoute = nil
         } else {
-            _ = routes.popLast()
+            routes.removeLast()
         }
     }
 }
 
 struct ModalNavigationContainerView: View {
     @EnvironmentObject var navManager: NavigationManager
-    @EnvironmentObject var vehicleManager: VehicleManager
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @Environment(AppState.self) var appState: AppState
     let route: Route
 
@@ -81,7 +63,7 @@ struct ModalNavigationContainerView: View {
             .navigationDestination(for: Route.self) { route in
                 route
                     .environment(appState)
-                    .environmentObject(vehicleManager)
+                    .environment(vehicleManager)
             }
         }
     }

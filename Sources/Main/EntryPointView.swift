@@ -19,7 +19,7 @@ struct EntryPointView: View {
             }
 
             Tab(PitstopAPPStrings.Common.analytics, image: PitstopAPPAsset.Assets.chartIcon.name, value: TabBarItem.analytics) {
-                AnalyticsView()
+                AnalyticsEntryPointView()
             }
 
             Tab(PitstopAPPStrings.Common.settings, image: PitstopAPPAsset.Assets.settingsIcon.name, value: TabBarItem.settings) {

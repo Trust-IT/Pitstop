@@ -11,6 +11,7 @@ import Observation
 @Observable class AppState {
     private(set) var currency: Locale.Currency = Locale.current.currency ?? Locale.Currency("EUR")
     private(set) var measurementUnit: UnitLength = Locale.current.measurementSystem == .metric ? .kilometers : .miles
+    private(set) var volumeUnit: UnitVolume = Locale.current.measurementSystem == .metric ? .liters : .gallons
     private(set) var currentTheme: ThemeColors
 
     /// Checks if vehicle is added from the flow in settings
@@ -35,5 +36,9 @@ import Observation
 
     func setMeasurementUnit(_ unit: UnitLength) {
         measurementUnit = unit
+    }
+
+    func setVolumeUnit(_ unit: UnitVolume) {
+        volumeUnit = unit
     }
 }

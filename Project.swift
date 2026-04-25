@@ -2,6 +2,9 @@ import ProjectDescription
 
 let project = Project(
     name: "Pitstop",
+    options: .options(
+        automaticSchemesOptions: .disabled
+    ),
     settings:
     .settings(
         base: [
@@ -60,10 +63,9 @@ let project = Project(
     ),
     targets: [
         .target(
-            name: "Pitstop-APP",
+            name: "Pitstop",
             destinations: .iOS,
             product: .app,
-            // [!code ++] // or .staticFramework, .staticLibrary...
             bundleId: "com.academy.pitstopD",
             deploymentTargets:
             .iOS(
@@ -71,7 +73,7 @@ let project = Project(
             ),
             infoPlist:
             .file(
-                path: "Sources/Pitstop-APP-Info.plist"
+                path: "Sources/Pitstop-Info.plist"
             ),
             sources: ["Sources/**"],
             resources: [
@@ -79,7 +81,7 @@ let project = Project(
                 "Sources/Assets.xcassets/**",
                 "Sources/Preview Content/**"
             ],
-            entitlements: "Pitstop-APP.entitlements",
+            entitlements: "Pitstop.entitlements",
             scripts: [
                 .pre(
                     script: "Scripts/swiftformat.sh",
@@ -102,12 +104,10 @@ let project = Project(
                 configurations: [
                     .debug(
                         name: "Debug",
-                        settings: ["SWIFT_VERSION": "6.0"],
                         xcconfig: "./xcconfigs/Debug.xcconfig"
                     ),
                     .release(
                         name: "Release",
-                        settings: ["SWIFT_VERSION": "6.0"],
                         xcconfig: "./xcconfigs/Release.xcconfig"
                     ),
                 ]
@@ -117,14 +117,47 @@ let project = Project(
             name: "UnitTests",
             destinations: .iOS,
             product: .unitTests,
-            bundleId: "com.academy.pitstopD",
+            bundleId: "com.academy.pitstopD.UnitTests",
             infoPlist: .default,
             sources: ["Tests/UnitTests/**"],
             dependencies: [
                 .target(
-                    name: "Pitstop-APP"
+                    name: "Pitstop"
                 )
             ]
+        ),
+    ],
+    schemes: [
+        .scheme(
+            name: "Pitstop-Debug",
+            shared: true,
+            buildAction: .buildAction(targets: [.target("Pitstop")]),
+            testAction: .targets(
+                [.testableTarget(target: .target("UnitTests"))],
+                configuration: "Debug"
+            ),
+            runAction: .runAction(configuration: "Debug"),
+            archiveAction: .archiveAction(configuration: "Debug"),
+            profileAction: .profileAction(configuration: "Debug"),
+            analyzeAction: .analyzeAction(configuration: "Debug")
+        ),
+        .scheme(
+            name: "Pitstop-Release",
+            shared: true,
+            buildAction: .buildAction(targets: [.target("Pitstop")]),
+            runAction: .runAction(configuration: "Release"),
+            archiveAction: .archiveAction(configuration: "Release"),
+            profileAction: .profileAction(configuration: "Release"),
+            analyzeAction: .analyzeAction(configuration: "Release")
+        ),
+        .scheme(
+            name: "UnitTests",
+            shared: true,
+            buildAction: .buildAction(targets: [.target("UnitTests")]),
+            testAction: .targets(
+                [.testableTarget(target: .target("UnitTests"))],
+                configuration: "Debug"
+            )
         ),
     ]
 )

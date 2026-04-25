@@ -31,7 +31,7 @@ struct RemindersListView: View {
         VStack {
             ScrollView(.vertical, showsIndicators: false) {
                 reminderSection(
-                    title: PitstopAPPStrings.Common.future,
+                    title: PitstopStrings.Localizable.Common.future,
                     items: reminders,
                     areItemsExpired: false,
                     onItemTap: { reminder in
@@ -40,7 +40,7 @@ struct RemindersListView: View {
                 )
 
                 reminderSection(
-                    title: PitstopAPPStrings.Common.expired,
+                    title: PitstopStrings.Localizable.Common.expired,
                     items: expiredReminders,
                     areItemsExpired: true,
                     onItemTap: { reminder in
@@ -53,7 +53,7 @@ struct RemindersListView: View {
                 Button(action: {
                     deleteExpiredReminders()
                 }, label: {
-                    DeleteButton(title: PitstopAPPStrings.Reminder.clearAll)
+                    DeleteButton(title: PitstopStrings.Localizable.Reminder.clearAll)
                 })
                 .buttonStyle(Primary())
             }
@@ -62,7 +62,7 @@ struct RemindersListView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text(PitstopAPPStrings.Reminder.title)
+                Text(PitstopStrings.Localizable.Reminder.title)
                     .font(Typography.headerM)
                     .foregroundColor(Palette.black)
             }
@@ -93,7 +93,7 @@ private extension RemindersListView {
             }
             if items.isEmpty {
                 HStack {
-                    Text(PitstopAPPStrings.Reminder.empty)
+                    Text(PitstopStrings.Localizable.Reminder.empty)
                         .font(Typography.TextM)
                         .foregroundColor(Palette.greyMiddle)
                     Spacer()

@@ -22,7 +22,7 @@ struct DocumentScannerView: View {
         transitionType: .slide
     )
 
-    @State private var documentTitle: String = PitstopAPPStrings.Common.untitled
+    @State private var documentTitle: String = PitstopStrings.Localizable.Common.untitled
 
     var body: some View {
         VStack {
@@ -58,7 +58,7 @@ struct DocumentScannerView: View {
             }
             Spacer()
             if !scannedImages.isEmpty {
-                Button(PitstopAPPStrings.Common.save) {
+                Button(PitstopStrings.Localizable.Common.save) {
                     persistDocument(withTitle: documentTitle)
                 }
                 .buttonStyle(Primary())
@@ -72,7 +72,7 @@ struct DocumentScannerView: View {
         }
         .toolbar {
             ToolbarTitleMenu {
-                Button(PitstopAPPStrings.Common.rename) {
+                Button(PitstopStrings.Localizable.Common.rename) {
                     renameDocumentAlert.present()
                 }
                 .buttonStyle(Primary())
@@ -80,8 +80,8 @@ struct DocumentScannerView: View {
         }
         .alert(config: $renameDocumentAlert) {
             AlertInputView(
-                title: PitstopAPPStrings.Document.rename,
-                placeholder: PitstopAPPStrings.Document.Rename.placeholder,
+                title: PitstopStrings.Localizable.Document.rename,
+                placeholder: PitstopStrings.Localizable.Document.Rename.placeholder,
                 alert: $renameDocumentAlert,
                 action: { input in
                     documentTitle = input

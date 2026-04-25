@@ -10,10 +10,7 @@ import SwiftUI
 enum Route {
     // Onboarding
     case onboardingWelcome
-    case onboardingRegistration
-    case onboardingMoreInfo(input: OnbVehicleInputData)
-    case onboardingNotification
-    case onboardingReady
+    case onboardingAddVehicle
 
     // Vehicle
     case reminderReport(input: Reminder, isEdit: Bool)
@@ -33,7 +30,7 @@ enum Route {
 }
 
 extension Route: Identifiable {
-    var id: Int { hashValue }
+    var id: UUID { UUID() } // TODO: CHECK IF IT IS VALID
 }
 
 extension Route: Hashable {
@@ -47,13 +44,7 @@ extension Route: Equatable {
         switch (lhs, rhs) {
         case (.onboardingWelcome, .onboardingWelcome):
             true
-        case (.onboardingRegistration, .onboardingRegistration):
-            true
-        case let (.onboardingMoreInfo(leftData), .onboardingMoreInfo(rightData)):
-            leftData == rightData
-        case (.onboardingNotification, .onboardingNotification):
-            true
-        case (.onboardingReady, .onboardingReady):
+        case (.onboardingAddVehicle, .onboardingAddVehicle):
             true
         case let (.reminderReport(leftInput, leftIsEdit),
                   .reminderReport(rightInput, rightIsEdit)):
@@ -80,15 +71,9 @@ extension Route: View {
     var body: some View {
         switch self {
         case .onboardingWelcome:
-            OnbWelcomeView()
-        case .onboardingRegistration:
-            OnbRegistrationView()
-        case let .onboardingMoreInfo(vehicleData):
-            OnbMoreInfoView(input: vehicleData)
-        case .onboardingNotification:
-            OnbNotificationView()
-        case .onboardingReady:
-            OnbReadyView()
+            OnboardingFlowView(pages: [.welcome, .registration, .moreInfo, .notification, .ready])
+        case .onboardingAddVehicle:
+            OnboardingFlowView(pages: [.welcome, .registration, .moreInfo, .ready], isDismissible: true)
         case let .reminderReport(reminder, isEdit):
             ReminderReportView(reminder: reminder, isEditMode: isEdit)
         case let .fuelReport(fuelData):

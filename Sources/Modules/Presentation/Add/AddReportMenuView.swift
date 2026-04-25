@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct AddReportMenuView: View {
-    let appState: AppState
     @EnvironmentObject private var navManager: NavigationManager
     @Binding var isPresented: Bool
 
@@ -71,8 +70,7 @@ struct AddReportMenuView: View {
             })
             Button(action: {
                 isPresented.toggle()
-                navManager.push(.onboardingRegistration)
-                appState.setAddingNewVehicle(true)
+                navManager.present(.onboardingAddVehicle)
             }, label: {
                 HStack {
                     ZStack {
@@ -105,7 +103,7 @@ struct AddReportMenuView: View {
 }
 
 #Preview {
-    AddReportMenuView(appState: AppState(), isPresented: .constant(true))
+    AddReportMenuView(isPresented: .constant(true))
         .environmentObject(NavigationManager())
         .environment(VehicleManager())
         .environment(SceneDelegate())

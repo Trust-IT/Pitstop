@@ -25,7 +25,7 @@ struct DocumentContentView: View {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
-                    Text(PitstopAPPStrings.Common.cancel)
+                    Text(PitstopStrings.Localizable.Common.cancel)
                         .font(Typography.headerM)
                 })
                 .accentColor(Palette.greyHard)

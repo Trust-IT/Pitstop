@@ -14,9 +14,6 @@ import Observation
     private(set) var volumeUnit: UnitVolume = Locale.current.measurementSystem == .metric ? .liters : .gallons
     private(set) var currentTheme: ThemeColors
 
-    /// Checks if vehicle is added from the flow in settings
-    private(set) var isAddingNewVehicle: Bool = false
-
     init() {
         if let currentTheme = ThemeColors.retrieveFromUserDefaults() {
             self.currentTheme = currentTheme
@@ -28,10 +25,6 @@ import Observation
     func setCurrentTheme(_ theme: ThemeColors) {
         currentTheme = theme
         ThemeColors.saveToUserDefaults(theme)
-    }
-
-    func setAddingNewVehicle(_ value: Bool) {
-        isAddingNewVehicle = value
     }
 
     func setMeasurementUnit(_ unit: UnitLength) {

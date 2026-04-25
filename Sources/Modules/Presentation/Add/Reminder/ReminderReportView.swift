@@ -42,14 +42,14 @@ struct ReminderReportView: View {
 
             ReminderInputView(reminder: reminder, reminderInputFocus: $reminderInputFocus)
 
-            Button(PitstopAPPStrings.Common.save) {
+            Button(PitstopStrings.Localizable.Common.save) {
                 createReminderNotification()
             }
             .buttonStyle(Primary())
             .disabled(reminder.title.isEmpty)
         }
         .background(Palette.greyBackground)
-        .navigationTitle(PitstopAPPStrings.Reminder.new)
+        .navigationTitle(PitstopStrings.Localizable.Reminder.new)
         .navigationBarBackButtonHidden()
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -69,7 +69,7 @@ struct ReminderReportView: View {
                     Button(action: {
                         showDeleteAlert.toggle()
                     }, label: {
-                        Text(PitstopAPPStrings.Common.delete)
+                        Text(PitstopStrings.Localizable.Common.delete)
                             .font(Typography.headerM)
                             .foregroundStyle(appState.currentTheme.accentColor)
                     })
@@ -97,9 +97,9 @@ struct ReminderReportView: View {
                message: { Text(alertMessage) })
         .alert(isPresented: $showDeleteAlert) {
             Alert(
-                title: Text(PitstopAPPStrings.Reminder.delete),
-                message: Text(PitstopAPPStrings.Common.undone),
-                primaryButton: .destructive(Text(PitstopAPPStrings.Common.delete)) {
+                title: Text(PitstopStrings.Localizable.Reminder.delete),
+                message: Text(PitstopStrings.Localizable.Common.undone),
+                primaryButton: .destructive(Text(PitstopStrings.Localizable.Common.delete)) {
                     removeNotification(for: reminder)
                     deleteReminder(reminder)
                     navManager.pop()
@@ -123,7 +123,7 @@ private extension ReminderReportView {
                 let status = try await NotificationManager.shared.requestAuthNotifications()
 
                 guard status == .authorized else {
-                    showAlert(with: PitstopAPPStrings.Common.attention, and: PitstopAPPStrings.Reminder.enableNotification)
+                    showAlert(with: PitstopStrings.Localizable.Common.attention, and: PitstopStrings.Localizable.Reminder.enableNotification)
                     return
                 }
 
@@ -133,7 +133,7 @@ private extension ReminderReportView {
 
                 navManager.pop()
             } catch {
-                showAlert(with: PitstopAPPStrings.Common.error, and: error.localizedDescription)
+                showAlert(with: PitstopStrings.Localizable.Common.error, and: error.localizedDescription)
             }
         }
     }

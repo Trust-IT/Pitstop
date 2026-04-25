@@ -82,7 +82,7 @@ struct AddNumberView: View {
                             focusedField = .number
                         }
 
-                    Button(PitstopAPPStrings.Common.save) {
+                    Button(PitstopStrings.Localizable.Common.save) {
                         saveNumber()
                         alert.dismiss()
                     }

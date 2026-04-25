@@ -14,19 +14,19 @@ struct EntryPointView: View {
 
     var body: some View {
         TabView(selection: $navManager.selectedTab) {
-            Tab(PitstopAPPStrings.Common.vehicle, image: PitstopAPPAsset.Assets.carIcon.name, value: TabBarItem.vehicle) {
+            Tab(PitstopStrings.Localizable.Common.vehicle, image: PitstopAsset.Assets.carIcon.name, value: TabBarItem.vehicle) {
                 VehicleView()
             }
 
-            Tab(PitstopAPPStrings.Common.analytics, image: PitstopAPPAsset.Assets.chartIcon.name, value: TabBarItem.analytics) {
+            Tab(PitstopStrings.Localizable.Common.analytics, image: PitstopAsset.Assets.chartIcon.name, value: TabBarItem.analytics) {
                 AnalyticsEntryPointView()
             }
 
-            Tab(PitstopAPPStrings.Common.settings, image: PitstopAPPAsset.Assets.settingsIcon.name, value: TabBarItem.settings) {
+            Tab(PitstopStrings.Localizable.Common.settings, image: PitstopAsset.Assets.settingsIcon.name, value: TabBarItem.settings) {
                 SettingsView()
             }
 
-            Tab(PitstopAPPStrings.Common.add, image: PitstopAPPAsset.Assets.plusIcon.name, value: TabBarItem.add, role: .search) {
+            Tab(PitstopStrings.Localizable.Common.add, image: PitstopAsset.Assets.plusIcon.name, value: TabBarItem.add, role: .search) {
                 Text("If you see this, then something is broken")
             }
         }
@@ -39,7 +39,7 @@ struct EntryPointView: View {
             }
         }
         .sheet(isPresented: $isPresented) {
-            AddReportMenuView(appState: appState, isPresented: $isPresented)
+            AddReportMenuView(isPresented: $isPresented)
                 .environment(appState)
                 .presentationDetents([.fraction(0.35)])
                 .presentationDragIndicator(.visible)

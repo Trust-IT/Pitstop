@@ -21,7 +21,7 @@ struct VehicleView: View {
         NavigationStack(path: $navManager.routes) {
             GeometryReader { proxy in
                 let topEdge = proxy.safeAreaInsets.top
-                HomeStyleView(topEdge: topEdge + 40)
+                HomeStyleView(topEdge: topEdge + 40, maxHeight: proxy.size.height / 3.8)
             }
             .navigationDestination(for: Route.self) { route in
                 route

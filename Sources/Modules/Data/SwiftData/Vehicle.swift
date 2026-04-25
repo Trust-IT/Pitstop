@@ -14,12 +14,11 @@ final class Vehicle {
     @Attribute(.unique)
     var uuid: UUID
 
-    var name: String
     var brand: String
     var model: String
     var mainFuelType: FuelType
     var initialOdometer: Int
-    var plate: String?
+    var plate: String? //
 
     // TODO: Replace with CNContact identifiers array
     @Relationship(deleteRule: .cascade, inverse: \Number.vehicle)
@@ -34,9 +33,10 @@ final class Vehicle {
         fuelExpenses.max(by: { $0.date < $1.date })?.odometer ?? initialOdometer
     }
 
+    var displayName: String { "\(brand) \(model)" }
+
     init(
         uuid: UUID = UUID(),
-        name: String,
         brand: String,
         model: String,
         mainFuelType: FuelType = .gasoline,
@@ -44,7 +44,6 @@ final class Vehicle {
         plate: String? = nil
     ) {
         self.uuid = uuid
-        self.name = name
         self.brand = brand
         self.model = model
         self.mainFuelType = mainFuelType
@@ -53,13 +52,13 @@ final class Vehicle {
     }
 
     func saveToModelContext(context: ModelContext) throws {
-        let vehicleName = name
+        let name = displayName
         context.insert(self)
         try context.save()
-        Logger.persistence.debug("Vehicle \(vehicleName) saved successfully")
+        Logger.persistence.debug("Vehicle \(name) saved successfully")
     }
 
     static func mock() -> Vehicle {
-        Vehicle(name: "Default car", brand: "Brand", model: "XYZ", initialOdometer: 0)
+        Vehicle(brand: "Brand", model: "XYZ", initialOdometer: 0)
     }
 }

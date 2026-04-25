@@ -40,9 +40,9 @@ struct AlertInputView: View {
             }
             VStack(spacing: 12) {
                 TextField(placeholder, text: $input)
-                    .textFieldStyle(BoxTextFieldStyle(focusedField: $focusState, field: .input))
+                    .boxFieldStyle(focusedField: $focusState, field: .input)
                     .padding(.horizontal, 16)
-                Button(PitstopAPPStrings.Common.save) {
+                Button(PitstopStrings.Localizable.Common.save) {
                     action(input)
                     alert.dismiss()
                 }

@@ -69,7 +69,7 @@ struct FuelReportView: View {
                 }
             }
             Spacer()
-            Button(PitstopAPPStrings.Common.save) {
+            Button(PitstopStrings.Localizable.Common.save) {
                 saveExpense()
             }
             .disabled(!areFieldsValid)

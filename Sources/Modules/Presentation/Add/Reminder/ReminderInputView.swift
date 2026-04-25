@@ -21,7 +21,7 @@ struct ReminderInputView: View {
 
             HStack {
                 CategoryRow(input: .init(
-                    title: PitstopAPPStrings.Common.category,
+                    title: PitstopStrings.Localizable.Common.category,
                     icon: .category,
                     color: appState.currentTheme.colors.background
                 )
@@ -115,7 +115,7 @@ struct ReminderInputView: View {
                         .foregroundColor(reminder.note.isEmpty ? Palette.greyInput : appState.currentTheme.accentColor)
                         .frame(width: 16, height: 16)
                 }
-                TextField(PitstopAPPStrings.Common.note, text: $reminder.note)
+                TextField(PitstopStrings.Localizable.Common.note, text: $reminder.note)
                     .disableAutocorrection(true)
                     .focused(reminderInputFocus, equals: .note)
                     .font(Typography.headerM)

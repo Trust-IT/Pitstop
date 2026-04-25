@@ -8,10 +8,14 @@
 import SwiftData
 import SwiftUI
 
+private enum EditVehicleFocusField: Hashable {
+    case brand, model, plate, fuelType
+}
+
 struct EditVehicleView: View {
     @EnvironmentObject private var navManager: NavigationManager
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
-    @FocusState var focusedField: VehicleInfoFocusField?
+    @FocusState private var focusedField: EditVehicleFocusField?
     @Environment(\.modelContext) private var modelContext
     @Environment(AppState.self) var appState: AppState
 
@@ -21,8 +25,7 @@ struct EditVehicleView: View {
         transitionType: .slide
     )
     var isDisabled: Bool {
-        name.isEmpty ||
-            brand.isEmpty ||
+        brand.isEmpty ||
             model.isEmpty ||
             mainFuelType == .none
     }
@@ -34,7 +37,6 @@ struct EditVehicleView: View {
 
     @Bindable var vehicle: Vehicle
 
-    @State private var name: String
     @State private var brand: String
     @State private var model: String
     @State private var plate: String
@@ -42,7 +44,6 @@ struct EditVehicleView: View {
 
     init(vehicle: Vehicle) {
         self.vehicle = vehicle
-        _name = State(initialValue: vehicle.name)
         _brand = State(initialValue: vehicle.brand)
         _model = State(initialValue: vehicle.model)
         _plate = State(initialValue: vehicle.plate ?? "")
@@ -53,32 +54,26 @@ struct EditVehicleView: View {
         VStack(spacing: 16) {
             ScrollView {
                 VStack(spacing: 20) {
-                    TextField(PitstopAPPStrings.Onb.vehicleName, text: $name)
-                        .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .vehicleName))
-                        .onSubmit {
-                            focusedField = .brand
-                        }
-
-                    TextField(PitstopAPPStrings.Onb.brand, text: $brand)
-                        .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .brand))
+                    TextField(PitstopStrings.Localizable.Onb.brand, text: $brand)
+                        .boxFieldStyle(focusedField: $focusedField, field: .brand)
                         .onSubmit {
                             focusedField = .model
                         }
 
-                    TextField(PitstopAPPStrings.Onb.model, text: $model)
-                        .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .model))
+                    TextField(PitstopStrings.Localizable.Onb.model, text: $model)
+                        .boxFieldStyle(focusedField: $focusedField, field: .model)
                         .onSubmit {
                             focusedField = .plate
                         }
 
-                    TextField(PitstopAPPStrings.Onb.plateNumber, text: $plate)
-                        .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .plate))
+                    TextField(PitstopStrings.Localizable.Onb.plateNumber, text: $plate)
+                        .boxFieldStyle(focusedField: $focusedField, field: .plate)
                         .onSubmit {
                             focusedField = nil
                         }
 
                     TextField("Main Fuel Type", text: fuelTypeBinding(for: $mainFuelType))
-                        .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .fuelType))
+                        .boxFieldStyle(focusedField: $focusedField, field: .fuelType)
                         .disabled(true)
                         .onTapGesture {
                             focusedField = nil
@@ -123,7 +118,7 @@ struct EditVehicleView: View {
             Alert(
                 title: Text("Are you sure you want to delete this vehicle?"),
                 message: Text("This action cannot be undone"),
-                primaryButton: .destructive(Text(PitstopAPPStrings.Common.delete)) {
+                primaryButton: .destructive(Text(PitstopStrings.Localizable.Common.delete)) {
                     modelContext.delete(vehicle)
                     vehicleManager.setCurrentVehicle(vehicles.first ?? .mock(), modelContext: modelContext)
                     navManager.pop()
@@ -133,7 +128,7 @@ struct EditVehicleView: View {
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text(name)
+                Text("\(brand) \(model)")
                     .font(Typography.headerM)
                     .foregroundColor(Palette.black)
             }
@@ -142,7 +137,7 @@ struct EditVehicleView: View {
                     updateVehicle(vehicle)
                     navManager.pop()
                 }, label: {
-                    Text(PitstopAPPStrings.Common.save)
+                    Text(PitstopStrings.Localizable.Common.save)
                         .font(Typography.headerM)
                         .foregroundStyle(appState.currentTheme.accentColor)
                 })
@@ -155,7 +150,6 @@ struct EditVehicleView: View {
 
 private extension EditVehicleView {
     func updateVehicle(_ vehicle: Vehicle) {
-        vehicle.name = name
         vehicle.brand = brand
         vehicle.model = model
         vehicle.plate = plate

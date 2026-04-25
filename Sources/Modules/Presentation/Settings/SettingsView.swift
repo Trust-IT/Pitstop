@@ -36,7 +36,7 @@ struct SettingsView: View {
                             }, label: {
                                 HStack {
                                     CategoryRow(input: .init(
-                                        title: vehicle.name,
+                                        title: vehicle.displayName,
                                         icon: .carSettings,
                                         color: appState.currentTheme.colors.background
                                     ))
@@ -94,7 +94,7 @@ struct SettingsView: View {
                 .listStyle(.insetGrouped)
                 Spacer()
             }
-            .navigationTitle(PitstopAPPStrings.Common.settings)
+            .navigationTitle(PitstopStrings.Localizable.Common.settings)
             .background(Palette.greyBackground)
             .alert(config: $themePickerAlert) {
                 ThemePickerView(alert: $themePickerAlert)

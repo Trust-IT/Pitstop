@@ -64,7 +64,7 @@ class FuelExpense: Identifiable {
 
     func save(context: ModelContext) {
         let cost = totalCost
-        let name = vehicle?.name ?? "unknown"
+        let name = vehicle?.displayName ?? "unknown"
         do {
             try context.save()
             Logger.persistence.debug("FuelExpense \(cost) for \(name) saved successfully")

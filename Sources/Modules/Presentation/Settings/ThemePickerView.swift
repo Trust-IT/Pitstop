@@ -73,7 +73,7 @@ struct ThemePickerView: View {
             .padding()
             .padding(.bottom, 10)
 
-            Button(PitstopAPPStrings.Common.save) {
+            Button(PitstopStrings.Localizable.Common.save) {
                 appState.setCurrentTheme(selectedTheme)
                 alert.dismiss()
             }

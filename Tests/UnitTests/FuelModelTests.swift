@@ -45,7 +45,7 @@ actor OdometerValidationTests {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: Vehicle.self, FuelExpense.self, configurations: config)
         context = ModelContext(container)
-        vehicle = Vehicle(name: "Test", brand: "Brand", model: "X", initialOdometer: 10000)
+        vehicle = Vehicle(brand: "Brand", model: "X", initialOdometer: 10000)
         context.insert(vehicle)
         try context.save()
         manager = VehicleManager()

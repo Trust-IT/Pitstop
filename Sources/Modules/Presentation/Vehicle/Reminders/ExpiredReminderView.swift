@@ -23,7 +23,7 @@ struct ExpiredReminderView: View {
                 deleteReminder(reminder)
                 navManager.pop()
             }, label: {
-                DeleteButton(title: PitstopAPPStrings.Reminder.clear)
+                DeleteButton(title: PitstopStrings.Localizable.Reminder.clear)
             })
             .buttonStyle(Primary())
         }
@@ -43,7 +43,7 @@ struct ExpiredReminderView: View {
         CustomList {
             HStack {
                 CategoryRow(input: .init(
-                    title: PitstopAPPStrings.Common.title,
+                    title: PitstopStrings.Localizable.Common.title,
                     icon: .other,
                     color: Palette.colorViolet,
                     isDisabled: true
@@ -62,7 +62,7 @@ struct ExpiredReminderView: View {
 
             HStack {
                 CategoryRow(input: .init(
-                    title: PitstopAPPStrings.Common.category,
+                    title: PitstopStrings.Localizable.Common.category,
                     icon: .category,
                     color: Palette.colorYellow,
                     isDisabled: true
@@ -80,7 +80,7 @@ struct ExpiredReminderView: View {
 
             HStack {
                 CategoryRow(input: .init(
-                    title: PitstopAPPStrings.Common.day,
+                    title: PitstopStrings.Localizable.Common.day,
                     icon: .day,
                     color: Palette.colorGreen,
                     isDisabled: true
@@ -99,7 +99,7 @@ struct ExpiredReminderView: View {
             if !reminder.note.isEmpty {
                 HStack {
                     CategoryRow(input: .init(
-                        title: PitstopAPPStrings.Common.note,
+                        title: PitstopStrings.Localizable.Common.note,
                         icon: .note,
                         color: Palette.colorViolet,
                         isDisabled: true

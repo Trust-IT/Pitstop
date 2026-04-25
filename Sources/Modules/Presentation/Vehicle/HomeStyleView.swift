@@ -5,41 +5,35 @@
 //  Created by Ivan Voloshchuk on 12/05/22.
 //
 
-import Foundation
 import SwiftUI
 
 struct HomeStyleView: View {
     @Environment(AppState.self) var appState: AppState
-    // Scroll animation vars
+
     @State var offset: CGFloat = 0
     @State var topEdge: CGFloat
-    let maxHeight = UIScreen.main.bounds.height / 3.8
+    let maxHeight: CGFloat
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: 0) {
                 GeometryReader { _ in
-                    // HEADER CONTENT
                     HeaderContent(offset: $offset, maxHeight: maxHeight)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
-                        .opacity(fadeOutOpacity()) // Directly apply opacity
+                        .opacity(fadeOutOpacity())
                         .frame(height: getHeaderHeight(), alignment: .bottom)
                         .background(appState.currentTheme.colors.background)
-                        .overlay(
-                            // TOP NAV BAR
-                            TopBarView(offset: offset, maxHeight: maxHeight, topEdge: topEdge)
-                                .padding(.horizontal, 16)
-                                .frame(height: 60)
-                                .padding(.top, topEdge + 10),
-                            alignment: .top
-                        )
                 }
                 .frame(height: maxHeight)
+                .overlay(alignment: .top) {
+                    TopBarView(offset: offset, maxHeight: maxHeight, topEdge: topEdge)
+                        .frame(height: 60)
+                        .padding(.top, topEdge + 10)
+                }
                 .offset(y: -offset)
                 .zIndex(1)
 
-                // BOTTOM CONTENT VIEW
                 ZStack {
                     BottomContentView()
                         .background(
@@ -53,56 +47,36 @@ struct HomeStyleView: View {
                 .background(appState.currentTheme.colors.background)
                 .zIndex(0)
             }
-            .modifier(OffsetModifier(offset: $offset))
+        }
+        .contentMargins(.bottom, maxHeight - minHeaderHeight, for: .scrollContent)
+        .onScrollGeometryChange(for: CGFloat.self) { geo in
+            geo.contentOffset.y + geo.contentInsets.top
+        } action: { _, newValue in
+            offset = -newValue
         }
         .background(Palette.greyBackground)
-        .coordinateSpace(name: "SCROLL")
         .ignoresSafeArea(.all, edges: .top)
     }
 
-    // Helper Functions
+    // safe area + 10pt bar top padding + 60pt bar height + 20pt bottom breathing room
+    var minHeaderHeight: CGFloat { topEdge + 90 }
+
     func getHeaderHeight() -> CGFloat {
         let topHeight = maxHeight + offset
-        return topHeight > (60 + topEdge) ? topHeight : (60 + topEdge)
+        return topHeight > minHeaderHeight ? topHeight : minHeaderHeight
     }
 
     func getCornerRadius() -> CGFloat {
-        let progress = -offset / (maxHeight - (60 + topEdge))
+        let progress = -offset / (maxHeight - minHeaderHeight)
         let value = 1 - progress
         let radius = value * 35
         return offset < 0 ? radius : 35
     }
 
-    func fadeInOpacity() -> CGFloat {
-        let progress = -(offset + 70) / (maxHeight - (60 + topEdge * 3.2))
-        return max(0, min(1, progress)) // Clamp between 0 and 1
-    }
-
     func fadeOutOpacity() -> CGFloat {
         let progress = -offset / 70
         let opacity = 1 - progress
-        return max(0, min(1, opacity)) // Clamp between 0 and 1
-    }
-}
-
-struct OffsetModifier: ViewModifier {
-    @Binding var offset: CGFloat
-
-    func body(content: Content) -> some View {
-        content
-            .overlay(
-                GeometryReader { proxy -> Color in
-                    // getting value for coordinate space called scroll
-                    let minY = proxy.frame(in: .named("SCROLL")).minY
-
-                    DispatchQueue.main.async {
-                        offset = minY
-                    }
-
-                    return Color.clear
-                },
-                alignment: .top
-            )
+        return max(0, min(1, opacity))
     }
 }
 
@@ -111,7 +85,7 @@ struct OffsetModifier: ViewModifier {
     NavigationStack(path: $nav.routes) {
         GeometryReader { proxy in
             let topEdge = proxy.safeAreaInsets.top
-            HomeStyleView(topEdge: topEdge)
+            HomeStyleView(topEdge: topEdge, maxHeight: proxy.size.height / 3.8)
                 .environment(VehicleManager())
                 .environmentObject(NavigationManager())
                 .environment(AppState())

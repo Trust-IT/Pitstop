@@ -40,7 +40,7 @@ final class Number: Identifiable {
 
     func save(context: ModelContext) {
         let phone = telephone
-        let name = vehicle?.name ?? "unknown"
+        let name = vehicle?.displayName ?? "unknown"
         do {
             try context.save()
             Logger.persistence.debug("Number \(phone) for \(name) saved successfully")

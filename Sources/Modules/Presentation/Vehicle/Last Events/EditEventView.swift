@@ -49,7 +49,7 @@ struct EditEventView: View {
                 Alert(
                     title: Text(String(localized: "Are you sure you want to delete this report?")),
                     message: Text(String(localized: "This action cannot be undone")),
-                    primaryButton: .destructive(Text(PitstopAPPStrings.Common.delete)) {
+                    primaryButton: .destructive(Text(PitstopStrings.Localizable.Common.delete)) {
                         fuelExpense.delete(context: modelContext)
                         vehicleManager.refreshStats(modelContext: modelContext)
                         presentationMode.wrappedValue.dismiss()
@@ -65,7 +65,7 @@ struct EditEventView: View {
             presentationMode.wrappedValue.dismiss()
         }, label: {
             HStack {
-                Text(PitstopAPPStrings.Common.cancel)
+                Text(PitstopStrings.Localizable.Common.cancel)
                     .font(Typography.headerM)
             }
             .accentColor(Palette.greyHard)
@@ -105,7 +105,7 @@ struct EditEventView: View {
             HStack {
                 CategoryRow(
                     input: .init(
-                        title: PitstopAPPStrings.Common.day,
+                        title: PitstopStrings.Localizable.Common.day,
                         icon: .day,
                         color: Palette.greyLight
                     )
@@ -123,7 +123,7 @@ struct EditEventView: View {
             HStack {
                 CategoryRow(
                     input: .init(
-                        title: PitstopAPPStrings.Common.odometer,
+                        title: PitstopStrings.Localizable.Common.odometer,
                         icon: .odometer,
                         color: Palette.greyLight
                     )

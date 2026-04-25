@@ -1,18 +1,13 @@
 //
-//  OnbMoreInfoView.swift
+//  OnboardingVehicleDetailsView.swift
 //  Pitstop-APP
 //
 //  Created by Ivan Voloshchuk on 16/01/25.
 //
 
-import OSLog
-import SwiftData
 import SwiftUI
 
-struct OnbMoreInfoView: View {
-    @EnvironmentObject private var navManager: NavigationManager
-    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
-    @Environment(\.modelContext) private var modelContext
+struct OnboardingVehicleDetailsView: View {
     @Environment(AppState.self) private var appState
     @FocusState fileprivate var focusedField: FocusFieldAlertOB?
 
@@ -28,19 +23,17 @@ struct OnbMoreInfoView: View {
         transitionType: .slide
     )
 
-    @State private var odometer: Int = 0
-    @State private var plate: String = ""
-
-    let input: OnbVehicleInputData
+    @Binding var plate: String
+    @Binding var odometer: Int
 
     var body: some View {
         VStack {
             Spacer(minLength: 60)
             VStack(spacing: 12) {
-                Text(PitstopAPPStrings.Onb.moreInfo)
+                Text(PitstopStrings.Localizable.Onb.moreInfo)
                     .font(Typography.headerXL)
                     .foregroundColor(Palette.black)
-                Text(PitstopAPPStrings.Onb.vehicleInfo)
+                Text(PitstopStrings.Localizable.Onb.vehicleInfo)
                     .font(Typography.TextM)
                     .multilineTextAlignment(.center)
                     .foregroundColor(Palette.black)
@@ -49,7 +42,7 @@ struct OnbMoreInfoView: View {
                 Button(action: {
                     showPlateInput.present()
                 }, label: {
-                    moreInfoCard(text: PitstopAPPStrings.Onb.plateNumber,
+                    moreInfoCard(text: PitstopStrings.Localizable.Onb.plateNumber,
                                  bgColor: appState.currentTheme.colors.background,
                                  iconName: .star)
                 })
@@ -59,7 +52,7 @@ struct OnbMoreInfoView: View {
                 Button(action: {
                     showOdometerInput.present()
                 }, label: {
-                    moreInfoCard(text: PitstopAPPStrings.Common.odometer,
+                    moreInfoCard(text: PitstopStrings.Localizable.Common.odometer,
                                  bgColor: appState.currentTheme.colors.background,
                                  iconName: .odometer)
                 })
@@ -70,18 +63,6 @@ struct OnbMoreInfoView: View {
             .padding(.horizontal, 16)
             .padding(.top, 56)
             Spacer()
-            Button(action: {
-                addVehicle()
-                if appState.isAddingNewVehicle {
-                    navManager.push(.onboardingReady)
-                } else {
-                    navManager.push(.onboardingNotification)
-                }
-            }, label: {
-                Text(PitstopAPPStrings.Onb.addVehicle)
-            })
-            .buttonStyle(Primary())
-            .padding(.bottom, 32)
         }
         .background(Palette.greyBackground)
         .alert(config: $showPlateInput) {
@@ -91,28 +72,11 @@ struct OnbMoreInfoView: View {
             OdometerInputAlert(odometer: $odometer, showOdometerInput: $showOdometerInput)
         }
     }
-
-    private func addVehicle() {
-        let vehicle = Vehicle(
-            name: input.name,
-            brand: input.brand,
-            model: input.model,
-            mainFuelType: input.fuelType,
-            initialOdometer: odometer,
-            plate: plate
-        )
-        do {
-            try vehicle.saveToModelContext(context: modelContext)
-        } catch {
-            Logger.persistence.error("Onboarding add vehicle: \(error)")
-        }
-        vehicleManager.setCurrentVehicle(vehicle, modelContext: modelContext)
-    }
 }
 
 // MARK: Additional Views
 
-private extension OnbMoreInfoView {
+private extension OnboardingVehicleDetailsView {
     @ViewBuilder
     func moreInfoCard(
         text: String,
@@ -163,7 +127,7 @@ private extension OnbMoreInfoView {
     }
 }
 
-private extension OnbMoreInfoView {
+private extension OnboardingVehicleDetailsView {
     struct PlateInputAlert: View {
         @Binding var plateNumber: String
         @Binding var showPlateInput: AlertConfig
@@ -173,7 +137,7 @@ private extension OnbMoreInfoView {
             VStack(spacing: 16) {
                 HStack {
                     Spacer()
-                    Text(PitstopAPPStrings.Onb.writePlate)
+                    Text(PitstopStrings.Localizable.Onb.writePlate)
                         .foregroundColor(Palette.black)
                         .font(Typography.headerM)
                         .padding(.leading, 40)
@@ -193,9 +157,9 @@ private extension OnbMoreInfoView {
                 }
                 VStack(spacing: 12) {
                     TextField("DX390XX", text: $plateNumber)
-                        .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .plate))
+                        .boxFieldStyle(focusedField: $focusedField, field: .plate)
                         .padding(.horizontal, 16)
-                    Button(PitstopAPPStrings.Common.save) {
+                    Button(PitstopStrings.Localizable.Common.save) {
                         showPlateInput.dismiss()
                     }
                     .buttonStyle(Primary())
@@ -220,7 +184,7 @@ private extension OnbMoreInfoView {
             VStack(spacing: 16) {
                 HStack {
                     Spacer()
-                    Text(PitstopAPPStrings.Onb.writeOdometer)
+                    Text(PitstopStrings.Localizable.Onb.writeOdometer)
                         .foregroundColor(Palette.black)
                         .font(Typography.headerM)
                         .padding(.leading, 40)
@@ -239,11 +203,11 @@ private extension OnbMoreInfoView {
                     })
                 }
                 VStack(spacing: 12) {
-                    TextField(PitstopAPPStrings.Onb.odometerPlaceholder, value: $odometer, format: .number)
-                        .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: .odometer))
+                    TextField(PitstopStrings.Localizable.Onb.odometerPlaceholder, value: $odometer, format: .number)
+                        .boxFieldStyle(focusedField: $focusedField, field: .odometer)
                         .keyboardType(.numberPad)
                         .padding(.horizontal, 16)
-                    Button(PitstopAPPStrings.Common.save) {
+                    Button(PitstopStrings.Localizable.Common.save) {
                         showOdometerInput.dismiss()
                     }
                     .buttonStyle(Primary())
@@ -266,8 +230,8 @@ private extension OnbMoreInfoView {
 }
 
 #Preview {
-    OnbMoreInfoView(input: OnbVehicleInputData())
-        .environmentObject(NavigationManager())
-        .environment(VehicleManager())
+    @Previewable @State var plate = ""
+    @Previewable @State var odometer = 0
+    OnboardingVehicleDetailsView(plate: $plate, odometer: $odometer)
         .environment(AppState())
 }

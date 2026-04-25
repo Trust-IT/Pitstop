@@ -7,24 +7,32 @@
 
 import SwiftUI
 
-struct BoxTextFieldStyle<Field: Hashable>: TextFieldStyle {
+struct BoxFieldModifier<Field: Hashable>: ViewModifier {
     @FocusState.Binding var focusedField: Field?
     let field: Field
 
-    func _body(configuration: TextField<Self._Label>) -> some View {
-        configuration
-            .disableAutocorrection(true)
+    private let radius: CGFloat = 36
+
+    func body(content: Content) -> some View {
+        content
+            .autocorrectionDisabled()
             .focused($focusedField, equals: field)
             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
             .frame(height: 50)
             .background(focusedField == field ? Palette.greyLight : Palette.greyBackground)
             .font(Typography.TextM)
             .foregroundColor(Palette.black)
-            .cornerRadius(36)
+            .clipShape(RoundedRectangle(cornerRadius: radius))
             .overlay(
-                RoundedRectangle(cornerRadius: 36)
+                RoundedRectangle(cornerRadius: radius)
                     .stroke(focusedField == field ? Palette.black : Palette.greyInput, lineWidth: 1)
             )
+    }
+}
+
+extension View {
+    func boxFieldStyle<F: Hashable>(focusedField: FocusState<F?>.Binding, field: F) -> some View {
+        modifier(BoxFieldModifier(focusedField: focusedField, field: field))
     }
 }
 
@@ -33,5 +41,5 @@ struct BoxTextFieldStyle<Field: Hashable>: TextFieldStyle {
     @Previewable @FocusState var focusedField: Int?
 
     TextField("Test", text: $text)
-        .textFieldStyle(BoxTextFieldStyle(focusedField: $focusedField, field: 1))
+        .boxFieldStyle(focusedField: $focusedField, field: 1)
 }

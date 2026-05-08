@@ -5,14 +5,13 @@
 //  Created by Ivan Voloshchuk on 14/05/22.
 //
 
+import ChassisUI
 import PDFKit
-import SwiftData
+import PitstopData
 import SwiftUI
 
 struct BottomContentView: View {
-    @EnvironmentObject private var navManager: NavigationManager
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
-    @Environment(\.modelContext) private var modelContext
     @Environment(AppState.self) var appState: AppState
 
     @State private var viewAllNumbers = false
@@ -39,7 +38,11 @@ struct BottomContentView: View {
             .padding()
             .padding(.top, 10)
             .padding(.bottom, -10)
-            .sheet(isPresented: $viewAllEvents) { LastEventsView() }
+            .sheet(isPresented: $viewAllEvents) {
+                LastEventsView()
+                    .environment(appState)
+                    .environment(vehicleManager)
+            }
 
             if vehicleManager.currentVehicle.fuelExpenses.isEmpty {
                 HStack {
@@ -97,7 +100,7 @@ struct BottomContentView: View {
                             Button(action: {
                                 UIApplication.shared.open(URL(string: "tel://" + number.telephone)!)
                             }, label: {
-                                ElementCellView(title: number.title, subtitle: number.telephone, icon: .wrench)
+                                ElementCellView(title: number.title, subtitle: number.telephone, icon: ChassisUIAsset.wrench)
                             })
                         }
                         Button(action: {
@@ -125,14 +128,16 @@ struct BottomContentView: View {
         }
         .sheet(isPresented: $showEventEdit) {
             EditEventView(fuelExpense: $selectedFuelExpense)
+                .environment(appState)
+                .environment(vehicleManager)
         }
         .sheet(isPresented: $viewAllNumbers) {
             ImportantNumbersView()
+                .environment(vehicleManager)
                 .interactiveDismissDisabled(true)
         }
         .alert(config: $newNumberAlert) {
             AddNumberView(alert: $newNumberAlert)
-                .environment(\.modelContext, modelContext)
                 .environment(vehicleManager)
         }
     }
@@ -185,7 +190,7 @@ struct CategoryComponent: View {
                 Circle()
                     .frame(width: 32, height: 32)
                     .foregroundColor(Palette.greyLight)
-                Image(category.icon)
+                category.icon.swiftUIImage
                     .resizable()
                     .frame(width: 16, height: 16)
                     .tint(Palette.black)

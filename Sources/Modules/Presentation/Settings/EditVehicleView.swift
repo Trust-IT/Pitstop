@@ -5,7 +5,9 @@
 //  Created by Ivan Voloshchuk on 22/05/22.
 //
 
-import SwiftData
+import ChassisUI
+import NavigatorUI
+import PitstopData
 import SwiftUI
 
 private enum EditVehicleFocusField: Hashable {
@@ -13,10 +15,9 @@ private enum EditVehicleFocusField: Hashable {
 }
 
 struct EditVehicleView: View {
-    @EnvironmentObject private var navManager: NavigationManager
+    @Environment(\.navigator) private var navigator
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @FocusState private var focusedField: EditVehicleFocusField?
-    @Environment(\.modelContext) private var modelContext
     @Environment(AppState.self) var appState: AppState
 
     @State private var defaultFuelPicker: AlertConfig = .init(
@@ -31,9 +32,6 @@ struct EditVehicleView: View {
     }
 
     @State private var showDeleteAlert: Bool = false
-
-    @Query
-    var vehicles: [Vehicle]
 
     @Bindable var vehicle: Vehicle
 
@@ -98,12 +96,12 @@ struct EditVehicleView: View {
             Spacer()
             if vehicleManager.currentVehicle != vehicle {
                 Button("Set as current vehicle") {
-                    vehicleManager.setCurrentVehicle(vehicle, modelContext: modelContext)
-                    navManager.pop()
+                    vehicleManager.setCurrentVehicle(vehicle)
+                    navigator.back()
                 }
                 .buttonStyle(Primary())
             }
-            if vehicles.count > 1 {
+            if vehicleManager.vehicles.count > 1 {
                 Button(action: {
                     showDeleteAlert.toggle()
                 }, label: {
@@ -119,9 +117,8 @@ struct EditVehicleView: View {
                 title: Text("Are you sure you want to delete this vehicle?"),
                 message: Text("This action cannot be undone"),
                 primaryButton: .destructive(Text(PitstopStrings.Localizable.Common.delete)) {
-                    modelContext.delete(vehicle)
-                    vehicleManager.setCurrentVehicle(vehicles.first ?? .mock(), modelContext: modelContext)
-                    navManager.pop()
+                    vehicleManager.deleteVehicle(vehicle)
+                    navigator.back()
                 },
                 secondaryButton: .cancel()
             )
@@ -134,8 +131,8 @@ struct EditVehicleView: View {
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: {
-                    updateVehicle(vehicle)
-                    navManager.pop()
+                    vehicleManager.updateVehicle(vehicle, brand: brand, model: model, plate: plate, mainFuelType: mainFuelType)
+                    navigator.back()
                 }, label: {
                     Text(PitstopStrings.Localizable.Common.save)
                         .font(Typography.headerM)
@@ -149,13 +146,6 @@ struct EditVehicleView: View {
 }
 
 private extension EditVehicleView {
-    func updateVehicle(_ vehicle: Vehicle) {
-        vehicle.brand = brand
-        vehicle.model = model
-        vehicle.plate = plate
-        vehicle.mainFuelType = mainFuelType
-    }
-
     func fuelTypeBinding(for fuelType: Binding<FuelType>) -> Binding<String> {
         Binding(
             get: { fuelType.wrappedValue.rawValue },

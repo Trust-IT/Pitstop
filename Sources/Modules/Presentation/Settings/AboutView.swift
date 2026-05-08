@@ -5,6 +5,7 @@
 //  Created by Ivan Voloshchuk on 14/06/22.
 //
 
+import ChassisUI
 import SwiftUI
 
 struct AboutView: View {

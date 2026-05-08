@@ -6,6 +6,7 @@
 //
 
 import OSLog
+import PitstopData
 import SwiftUI
 import UIKit
 import VisionKit

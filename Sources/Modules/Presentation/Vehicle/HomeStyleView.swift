@@ -5,6 +5,8 @@
 //  Created by Ivan Voloshchuk on 12/05/22.
 //
 
+import ChassisUI
+import NavigatorUI
 import SwiftUI
 
 struct HomeStyleView: View {
@@ -81,15 +83,13 @@ struct HomeStyleView: View {
 }
 
 #Preview {
-    @Previewable @StateObject var nav = NavigationManager()
-    NavigationStack(path: $nav.routes) {
+    @Previewable @State var vehicleManager = PreviewSupport.vehicleManager
+    ManagedNavigationStack { _ in
         GeometryReader { proxy in
             let topEdge = proxy.safeAreaInsets.top
             HomeStyleView(topEdge: topEdge, maxHeight: proxy.size.height / 3.8)
-                .environment(VehicleManager())
-                .environmentObject(NavigationManager())
+                .environment(vehicleManager)
                 .environment(AppState())
-                .environment(SceneDelegate())
         }
     }
 }

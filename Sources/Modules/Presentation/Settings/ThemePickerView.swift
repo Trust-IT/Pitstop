@@ -5,7 +5,7 @@
 //  Created by Ivan Voloshchuk on 04/01/25.
 //
 
-import SwiftData
+import ChassisUI
 import SwiftUI
 
 struct ThemePickerView: View {
@@ -108,10 +108,10 @@ struct ThemePickerView: View {
 }
 
 #Preview {
-    let previewModel = Preview()
-    previewModel.addVehicle(.mock())
-    return ThemePickerView(alert: .constant(.init()))
-        .modelContainer(previewModel.modelContainer)
+    @Previewable @State var appState = AppState()
+    ThemePickerView(alert: .constant(.init()))
+        .modelContainer(PreviewSupport.modelContainer)
+        .environment(appState)
         .background(Palette.black)
 }
 

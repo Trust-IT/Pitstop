@@ -5,6 +5,8 @@
 //  Created by Ivan Voloshchuk on 14/05/22.
 //
 
+import ChassisUI
+import PitstopData
 import SwiftUI
 
 enum FocusFieldNumbers: Hashable {
@@ -13,7 +15,6 @@ enum FocusFieldNumbers: Hashable {
 }
 
 struct AddNumberView: View {
-    @Environment(\.modelContext) private var modelContext
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @FocusState var focusedField: FocusFieldNumbers?
     @Binding var alert: AlertConfig
@@ -103,8 +104,7 @@ private extension AddNumberView {
             telephone: numberPhone,
             vehicle: vehicleManager.currentVehicle
         )
-        number.insert(context: modelContext)
-        vehicleManager.currentVehicle.numbers.append(number)
+        vehicleManager.addNumber(number)
     }
 }
 

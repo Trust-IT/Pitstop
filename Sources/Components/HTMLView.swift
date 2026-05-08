@@ -8,33 +8,41 @@
 import Foundation
 import OSLog
 import SwiftUI
-import WebKit
 
-struct HTMLView: UIViewRepresentable {
+public struct HTMLView: View {
     let htmlFileName: String
 
-    func makeUIView(context _: Context) -> WKWebView {
-        WKWebView()
+    @State private var content: AttributedString = .init()
+
+    public var body: some View {
+        ScrollView {
+            Text(content)
+                .padding()
+        }
+        .task { load() }
     }
 
-    func updateUIView(_ uiView: UIViewType, context _: Context) {
-        uiView.load(htmlFileName)
-    }
-}
-
-extension WKWebView {
-    func load(_ htmlFileName: String) {
+    private func load() {
         guard !htmlFileName.isEmpty else {
             Logger.navigation.warning("HTMLView: empty file name")
             return
         }
-        guard let filePath = Bundle.main.path(forResource: htmlFileName, ofType: "html") else {
+        guard let filePath = Bundle.main.path(forResource: htmlFileName, ofType: "html"),
+              let htmlData = try? Data(contentsOf: URL(fileURLWithPath: filePath))
+        else {
             Logger.navigation.warning("HTMLView: file path not found for \(htmlFileName)")
             return
         }
         do {
-            let htmlString = try String(contentsOfFile: filePath, encoding: .utf8)
-            loadHTMLString(htmlString, baseURL: URL(fileURLWithPath: filePath))
+            let nsAttr = try NSAttributedString(
+                data: htmlData,
+                options: [
+                    .documentType: NSAttributedString.DocumentType.html,
+                    .characterEncoding: String.Encoding.utf8.rawValue
+                ],
+                documentAttributes: nil
+            )
+            content = AttributedString(nsAttr)
         } catch {
             Logger.navigation.error("HTMLView: failed to load \(htmlFileName): \(error)")
         }

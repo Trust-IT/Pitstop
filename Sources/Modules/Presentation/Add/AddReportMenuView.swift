@@ -5,10 +5,13 @@
 //  Created by Ivan Voloshchuk on 25/01/25.
 //
 
+import ChassisUI
+import NavigatorUI
+import PitstopData
 import SwiftUI
 
 struct AddReportMenuView: View {
-    @EnvironmentObject private var navManager: NavigationManager
+    @Environment(\.navigator) private var navigator
     @Binding var isPresented: Bool
 
     var body: some View {
@@ -18,14 +21,14 @@ struct AddReportMenuView: View {
                 .foregroundStyle(Palette.black)
             Button(action: {
                 isPresented.toggle()
-                navManager.push(.fuelReport(input: .mock()))
+                navigator.navigate(to: AddDestinations.fuelReport(input: .mock()))
             }, label: {
                 HStack {
                     ZStack {
                         Circle()
                             .fill(Palette.colorYellow)
                             .frame(width: 34, height: 34)
-                        Image(.fuel)
+                        ChassisUIAsset.fuel.swiftUIImage
                             .resizable()
                             .frame(width: 20, height: 20)
                             .foregroundStyle(Palette.yellowAccent)
@@ -44,14 +47,14 @@ struct AddReportMenuView: View {
             })
             Button(action: {
                 isPresented.toggle()
-                navManager.push(.reminderReport(input: .mock(), isEdit: false))
+                navigator.send(ShowReminderCreateEvent())
             }, label: {
                 HStack {
                     ZStack {
                         Circle()
                             .fill(Palette.colorGreen)
                             .frame(width: 34, height: 34)
-                        Image(.bell)
+                        ChassisUIAsset.bell.swiftUIImage
                             .resizable()
                             .frame(width: 20, height: 20)
                             .foregroundStyle(Palette.greenAccent)
@@ -70,14 +73,14 @@ struct AddReportMenuView: View {
             })
             Button(action: {
                 isPresented.toggle()
-                navManager.present(.onboardingAddVehicle)
+                navigator.send(ShowAddVehicleEvent())
             }, label: {
                 HStack {
                     ZStack {
                         Circle()
                             .fill(Palette.colorViolet)
                             .frame(width: 34, height: 34)
-                        Image(.carSettings)
+                        ChassisUIAsset.carSettings.swiftUIImage
                             .resizable()
                             .frame(width: 18, height: 18)
                             .foregroundStyle(Palette.violetAccent)
@@ -94,7 +97,6 @@ struct AddReportMenuView: View {
                     Spacer()
                 }
             })
-            Spacer()
         }
         .padding(.top, 40)
         .padding(.horizontal, 18)
@@ -103,8 +105,7 @@ struct AddReportMenuView: View {
 }
 
 #Preview {
+    @Previewable @State var vehicleManager = PreviewSupport.vehicleManager
     AddReportMenuView(isPresented: .constant(true))
-        .environmentObject(NavigationManager())
-        .environment(VehicleManager())
-        .environment(SceneDelegate())
+        .environment(vehicleManager)
 }

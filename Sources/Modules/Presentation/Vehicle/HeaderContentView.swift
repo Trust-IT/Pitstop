@@ -5,6 +5,8 @@
 //  Created by Ivan Voloshchuk on 12/05/22.
 //
 
+import ChassisUI
+import PitstopData
 import SwiftUI
 
 struct HeaderContent: View {

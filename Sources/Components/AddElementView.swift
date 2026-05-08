@@ -5,14 +5,15 @@
 //  Created by Ivan Voloshchuk on 12/02/25.
 //
 
+import ChassisUI
 import SwiftUI
 
-struct AddElementView: View {
+public struct AddElementView: View {
     let label: String
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .center, spacing: 10) {
-            Image(.plus)
+            ChassisUIAsset.plus.swiftUIImage
                 .foregroundColor(Palette.greyMiddle)
             Text(label)
                 .foregroundColor(Palette.greyMiddle)

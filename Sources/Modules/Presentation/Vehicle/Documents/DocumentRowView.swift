@@ -5,15 +5,17 @@
 //  Created by Ivan Voloshchuk on 11/02/25.
 //
 
+import ChassisUI
+import NavigatorUI
 import OSLog
-import SwiftData
+import PitstopData
 import SwiftUI
 
 struct DocumentRowView: View {
-    @EnvironmentObject private var navManager: NavigationManager
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.navigator) private var navigator
+    @Environment(VehicleManager.self) private var vehicleManager: VehicleManager
 
-    @Query var documents: [Document]
+    private var documents: [Document] { vehicleManager.documents }
     @State private var selectedDocument: Document = .mock()
     @State private var selectedDocumentType: DocumentPickerType?
     @State private var showDocumentPicker: AlertConfig = .init(
@@ -35,7 +37,7 @@ struct DocumentRowView: View {
                             selectedDocument = document
                             showPDF.toggle()
                         }, label: {
-                            ElementCellView(title: document.title, icon: .documents)
+                            ElementCellView(title: document.title, icon: ChassisUIAsset.documents)
                         })
                     }
                     Button(action: {
@@ -85,7 +87,7 @@ struct DocumentRowView: View {
                 presentImporter.toggle()
                 selectedDocumentType = nil
             case .photo:
-                navManager.push(.docScanner)
+                navigator.navigate(to: VehicleDestinations.docScanner)
                 selectedDocumentType = nil
             }
         }
@@ -123,9 +125,8 @@ private extension DocumentRowView {
         do {
             let data = try Data(contentsOf: url)
             let documentTitle = url.deletingPathExtension().lastPathComponent
-
             let newDocument = Document(data: data, title: documentTitle)
-            try newDocument.saveToModelContext(context: modelContext)
+            vehicleManager.addDocument(newDocument)
         } catch {
             // TODO: Implement proper error handling
             Logger.persistence.error("Error when processing document: \(error)")
@@ -134,10 +135,11 @@ private extension DocumentRowView {
 }
 
 #Preview {
-    DocumentRowView()
-        .background(Color.red)
-        .environment(VehicleManager())
-        .environmentObject(NavigationManager())
-        .environment(AppState())
-        .environment(SceneDelegate())
+    @Previewable @State var vehicleManager = PreviewSupport.vehicleManager
+    ManagedNavigationStack {
+        DocumentRowView()
+            .background(Color.red)
+            .environment(vehicleManager)
+            .environment(AppState())
+    }
 }

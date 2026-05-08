@@ -5,7 +5,8 @@
 //  Created by Ivan Voloshchuk on 09/05/22.
 //
 
-import SwiftData
+import ChassisUI
+import PitstopData
 import SwiftUI
 
 struct ReminderInputView: View {
@@ -22,7 +23,7 @@ struct ReminderInputView: View {
             HStack {
                 CategoryRow(input: .init(
                     title: PitstopStrings.Localizable.Common.category,
-                    icon: .category,
+                    icon: ChassisUIAsset.category,
                     color: appState.currentTheme.colors.background
                 )
                 )
@@ -53,7 +54,7 @@ struct ReminderInputView: View {
                 label: {
                     CategoryRow(input: .init(
                         title: String(localized: "Based on"),
-                        icon: .star,
+                        icon: ChassisUIAsset.star,
                         color: appState.currentTheme.colors.background
                     ))
                 }
@@ -67,7 +68,7 @@ struct ReminderInputView: View {
                 ) {
                     CategoryRow(input: .init(
                         title: String(localized: "Remind me on"),
-                        icon: .bell,
+                        icon: ChassisUIAsset.bell,
                         color: appState.currentTheme.colors.background
                     ))
 
@@ -77,7 +78,7 @@ struct ReminderInputView: View {
                 .accentColor(appState.currentTheme.accentColor)
 //            default:
 //                HStack {
-//                    CategoryRow(title: String(localized: "Remind me in"), icon: .remindMe, color: Palette.colorGreen)
+//                    CategoryRow(title: String(localized: "Remind me in"), icon: ChassisUIAsset.remindMe, color: Palette.colorGreen)
 //                    Spacer()
 //                    TextField("1000", value: $reminderVM.distance, formatter: NumberFormatter())
 //                        .font(Typography.headerM)
@@ -110,7 +111,7 @@ struct ReminderInputView: View {
                     Circle()
                         .frame(width: 32, height: 32)
                         .foregroundColor(reminder.note.isEmpty ? Palette.greyLight : appState.currentTheme.colors.background)
-                    Image(.note)
+                    ChassisUIAsset.note.swiftUIImage
                         .resizable()
                         .foregroundColor(reminder.note.isEmpty ? Palette.greyInput : appState.currentTheme.accentColor)
                         .frame(width: 16, height: 16)
@@ -130,9 +131,8 @@ struct ReminderInputView: View {
 
 #Preview {
     @Previewable @FocusState var reminderInputFocus: ReminderInputFocusField?
+    @Previewable @State var vehicleManager = PreviewSupport.vehicleManager
     ReminderInputView(reminder: .mock(), reminderInputFocus: $reminderInputFocus)
-        .environmentObject(NavigationManager())
-        .environment(VehicleManager())
+        .environment(vehicleManager)
         .environment(AppState())
-        .environment(SceneDelegate())
 }

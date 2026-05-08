@@ -5,46 +5,69 @@
 //  Created by Ivan Voloshchuk on 06/05/22.
 //
 
+import ChassisUI
+import NavigatorUI
+import PitstopData
 import SwiftUI
 
 struct EntryPointView: View {
-    @EnvironmentObject private var navManager: NavigationManager
     @Environment(AppState.self) var appState: AppState
+    @Environment(VehicleManager.self) var vehicleManager: VehicleManager
+    @State private var selectedTab: TabBarItem = .vehicle
     @State private var isPresented = false
+    @State private var sheetContentHeight = CGFloat(0)
 
     var body: some View {
-        TabView(selection: $navManager.selectedTab) {
-            Tab(PitstopStrings.Localizable.Common.vehicle, image: PitstopAsset.Assets.carIcon.name, value: TabBarItem.vehicle) {
+        TabView(selection: $selectedTab) {
+            Tab(PitstopStrings.Localizable.Common.vehicle, image: ChassisUIAsset.carIcon.name, value: TabBarItem.vehicle) {
                 VehicleView()
             }
 
-            Tab(PitstopStrings.Localizable.Common.analytics, image: PitstopAsset.Assets.chartIcon.name, value: TabBarItem.analytics) {
+            Tab(PitstopStrings.Localizable.Common.analytics, image: ChassisUIAsset.chartIcon.name, value: TabBarItem.analytics) {
                 AnalyticsEntryPointView()
             }
 
-            Tab(PitstopStrings.Localizable.Common.settings, image: PitstopAsset.Assets.settingsIcon.name, value: TabBarItem.settings) {
+            Tab(PitstopStrings.Localizable.Common.settings, image: ChassisUIAsset.settingsIcon.name, value: TabBarItem.settings) {
                 SettingsView()
             }
 
-            Tab(PitstopStrings.Localizable.Common.add, image: PitstopAsset.Assets.plusIcon.name, value: TabBarItem.add, role: .search) {
+            Tab(PitstopStrings.Localizable.Common.add, image: ChassisUIAsset.plusIcon.name, value: TabBarItem.add, role: .search) {
                 Text("If you see this, then something is broken")
             }
         }
         .tabBarMinimizeBehavior(.onScrollDown)
         .environment(appState)
-        .onChange(of: navManager.selectedTab) { previousTab, currentTab in
+        .onChange(of: selectedTab) { previousTab, currentTab in
             if currentTab == .add {
-                navManager.selectedTab = previousTab
+                selectedTab = previousTab
                 isPresented.toggle()
             }
         }
         .sheet(isPresented: $isPresented) {
             AddReportMenuView(isPresented: $isPresented)
                 .environment(appState)
-                .presentationDetents([.fraction(0.35)])
+                .background(
+                    GeometryReader { proxy in
+                        Color.clear.task { sheetContentHeight = proxy.size.height }
+                    }
+                )
+                .presentationDetents([.height(sheetContentHeight)])
                 .presentationDragIndicator(.visible)
         }
+        .presentationModifier(inherits: true) { destination in
+            destination()
+                .environment(appState)
+                .environment(vehicleManager)
+        }
         .tint(appState.currentTheme.accentColor)
+        .onNavigationReceive { (_: ShowOnboardingWelcomeEvent, nav) in
+            nav.navigate(to: OnboardingDestinations.welcome)
+            return .auto
+        }
+        .onNavigationReceive { (_: ShowAddVehicleEvent, nav) in
+            nav.navigate(to: OnboardingDestinations.addVehicle)
+            return .auto
+        }
     }
 }
 
@@ -56,9 +79,8 @@ enum TabBarItem: String {
 }
 
 #Preview {
+    @Previewable @State var vehicleManager = PreviewSupport.vehicleManager
     EntryPointView()
-        .environmentObject(NavigationManager())
-        .environment(VehicleManager())
+        .environment(vehicleManager)
         .environment(AppState())
-        .environment(SceneDelegate())
 }

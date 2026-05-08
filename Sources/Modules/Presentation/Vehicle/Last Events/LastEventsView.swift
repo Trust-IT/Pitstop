@@ -5,7 +5,8 @@
 //  Created by Ivan Voloshchuk on 06/01/25.
 //
 
-import SwiftData
+import ChassisUI
+import PitstopData
 import SwiftUI
 
 // TODO: Implement categorization for months + show expense for each month
@@ -13,7 +14,7 @@ import SwiftUI
 struct LastEventsView: View {
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @Environment(AppState.self) var appState: AppState
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     @State private var isFuelFilter: Bool = true
     @State private var fuelExpenses: [FuelExpense] = []
@@ -51,7 +52,7 @@ struct LastEventsView: View {
             .navigationBarItems(
                 leading:
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 }, label: {
                     Text(PitstopStrings.Localizable.Common.cancel)
                         .font(Typography.headerM)

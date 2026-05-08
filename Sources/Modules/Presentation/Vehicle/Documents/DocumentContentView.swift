@@ -5,13 +5,15 @@
 //  Created by Ivan Voloshchuk on 11/06/22.
 //
 
+import ChassisUI
 import PDFKit
+import PitstopData
 import SwiftUI
 
 struct DocumentContentView: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(VehicleManager.self) private var vehicleManager: VehicleManager
     @Binding var document: Document
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
     var body: some View {
         NavigationView {
             VStack {
@@ -23,7 +25,7 @@ struct DocumentContentView: View {
             .navigationBarItems(
                 leading:
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 }, label: {
                     Text(PitstopStrings.Localizable.Common.cancel)
                         .font(Typography.headerM)
@@ -47,10 +49,10 @@ struct DocumentContentView: View {
                             }
                         }
                         Button(action: {
-                            modelContext.delete(document)
-                            presentationMode.wrappedValue.dismiss()
+                            vehicleManager.deleteDocument(document)
+                            dismiss()
                         }, label: {
-                            Image(.deleteIcon)
+                            ChassisUIAsset.deleteIcon.swiftUIImage
                                 .resizable()
                                 .frame(width: 20, height: 22)
                                 .foregroundStyle(Palette.black)

@@ -5,12 +5,12 @@
 //  Created by Ivan Voloshchuk on 31/05/22.
 //
 
-import SwiftData
+import ChassisUI
+import PitstopData
 import SwiftUI
 
 struct EditEventView: View {
-    @Environment(\.presentationMode) private var presentationMode
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @Environment(AppState.self) var appState: AppState
     @State var showDeleteAlert = false
@@ -50,9 +50,8 @@ struct EditEventView: View {
                     title: Text(String(localized: "Are you sure you want to delete this report?")),
                     message: Text(String(localized: "This action cannot be undone")),
                     primaryButton: .destructive(Text(PitstopStrings.Localizable.Common.delete)) {
-                        fuelExpense.delete(context: modelContext)
-                        vehicleManager.refreshStats(modelContext: modelContext)
-                        presentationMode.wrappedValue.dismiss()
+                        vehicleManager.deleteFuelExpense(fuelExpense)
+                        dismiss()
                     },
                     secondaryButton: .cancel()
                 )
@@ -62,7 +61,7 @@ struct EditEventView: View {
 
     private var backButton: some View {
         Button(action: {
-            presentationMode.wrappedValue.dismiss()
+            dismiss()
         }, label: {
             HStack {
                 Text(PitstopStrings.Localizable.Common.cancel)
@@ -88,7 +87,7 @@ struct EditEventView: View {
                     input:
                     .init(
                         title: String(localized: "Cost"),
-                        icon: .other,
+                        icon: ChassisUIAsset.other,
                         color: Palette.greyLight
                     )
                 )
@@ -106,7 +105,7 @@ struct EditEventView: View {
                 CategoryRow(
                     input: .init(
                         title: PitstopStrings.Localizable.Common.day,
-                        icon: .day,
+                        icon: ChassisUIAsset.day,
                         color: Palette.greyLight
                     )
                 )
@@ -124,7 +123,7 @@ struct EditEventView: View {
                 CategoryRow(
                     input: .init(
                         title: PitstopStrings.Localizable.Common.odometer,
-                        icon: .odometer,
+                        icon: ChassisUIAsset.odometer,
                         color: Palette.greyLight
                     )
                 )
@@ -142,7 +141,7 @@ struct EditEventView: View {
                 CategoryRow(
                     input: .init(
                         title: String(localized: "Fuel type"),
-                        icon: .fuelType,
+                        icon: ChassisUIAsset.fuelType,
                         color: Palette.greyLight
                     )
                 )
@@ -159,7 +158,7 @@ struct EditEventView: View {
                 CategoryRow(
                     input: .init(
                         title: String(localized: "Price/Liter"),
-                        icon: .priceLiter,
+                        icon: ChassisUIAsset.priceLiter,
                         color: Palette.greyLight
                     )
                 )
@@ -177,7 +176,7 @@ struct EditEventView: View {
                 CategoryRow(
                     input: .init(
                         title: String(localized: "Liters"),
-                        icon: .liters,
+                        icon: ChassisUIAsset.liters,
                         color: Palette.greyLight
                     )
                 )

@@ -6,6 +6,7 @@
 //
 
 import OSLog
+import PitstopData
 @preconcurrency import UserNotifications
 
 actor NotificationManager {
@@ -87,7 +88,7 @@ extension NotificationManager {
     }
 }
 
-struct ReminderNotificationData {
+struct ReminderNotificationData: Sendable {
     let uuid: UUID
     let title: String
     let date: Date

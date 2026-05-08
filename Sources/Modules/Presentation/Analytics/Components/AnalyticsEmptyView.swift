@@ -5,6 +5,7 @@
 //  Created by Ivan Voloshchuk on 24/04/26.
 //
 
+import ChassisUI
 import SwiftUI
 
 struct AnalyticsEmptyView: View {
@@ -14,7 +15,7 @@ struct AnalyticsEmptyView: View {
     var body: some View {
         VStack(spacing: 16) {
             Spacer()
-            Image(.page5)
+            ChassisUIAsset.page5.swiftUIImage
                 .resizable()
                 .scaledToFit()
                 .frame(width: 260)

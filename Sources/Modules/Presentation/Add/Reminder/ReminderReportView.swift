@@ -5,13 +5,15 @@
 //  Created by Ivan Voloshchuk on 06/05/22.
 //
 
-import OSLog
+import ChassisUI
+import NavigatorUI
+import PitstopData
 import SwiftUI
 
 struct ReminderReportView: View {
-    @EnvironmentObject var navManager: NavigationManager
+    @Environment(\.navigator) var navigator
     @Environment(AppState.self) var appState: AppState
-    @Environment(\.modelContext) private var modelContext
+    @Environment(VehicleManager.self) private var vehicleManager: VehicleManager
 
     @State private var showDeleteAlert = false
     @State private var showAlert = false
@@ -55,12 +57,11 @@ struct ReminderReportView: View {
         .toolbar {
             ToolbarItem(placement: .navigation) {
                 Button(action: {
-                    navManager.pop()
+                    navigator.dismiss()
                 }, label: {
-                    Image(.arrowLeft)
-                        .resizable()
-                        .frame(width: 12, height: 16)
-                        .tint(Palette.black)
+                    Image(systemName: "xmark")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(Palette.black)
                 })
             }
 
@@ -101,8 +102,8 @@ struct ReminderReportView: View {
                 message: Text(PitstopStrings.Localizable.Common.undone),
                 primaryButton: .destructive(Text(PitstopStrings.Localizable.Common.delete)) {
                     removeNotification(for: reminder)
-                    deleteReminder(reminder)
-                    navManager.pop()
+                    vehicleManager.deleteReminder(reminder)
+                    navigator.dismiss()
                 },
                 secondaryButton: .cancel()
             )
@@ -128,10 +129,8 @@ private extension ReminderReportView {
                 }
 
                 await NotificationManager.shared.createNotification(for: ReminderNotificationData(from: reminder))
-
-                try reminder.saveToModelContext(context: modelContext)
-
-                navManager.pop()
+                vehicleManager.saveReminder(reminder)
+                navigator.back()
             } catch {
                 showAlert(with: PitstopStrings.Localizable.Common.error, and: error.localizedDescription)
             }
@@ -142,15 +141,6 @@ private extension ReminderReportView {
         let inputData = ReminderNotificationData(from: reminder)
         Task {
             await NotificationManager.shared.removeNotification(for: inputData)
-        }
-    }
-
-    func deleteReminder(_ reminder: Reminder) {
-        modelContext.delete(reminder)
-        do {
-            try modelContext.save()
-        } catch {
-            Logger.persistence.error("Failed to delete reminder: \(error)")
         }
     }
 }

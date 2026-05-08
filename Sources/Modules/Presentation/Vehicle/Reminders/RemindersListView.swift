@@ -5,27 +5,17 @@
 //  Created by Ivan Voloshchuk on 03/06/22.
 //
 
-import OSLog
-import SwiftData
+import ChassisUI
+import NavigatorUI
+import PitstopData
 import SwiftUI
 
 struct RemindersListView: View {
-    @EnvironmentObject var navManager: NavigationManager
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.navigator) var navigator
+    @Environment(VehicleManager.self) private var vehicleManager: VehicleManager
 
-    static var currentDate: Date { Date.now }
-
-    @Query(
-        filter: #Predicate<Reminder> { $0.date >= currentDate },
-        sort: [SortDescriptor(\Reminder.date, order: .forward)]
-    )
-    var reminders: [Reminder]
-
-    @Query(
-        filter: #Predicate<Reminder> { $0.date < currentDate },
-        sort: [SortDescriptor(\Reminder.date, order: .forward)]
-    )
-    var expiredReminders: [Reminder]
+    private var reminders: [Reminder] { vehicleManager.currentReminders }
+    private var expiredReminders: [Reminder] { vehicleManager.expiredReminders }
 
     var body: some View {
         VStack {
@@ -35,7 +25,7 @@ struct RemindersListView: View {
                     items: reminders,
                     areItemsExpired: false,
                     onItemTap: { reminder in
-                        navManager.push(.reminderReport(input: reminder, isEdit: true))
+                        navigator.navigate(to: VehicleDestinations.reminderReport(input: reminder, isEdit: true))
                     }
                 )
 
@@ -44,7 +34,7 @@ struct RemindersListView: View {
                     items: expiredReminders,
                     areItemsExpired: true,
                     onItemTap: { reminder in
-                        navManager.push(.expiredReminder(input: reminder))
+                        navigator.navigate(to: VehicleDestinations.expiredReminder(input: reminder))
                     }
                 )
             }
@@ -65,6 +55,15 @@ struct RemindersListView: View {
                 Text(PitstopStrings.Localizable.Reminder.title)
                     .font(Typography.headerM)
                     .foregroundColor(Palette.black)
+            }
+            ToolbarItem(placement: .navigation) {
+                Button(action: {
+                    navigator.dismiss()
+                }, label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(Palette.black)
+                })
             }
         }
     }
@@ -121,7 +120,7 @@ private extension RemindersListView {
                     Circle()
                         .frame(width: 32, height: 32)
                         .foregroundColor(expired ? Palette.greyLight : Palette.colorOrange)
-                    Image(item.category.icon)
+                    item.category.icon.swiftUIImage
                         .resizable()
                         .tint(expired ? Palette.greyInput : Palette.orangeAccent)
                         .frame(width: 16, height: 16)
@@ -154,25 +153,15 @@ private extension RemindersListView {
 
 private extension RemindersListView {
     func deleteExpiredReminders() {
-        for reminder in expiredReminders {
-            modelContext.delete(reminder)
-        }
-
-        do {
-            try modelContext.save()
-        } catch {
-            Logger.persistence.error("Failed to delete reminders: \(error)")
-        }
+        vehicleManager.deleteAllExpiredReminders()
     }
 }
 
 #Preview {
-    @Previewable @State var navManager = NavigationManager()
-    NavigationStack(path: $navManager.routes) {
+    @Previewable @State var vehicleManager = PreviewSupport.vehicleManager
+    ManagedNavigationStack {
         RemindersListView()
-            .environment(VehicleManager())
-            .environmentObject(navManager)
+            .environment(vehicleManager)
             .environment(AppState())
-            .environment(SceneDelegate())
     }
 }

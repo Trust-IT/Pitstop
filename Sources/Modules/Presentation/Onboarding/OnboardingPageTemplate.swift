@@ -3,10 +3,11 @@
 //  Pitstop-APP
 //
 
+import ChassisUI
 import SwiftUI
 
 struct OnboardingPageTemplate: View {
-    let image: ImageResource
+    let image: ChassisUIImages
     let title: String
     let subtitle: String
 
@@ -25,7 +26,7 @@ struct OnboardingPageTemplate: View {
             }
             .padding(.horizontal, 24)
             Spacer()
-            Image(image)
+            image.swiftUIImage
             Spacer()
         }
         .background(Palette.greyBackground)

@@ -5,12 +5,14 @@
 //  Created by Ivan Voloshchuk on 10/06/22.
 //
 
+import ChassisUI
+import PitstopData
 import SwiftUI
 
 struct EditNumberView: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(VehicleManager.self) private var vehicleManager: VehicleManager
     @FocusState var focusedField: FocusFieldNumbers?
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) private var dismiss
 
     @State private var showAlert = false
     var isDisabled: Bool {
@@ -78,8 +80,8 @@ struct EditNumberView: View {
                         title: Text("Are you sure you want to delete this contact?"),
                         message: Text("This action cannot be undone"),
                         primaryButton: .destructive(Text(PitstopStrings.Localizable.Common.delete)) {
-                            number.delete(context: modelContext)
-                            presentationMode.wrappedValue.dismiss()
+                            vehicleManager.deleteNumber(number)
+                            dismiss()
                         },
                         secondaryButton: .cancel()
                     )
@@ -92,10 +94,10 @@ struct EditNumberView: View {
             .navigationBarItems(
                 leading:
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 }, label: {
                     HStack {
-                        Image("arrowLeft")
+                        ChassisUIAsset.arrowLeft.swiftUIImage
                         Text("Back")
                             .font(Typography.headerM)
                     }
@@ -104,7 +106,7 @@ struct EditNumberView: View {
                 trailing:
                 Button(action: {
                     updateNumber()
-                    presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 }, label: {
                     Text(PitstopStrings.Localizable.Common.save)
                         .font(Typography.headerM)
@@ -125,9 +127,7 @@ struct EditNumberView: View {
 
 private extension EditNumberView {
     func updateNumber() {
-        number.title = title
-        number.telephone = telephone
-        number.save(context: modelContext)
+        vehicleManager.updateNumber(number, title: title, telephone: telephone)
     }
 }
 

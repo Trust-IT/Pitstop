@@ -5,13 +5,14 @@
 //  Created by Ivan Voloshchuk on 11/06/22.
 //
 
-import OSLog
-import SwiftData
+import ChassisUI
+import NavigatorUI
+import PitstopData
 import SwiftUI
 
 struct ExpiredReminderView: View {
-    @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject var navManager: NavigationManager
+    @Environment(VehicleManager.self) private var vehicleManager: VehicleManager
+    @Environment(\.navigator) var navigator
     let reminder: Reminder
 
     var body: some View {
@@ -20,8 +21,8 @@ struct ExpiredReminderView: View {
                 .disabled(true)
             Spacer()
             Button(action: {
-                deleteReminder(reminder)
-                navManager.pop()
+                vehicleManager.deleteReminder(reminder)
+                navigator.back()
             }, label: {
                 DeleteButton(title: PitstopStrings.Localizable.Reminder.clear)
             })
@@ -44,7 +45,7 @@ struct ExpiredReminderView: View {
             HStack {
                 CategoryRow(input: .init(
                     title: PitstopStrings.Localizable.Common.title,
-                    icon: .other,
+                    icon: ChassisUIAsset.other,
                     color: Palette.colorViolet,
                     isDisabled: true
                 ))
@@ -63,7 +64,7 @@ struct ExpiredReminderView: View {
             HStack {
                 CategoryRow(input: .init(
                     title: PitstopStrings.Localizable.Common.category,
-                    icon: .category,
+                    icon: ChassisUIAsset.category,
                     color: Palette.colorYellow,
                     isDisabled: true
                 ))
@@ -81,7 +82,7 @@ struct ExpiredReminderView: View {
             HStack {
                 CategoryRow(input: .init(
                     title: PitstopStrings.Localizable.Common.day,
-                    icon: .day,
+                    icon: ChassisUIAsset.day,
                     color: Palette.colorGreen,
                     isDisabled: true
                 ))
@@ -100,7 +101,7 @@ struct ExpiredReminderView: View {
                 HStack {
                     CategoryRow(input: .init(
                         title: PitstopStrings.Localizable.Common.note,
-                        icon: .note,
+                        icon: ChassisUIAsset.note,
                         color: Palette.colorViolet,
                         isDisabled: true
                     ))
@@ -112,17 +113,6 @@ struct ExpiredReminderView: View {
                 }
                 .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
             }
-        }
-    }
-}
-
-private extension ExpiredReminderView {
-    func deleteReminder(_ reminder: Reminder) {
-        modelContext.delete(reminder)
-        do {
-            try modelContext.save()
-        } catch {
-            Logger.persistence.error("Failed to delete reminder: \(error)")
         }
     }
 }

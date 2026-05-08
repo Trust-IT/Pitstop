@@ -6,6 +6,8 @@
 //
 
 import Charts
+import ChassisUI
+import PitstopData
 import SwiftUI
 
 enum MonthlyMetric: String, CaseIterable, Identifiable {
@@ -48,7 +50,6 @@ enum ChartTrend {
 struct AnalyticsMonthlyView: View {
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
     @Environment(AppState.self) var appState: AppState
-    @Environment(\.modelContext) private var modelContext
 
     @State private var selectedValue: String?
     @State private var selectedMetric: MonthlyMetric = .efficiency
@@ -230,7 +231,7 @@ struct AnalyticsMonthlyView: View {
     }
 
     private func loadData() {
-        let expenses = vehicleManager.fetchLast30Days(modelContext: modelContext)
+        let expenses = vehicleManager.fetchLast30Days()
         efficiencyData = vehicleManager.calculateFuelEfficencyData(expenses: expenses)
         costPerKmData = vehicleManager.calculateCostPerKmData(expenses: expenses)
         avgEfficiency = vehicleManager.calculateTotalFuelEfficency(efficencies: efficiencyData.map(\.1))
@@ -261,18 +262,14 @@ struct AnalyticsMonthlyView: View {
             // odometerOffset is cumulative km from year-start (always positive, monotonically increasing)
             // swiftlint:disable:next large_tuple
             let seedData: [(daysAgo: Int, odometerOffset: Int, liters: Float, total: Decimal)] = [
-                // January
                 (113, 0, 45.0, 72.90),
                 (105, 450, 40.5, 65.61),
-                // February
                 (90, 1100, 43.0, 69.66),
                 (82, 1550, 38.0, 61.56),
                 (75, 2000, 41.5, 67.23),
-                // March
                 (60, 2700, 44.0, 71.28),
                 (52, 3150, 39.5, 63.99),
                 (44, 3650, 42.5, 68.85),
-                // April (last 30 days)
                 (28, 6170, 42.0, 68.04),
                 (23, 6590, 38.5, 62.28),
                 (18, 6960, 44.1, 71.42),
@@ -294,27 +291,23 @@ struct AnalyticsMonthlyView: View {
                     date: date,
                     vehicle: vehicle
                 )
-                expense.insert(context: modelContext)
+                vehicleManager.saveFuelExpense(expense)
             }
 
-            vehicleManager.refreshStats(modelContext: modelContext)
             loadData()
         }
 
         private func clearAllExpenses() {
             let expenses = vehicleManager.sortedExpenses
-            expenses.forEach { $0.delete(context: modelContext) }
-            try? modelContext.save()
-            vehicleManager.refreshStats(modelContext: modelContext)
+            expenses.forEach { vehicleManager.deleteFuelExpense($0) }
             loadData()
         }
     #endif
 }
 
 #Preview {
+    @Previewable @State var vehicleManager = PreviewSupport.vehicleManager
     AnalyticsMonthlyView()
-        .environment(VehicleManager())
-        .environmentObject(NavigationManager())
+        .environment(vehicleManager)
         .environment(AppState())
-        .environment(SceneDelegate())
 }

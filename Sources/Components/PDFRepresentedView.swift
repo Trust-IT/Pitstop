@@ -50,7 +50,7 @@ struct PDFRepresentedView: UIViewRepresentable {
 }
 
 // TODO: Move to a PDF manager
-enum PDFCreator {
+public enum PDFCreator {
     static func createPDF(from images: [UIImage]) -> Data? {
         guard !images.isEmpty else { return nil }
         let A4Size = CGRect(x: 0, y: 0, width: 612, height: 792)

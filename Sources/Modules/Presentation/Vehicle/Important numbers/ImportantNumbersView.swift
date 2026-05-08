@@ -5,11 +5,13 @@
 //  Created by Ivan Voloshchuk on 14/05/22.
 //
 
+import ChassisUI
+import PitstopData
 import SwiftUI
 
 struct ImportantNumbersView: View {
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationView {
@@ -33,7 +35,7 @@ struct ImportantNumbersView: View {
             .navigationBarItems(
                 leading:
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 }, label: {
                     Text(PitstopStrings.Localizable.Common.cancel)
                         .font(Typography.headerM)

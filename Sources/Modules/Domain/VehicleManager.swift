@@ -8,57 +8,172 @@
 import Foundation
 import Observation
 import OSLog
+import PitstopData
 import SwiftData
 
-@Observable class VehicleManager {
+@MainActor
+@Observable
+final class VehicleManager {
+    // MARK: State
+
     private(set) var currentVehicle: Vehicle = .mock()
 
-    // MARK: Cached stats (refreshed via refreshStats)
-
+    // Cached stats (refreshed via refreshStats)
     private(set) var sortedExpenses: [FuelExpense] = []
     private(set) var totalFuelCost: Decimal = 0
     private(set) var fuelEfficiency: Float?
 
+    // Reactive lists (refreshed after mutations)
+    private(set) var vehicles: [Vehicle] = []
+    private(set) var documents: [Document] = []
+    private(set) var currentReminders: [Reminder] = []
+    private(set) var expiredReminders: [Reminder] = []
+
+    // MARK: Dependencies
+
+    private let modelContext: ModelContext
     private let userDefaultsKey = "currentVehicleUUID"
+
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+        refreshAll()
+        loadCurrentVehicle()
+    }
+
+    // MARK: Refresh
+
+    /// Refreshes all reactive lists + stats. Call after external mutations or on appear.
+    func refreshAll() {
+        vehicles = fetchVehicles()
+        documents = fetchDocuments()
+        let now = Date.now
+        let allReminders = fetchReminders()
+        currentReminders = allReminders.filter { $0.date >= now }.sorted { $0.date < $1.date }
+        expiredReminders = allReminders.filter { $0.date < now }.sorted { $0.date < $1.date }
+        refreshStats()
+    }
 
     // MARK: Vehicle selection
 
-    func fetchVehicleByUUID(uuid: UUID, modelContext: ModelContext) -> Vehicle? {
-        do {
-            let descriptor = FetchDescriptor<Vehicle>(
-                predicate: #Predicate { vehicle in
-                    vehicle.uuid == uuid
-                }
-            )
-            let vehicles = try modelContext.fetch(descriptor)
-            return vehicles.first
-        } catch {
-            Logger.manager.error("Error fetching vehicle by UUID: \(error)")
-            return nil
-        }
-    }
-
-    func loadCurrentVehicle(modelContext: ModelContext) {
-        if let uuidString = UserDefaults.standard.string(forKey: userDefaultsKey),
-           let uuid = UUID(uuidString: uuidString),
-           let vehicle = fetchVehicleByUUID(uuid: uuid, modelContext: modelContext) {
-            currentVehicle = vehicle
-            refreshStats(modelContext: modelContext)
-        }
-    }
-
-    func setCurrentVehicle(_ vehicle: Vehicle, modelContext: ModelContext? = nil) {
+    func loadCurrentVehicle() {
+        guard
+            let uuidString = UserDefaults.standard.string(forKey: userDefaultsKey),
+            let uuid = UUID(uuidString: uuidString),
+            let vehicle = vehicles.first(where: { $0.uuid == uuid })
+        else { return }
         currentVehicle = vehicle
-        saveUUIDToUserDefaults(vehicle: vehicle)
-        if let modelContext {
-            refreshStats(modelContext: modelContext)
+        refreshStats()
+    }
+
+    func setCurrentVehicle(_ vehicle: Vehicle) {
+        currentVehicle = vehicle
+        UserDefaults.standard.set(vehicle.uuid.uuidString, forKey: userDefaultsKey)
+        refreshStats()
+    }
+
+    // MARK: Vehicle CRUD
+
+    func addVehicle(_ vehicle: Vehicle) {
+        modelContext.insert(vehicle)
+        save()
+        refreshAll()
+    }
+
+    func deleteVehicle(_ vehicle: Vehicle) {
+        modelContext.delete(vehicle)
+        save()
+        refreshAll()
+        if currentVehicle.uuid == vehicle.uuid {
+            setCurrentVehicle(vehicles.first ?? .mock())
         }
+    }
+
+    func updateVehicle(
+        _ vehicle: Vehicle,
+        brand: String,
+        model: String,
+        plate: String,
+        mainFuelType: FuelType
+    ) {
+        vehicle.brand = brand
+        vehicle.model = model
+        vehicle.plate = plate
+        vehicle.mainFuelType = mainFuelType
+        save()
+    }
+
+    // MARK: Reminder CRUD
+
+    func saveReminder(_ reminder: Reminder) {
+        modelContext.insert(reminder)
+        save()
+        refreshAll()
+    }
+
+    func deleteReminder(_ reminder: Reminder) {
+        modelContext.delete(reminder)
+        save()
+        refreshAll()
+    }
+
+    func deleteAllExpiredReminders() {
+        for reminder in expiredReminders {
+            modelContext.delete(reminder)
+        }
+        save()
+        refreshAll()
+    }
+
+    // MARK: Document CRUD
+
+    func addDocument(_ document: Document) {
+        modelContext.insert(document)
+        save()
+        refreshAll()
+    }
+
+    func deleteDocument(_ document: Document) {
+        modelContext.delete(document)
+        save()
+        refreshAll()
+    }
+
+    // MARK: FuelExpense CRUD
+
+    func saveFuelExpense(_ expense: FuelExpense) {
+        modelContext.insert(expense)
+        save()
+        refreshStats()
+    }
+
+    func deleteFuelExpense(_ expense: FuelExpense) {
+        modelContext.delete(expense)
+        save()
+        refreshStats()
+    }
+
+    // MARK: Number CRUD
+
+    func addNumber(_ number: Number) {
+        modelContext.insert(number)
+        save()
+    }
+
+    func deleteNumber(_ number: Number) {
+        modelContext.delete(number)
+        save()
+    }
+
+    func updateNumber(_ number: Number, title: String, telephone: String) {
+        number.title = title
+        number.telephone = telephone
+        save()
     }
 
     // MARK: Cached stats
 
-    /// Refreshes cached stats for the current vehicle. Call after insert/delete/vehicle change.
-    func refreshStats(modelContext: ModelContext) {
+    /// Refreshes cached stats for the current vehicle.
+    func refreshStats() {
         let uuid = currentVehicle.uuid
         let descriptor = FetchDescriptor<FuelExpense>(
             predicate: #Predicate { $0.vehicle?.uuid == uuid },
@@ -92,9 +207,7 @@ import SwiftData
 
     // MARK: Date-range stats (fetched on demand, not cached)
 
-    /// Fetches fuel expenses for the current vehicle within the last 30 days.
-    /// Uses FetchDescriptor + predicate + date index for O(log n) filtering.
-    func fetchLast30Days(modelContext: ModelContext, from referenceDate: Date = .now) -> [FuelExpense] {
+    func fetchLast30Days(from referenceDate: Date = .now) -> [FuelExpense] {
         guard let cutoff = Calendar.current.date(byAdding: .day, value: -30, to: referenceDate) else {
             return []
         }
@@ -108,7 +221,7 @@ import SwiftData
         return (try? modelContext.fetch(descriptor)) ?? []
     }
 
-    func fetchCurrentYear(modelContext: ModelContext) -> [FuelExpense] {
+    func fetchCurrentYear() -> [FuelExpense] {
         let calendar = Calendar.current
         let year = calendar.component(.year, from: .now)
         guard
@@ -251,8 +364,6 @@ import SwiftData
         let closestBefore = index > 0 ? sortedExpenses[index - 1] : nil
         let boundary = sortedExpenses[index]
 
-        // When boundary is strictly after designatedDate, it is the upper constraint.
-        // When boundary is on the same date, the next expense is the upper constraint.
         let closestAfter: FuelExpense? = boundary.date > designatedDate
             ? boundary
             : (index < sortedExpenses.count - 1 ? sortedExpenses[index + 1] : nil)
@@ -273,8 +384,29 @@ import SwiftData
         return (currentFuelQuantity / Float(distanceTraveled)) * 100
     }
 
-    private func saveUUIDToUserDefaults(vehicle: Vehicle) {
-        UserDefaults.standard.set(vehicle.uuid.uuidString, forKey: userDefaultsKey)
+    // MARK: Private fetch helpers
+
+    private func fetchVehicles() -> [Vehicle] {
+        let descriptor = FetchDescriptor<Vehicle>()
+        return (try? modelContext.fetch(descriptor)) ?? []
+    }
+
+    private func fetchDocuments() -> [Document] {
+        let descriptor = FetchDescriptor<Document>()
+        return (try? modelContext.fetch(descriptor)) ?? []
+    }
+
+    private func fetchReminders() -> [Reminder] {
+        let descriptor = FetchDescriptor<Reminder>(sortBy: [SortDescriptor(\.date)])
+        return (try? modelContext.fetch(descriptor)) ?? []
+    }
+
+    private func save() {
+        do {
+            try modelContext.save()
+        } catch {
+            Logger.persistence.error("VehicleManager save failed: \(error)")
+        }
     }
 }
 

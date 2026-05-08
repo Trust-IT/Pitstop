@@ -5,6 +5,7 @@
 //  Created by Ivan Voloshchuk on 02/01/25.
 //
 
+import ChassisUI
 import SwiftUI
 
 struct SegmentedPicker<T>: View where

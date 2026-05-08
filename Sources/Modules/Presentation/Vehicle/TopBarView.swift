@@ -5,19 +5,18 @@
 //  Created by Ivan Voloshchuk on 26/05/22.
 //
 
-import SwiftData
+import ChassisUI
+import NavigatorUI
+import PitstopData
 import SwiftUI
 
 struct TopBarView: View {
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
-    @EnvironmentObject var navManager: NavigationManager
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.navigator) var navigator
 
     var offset: CGFloat
     let maxHeight: CGFloat
     var topEdge: CGFloat
-
-    @Query var vehicles: [Vehicle]
 
     var body: some View {
         ZStack(alignment: .center) {
@@ -25,38 +24,38 @@ struct TopBarView: View {
             HStack(alignment: .center) {
                 Menu {
                     Section(String(localized: "Select vehicle")) {
-                        ForEach(vehicles, id: \.uuid) { vehicle in
+                        ForEach(vehicleManager.vehicles, id: \.uuid) { vehicle in
                             Button(vehicle.displayName) {
-                                vehicleManager.setCurrentVehicle(vehicle, modelContext: modelContext)
+                                vehicleManager.setCurrentVehicle(vehicle)
                             }
                         }
                     }
                 } label: {
-                    HStack(spacing: 6) {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(vehicleManager.currentVehicle.brand)
+                            Text(vehicleManager.currentVehicle.displayName)
                                 .foregroundColor(Palette.blackHeader)
-                                .font(Typography.headerXL)
-                            Text(vehicleManager.currentVehicle.model)
-                                .foregroundColor(Palette.blackHeader)
-                                .font(Typography.TextM)
-                                .opacity(0.6)
+                                .font(Typography.headerL)
+                            if let plate = vehicleManager.currentVehicle.plate {
+                                Text(plate)
+                                    .foregroundColor(Palette.blackHeader)
+                                    .font(Typography.TextM)
+                            }
                         }
-                        Image(.arrowLeft)
-                            .resizable()
+                        Image(systemName: "chevron.down")
                             .foregroundColor(Palette.blackHeader)
-                            .frame(width: 10, height: 14)
-                            .rotationEffect(.degrees(270))
                     }
                 }
                 Spacer()
                 Button {
-                    navManager.push(.reminderList)
+                    navigator.navigate(to: VehicleDestinations.reminderList)
                 } label: {
                     HStack(spacing: 4) {
                         Text(PitstopStrings.Localizable.Reminder.title)
                             .font(Typography.ControlS)
+                            .foregroundStyle(Palette.blackHeader)
                         Image(systemName: "bell")
+                            .foregroundStyle(Palette.blackHeader)
                     }
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
@@ -71,36 +70,34 @@ struct TopBarView: View {
             HStack(alignment: .center) {
                 Menu {
                     Section(String(localized: "Select vehicle")) {
-                        ForEach(vehicles, id: \.uuid) { vehicle in
+                        ForEach(vehicleManager.vehicles, id: \.uuid) { vehicle in
                             Button(vehicle.displayName) {
-                                vehicleManager.setCurrentVehicle(vehicle, modelContext: modelContext)
+                                vehicleManager.setCurrentVehicle(vehicle)
                             }
                         }
                     }
                 } label: {
-                    HStack(spacing: 5) {
+                    HStack(alignment: .firstTextBaseline, spacing: 5) {
                         VStack(alignment: .leading, spacing: 1) {
-                            Text(vehicleManager.currentVehicle.brand)
+                            Text(vehicleManager.currentVehicle.displayName)
                                 .foregroundColor(Palette.blackHeader)
                                 .font(Typography.headerM)
-                            Text(vehicleManager.currentVehicle.model)
-                                .foregroundColor(Palette.blackHeader)
-                                .font(Typography.ControlS)
-                                .opacity(0.55)
+                            if let plate = vehicleManager.currentVehicle.plate {
+                                Text(plate)
+                                    .foregroundColor(Palette.blackHeader)
+                                    .font(Typography.ControlS)
+                            }
                         }
-                        Image(.arrowLeft)
-                            .resizable()
+                        Image(systemName: "chevron.down")
                             .foregroundColor(Palette.blackHeader)
-                            .frame(width: 8, height: 11)
-                            .rotationEffect(.degrees(270))
                     }
                 }
                 Spacer()
                 Button {
-                    navManager.push(.reminderList)
+                    navigator.navigate(to: VehicleDestinations.reminderList)
                 } label: {
                     Image(systemName: "bell")
-                        .font(.system(size: 15, weight: .medium))
+                        .foregroundStyle(Palette.blackHeader)
                 }
                 .buttonStyle(.glass)
                 .frame(width: 44, height: 44)

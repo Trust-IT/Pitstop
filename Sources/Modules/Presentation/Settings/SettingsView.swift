@@ -5,18 +5,14 @@
 //  Created by Ivan Voloshchuk on 06/05/22.
 //
 
-import OSLog
-import SwiftData
+import ChassisUI
+import NavigatorUI
+import PitstopData
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject private var navManager: NavigationManager
     @Environment(AppState.self) var appState: AppState
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
-    @Environment(\.modelContext) private var modelContext
-
-    @Query
-    var vehicles: [Vehicle]
 
     @State private var themePickerAlert: AlertConfig = .init(
         enableBackgroundBlur: true,
@@ -25,23 +21,23 @@ struct SettingsView: View {
     )
 
     var body: some View {
-        NavigationStack(path: $navManager.routes) {
+        ManagedNavigationStack(name: "Settings") { navigator in
             VStack {
                 Text("")
                 CustomList {
                     Section(header: Text("Vehicles")) {
-                        ForEach(vehicles, id: \.uuid) { vehicle in
+                        ForEach(vehicleManager.vehicles, id: \.uuid) { vehicle in
                             Button(action: {
-                                navManager.push(.editVehicle(input: vehicle))
+                                navigator.navigate(to: SettingsDestinations.editVehicle(input: vehicle))
                             }, label: {
                                 HStack {
                                     CategoryRow(input: .init(
                                         title: vehicle.displayName,
-                                        icon: .carSettings,
+                                        icon: ChassisUIAsset.carSettings,
                                         color: appState.currentTheme.colors.background
                                     ))
                                     Spacer()
-                                    Image(.arrowRight)
+                                    ChassisUIAsset.arrowRight.swiftUIImage
                                 }
                             })
                         }
@@ -55,37 +51,37 @@ struct SettingsView: View {
                             HStack {
                                 CategoryRow(input: .init(
                                     title: "Theme picker",
-                                    icon: .wrench,
+                                    icon: ChassisUIAsset.wrench,
                                     color: Palette.greyBackground
                                 ))
                                 Spacer()
-                                Image(.arrowRight)
+                                ChassisUIAsset.arrowRight.swiftUIImage
                             }
                         })
                         Button(action: {
-                            navManager.push(.aboutUs)
+                            navigator.navigate(to: SettingsDestinations.aboutUs)
                         }, label: {
                             HStack {
                                 CategoryRow(input: .init(
                                     title: "About us",
-                                    icon: .paperclip,
+                                    icon: ChassisUIAsset.paperclip,
                                     color: Palette.greyBackground
                                 ))
                                 Spacer()
-                                Image(.arrowRight)
+                                ChassisUIAsset.arrowRight.swiftUIImage
                             }
                         })
                         Button(action: {
-                            navManager.push(.tos)
+                            navigator.navigate(to: SettingsDestinations.tos)
                         }, label: {
                             HStack {
                                 CategoryRow(input: .init(
                                     title: "Terms of service",
-                                    icon: .paperclip,
+                                    icon: ChassisUIAsset.paperclip,
                                     color: Palette.greyBackground
                                 ))
                                 Spacer()
-                                Image(.arrowRight)
+                                ChassisUIAsset.arrowRight.swiftUIImage
                             }
                         })
                     }
@@ -100,35 +96,17 @@ struct SettingsView: View {
                 ThemePickerView(alert: $themePickerAlert)
                     .environment(appState)
             }
-            .navigationDestination(for: Route.self) { route in
-                route
+            .navigationModifier { destination in
+                destination()
+                    .toolbar(.hidden, for: .tabBar)
                     .environment(appState)
                     .environment(vehicleManager)
-                    .toolbar(.hidden, for: .tabBar)
             }
         }
-    }
-}
-
-private extension SettingsView {
-    func deleteVehicle(at offsets: IndexSet) {
-        for index in offsets {
-            let vehicleToDelete = vehicles[index]
-            modelContext.delete(vehicleToDelete)
-        }
-
-        do {
-            try modelContext.save()
-        } catch {
-            Logger.persistence.error("Failed to delete vehicle: \(error)")
-        }
-        vehicleManager.setCurrentVehicle(vehicles.first ?? .mock(), modelContext: modelContext)
     }
 }
 
 #Preview {
     SettingsView()
         .environment(AppState())
-        .environmentObject(NavigationManager())
-        .environment(VehicleManager())
 }

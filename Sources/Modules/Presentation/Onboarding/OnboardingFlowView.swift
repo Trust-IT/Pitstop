@@ -3,8 +3,10 @@
 //  Pitstop-APP
 //
 
+import ChassisUI
+import NavigatorUI
 import OSLog
-import SwiftData
+import PitstopData
 import SwiftUI
 
 enum OnboardingPage: Equatable {
@@ -16,10 +18,9 @@ enum OnboardingPage: Equatable {
 }
 
 struct OnboardingFlowView: View {
-    @EnvironmentObject private var navManager: NavigationManager
+    @Environment(\.navigator) private var navigator
     @Environment(VehicleManager.self) private var vehicleManager
     @Environment(AppState.self) private var appState
-    @Environment(\.modelContext) private var modelContext
     @AppStorage("shouldShowOnboarding") private var shouldShowOnboarding: Bool = true
 
     let pages: [OnboardingPage]
@@ -61,7 +62,7 @@ struct OnboardingFlowView: View {
         .toolbar {
             if isDismissible {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: { navManager.popAll() }) {
+                    Button(action: { navigator.dismiss() }) {
                         Image(systemName: "xmark")
                             .foregroundColor(Palette.black)
                     }
@@ -162,7 +163,7 @@ struct OnboardingFlowView: View {
 
     private func complete() {
         shouldShowOnboarding = false
-        navManager.popAll()
+        navigator.dismiss()
     }
 
     private func addVehicle() {
@@ -173,12 +174,8 @@ struct OnboardingFlowView: View {
             initialOdometer: odometer,
             plate: plate
         )
-        do {
-            try vehicle.saveToModelContext(context: modelContext)
-        } catch {
-            Logger.persistence.error("Onboarding add vehicle: \(error)")
-        }
-        vehicleManager.setCurrentVehicle(vehicle, modelContext: modelContext)
+        vehicleManager.addVehicle(vehicle)
+        vehicleManager.setCurrentVehicle(vehicle)
         isVehicleCreated = true
     }
 }

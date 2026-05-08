@@ -5,13 +5,14 @@
 //  Created by Ivan Voloshchuk on 01/02/25.
 //
 
-import OSLog
-import SwiftData
+import ChassisUI
+import NavigatorUI
+import PitstopData
 import SwiftUI
 
 struct DocumentScannerView: View {
-    @EnvironmentObject private var navManager: NavigationManager
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.navigator) private var navigator
+    @Environment(VehicleManager.self) private var vehicleManager: VehicleManager
     @State private var scannedImages: [UIImage] = []
     @State private var showCameraPicker = false
     let columns = [GridItem(.adaptive(minimum: 100))]
@@ -94,14 +95,9 @@ struct DocumentScannerView: View {
         guard let data = PDFCreator.createPDF(from: scannedImages) else {
             return
         }
-
-        do {
-            let document = Document(data: data, title: title)
-            try document.saveToModelContext(context: modelContext)
-            navManager.pop()
-        } catch {
-            Logger.persistence.error("Error when saving document: \(error)")
-        }
+        let document = Document(data: data, title: title)
+        vehicleManager.addDocument(document)
+        navigator.back()
     }
 }
 

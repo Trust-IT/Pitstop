@@ -5,6 +5,7 @@
 //  Created by Ivan Voloshchuk on 24/01/25.
 //
 
+import ChassisUI
 import SwiftUI
 
 struct FuelInputTextField<V: Comparable & AdditiveArithmetic, F: ParseableFormatStyle>: View
@@ -14,7 +15,7 @@ struct FuelInputTextField<V: Comparable & AdditiveArithmetic, F: ParseableFormat
     let title: String
     let placeholder: String
     let measurement: String
-    let icon: ImageResource
+    let icon: ChassisUIImages
     @FocusState.Binding var focusState: FuelInputFocusField?
     let focus: FuelInputFocusField
     @Binding var value: V
@@ -34,7 +35,7 @@ struct FuelInputTextField<V: Comparable & AdditiveArithmetic, F: ParseableFormat
                     Circle()
                         .fill(isEmpty ? Palette.greyLight : appState.currentTheme.colors.background)
                         .frame(width: 32, height: 32)
-                    Image(icon)
+                    icon.swiftUIImage
                         .resizable()
                         .frame(width: 16, height: 16)
                         .foregroundStyle(isEmpty ? Palette.greyInput : appState.currentTheme.accentColor)

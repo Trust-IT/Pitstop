@@ -5,17 +5,18 @@
 //  Created by Ivan Voloshchuk on 02/01/25.
 //
 
+import ChassisUI
 import SwiftUI
 
-struct CategoryPicker<T>: View where
+public struct CategoryPicker<T>: View where
     T: Hashable & CaseIterable & RawRepresentable & Identifiable,
     T.RawValue == String {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) private var dismiss
     @Binding var selectedCategory: T
     var categories: [T]
 
     /// If no category is specified it will take all cases from the enum
-    init(selectedCategory: Binding<T>, categories: [T] = []) {
+    public init(selectedCategory: Binding<T>, categories: [T] = []) {
         if categories.isEmpty {
             self.categories = Array(T.allCases)
         } else {
@@ -24,7 +25,7 @@ struct CategoryPicker<T>: View where
         _selectedCategory = selectedCategory
     }
 
-    var body: some View {
+    public var body: some View {
         ZStack {
             Palette.greyBackground
                 .ignoresSafeArea()
@@ -36,7 +37,7 @@ struct CategoryPicker<T>: View where
                                 selectedCategory = category
                             }
                         }
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     }, label: {
                         HStack {
                             Text(category.rawValue.capitalized)

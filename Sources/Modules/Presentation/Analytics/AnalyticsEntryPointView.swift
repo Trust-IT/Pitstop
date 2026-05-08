@@ -5,17 +5,19 @@
 //  Created by Ivan Voloshchuk on 08/01/25.
 //
 
+import ChassisUI
 import Foundation
+import NavigatorUI
+import PitstopData
 import SwiftUI
 
 struct AnalyticsEntryPointView: View {
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
-    @EnvironmentObject private var navManager: NavigationManager
     @Environment(AppState.self) var appState: AppState
     @State private var selectedTab: AnalyticsTabs = .lastMonth
 
     var body: some View {
-        NavigationStack(path: $navManager.routes) {
+        ManagedNavigationStack(name: "Analytics") { _ in
             VStack {
                 ScrollView {
                     Spacer()
@@ -33,14 +35,14 @@ struct AnalyticsEntryPointView: View {
             .overlay(alignment: .bottom) {
                 SegmentedPicker(currentTab: $selectedTab, style: .black)
                     .padding(10)
-                    .background(.ultraThinMaterial)
+                    .glassEffect()
             }
             .navigationTitle("Analytics")
-            .navigationDestination(for: Route.self) { route in
-                route
+            .navigationModifier { destination in
+                destination()
+                    .toolbar(.hidden, for: .tabBar)
                     .environment(appState)
                     .environment(vehicleManager)
-                    .toolbar(.hidden, for: .tabBar)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -48,6 +50,7 @@ struct AnalyticsEntryPointView: View {
                         // TODO: Implement export
                     }, label: {
                         Image(systemName: "tray.and.arrow.down")
+                            .foregroundStyle(Palette.black)
                     })
                     .buttonStyle(.glass)
                 }
@@ -57,11 +60,10 @@ struct AnalyticsEntryPointView: View {
 }
 
 #Preview {
+    @Previewable @State var vehicleManager = PreviewSupport.vehicleManager
     AnalyticsEntryPointView()
-        .environment(VehicleManager())
-        .environmentObject(NavigationManager())
+        .environment(vehicleManager)
         .environment(AppState())
-        .environment(SceneDelegate())
 }
 
 enum AnalyticsTabs: String, CaseIterable, Identifiable {

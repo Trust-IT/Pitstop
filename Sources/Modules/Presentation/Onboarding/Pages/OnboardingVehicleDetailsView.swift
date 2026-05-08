@@ -5,6 +5,8 @@
 //  Created by Ivan Voloshchuk on 16/01/25.
 //
 
+import ChassisUI
+import PitstopData
 import SwiftUI
 
 struct OnboardingVehicleDetailsView: View {
@@ -44,7 +46,7 @@ struct OnboardingVehicleDetailsView: View {
                 }, label: {
                     moreInfoCard(text: PitstopStrings.Localizable.Onb.plateNumber,
                                  bgColor: appState.currentTheme.colors.background,
-                                 iconName: .star)
+                                 iconName: ChassisUIAsset.star)
                 })
                 if !plate.isEmpty {
                     cardInput(value: plate)
@@ -54,7 +56,7 @@ struct OnboardingVehicleDetailsView: View {
                 }, label: {
                     moreInfoCard(text: PitstopStrings.Localizable.Common.odometer,
                                  bgColor: appState.currentTheme.colors.background,
-                                 iconName: .odometer)
+                                 iconName: ChassisUIAsset.odometer)
                 })
                 if odometer != 0 {
                     cardInput(value: String(odometer))
@@ -81,7 +83,7 @@ private extension OnboardingVehicleDetailsView {
     func moreInfoCard(
         text: String,
         bgColor: Color,
-        iconName: ImageResource
+        iconName: ChassisUIImages
     ) -> some View {
         ZStack {
             Rectangle()
@@ -94,7 +96,7 @@ private extension OnboardingVehicleDetailsView {
                     Circle()
                         .foregroundColor(bgColor)
                         .frame(width: 32, height: 32)
-                    Image(iconName)
+                    iconName.swiftUIImage
                         .resizable()
                         .tint(appState.currentTheme.accentColor)
                         .frame(width: 16, height: 16)
@@ -149,7 +151,7 @@ private extension OnboardingVehicleDetailsView {
                             Circle()
                                 .frame(width: 24, height: 24)
                                 .foregroundColor(Palette.greyLight)
-                            Image(.ics)
+                            ChassisUIAsset.ics.swiftUIImage
                         }
                         .foregroundColor(Palette.black)
                         .padding(.trailing, 20)
@@ -196,7 +198,7 @@ private extension OnboardingVehicleDetailsView {
                             Circle()
                                 .frame(width: 24, height: 24)
                                 .foregroundColor(Palette.greyLight)
-                            Image(.ics)
+                            ChassisUIAsset.ics.swiftUIImage
                         }
                         .foregroundColor(Palette.black)
                         .padding(.trailing, 20)

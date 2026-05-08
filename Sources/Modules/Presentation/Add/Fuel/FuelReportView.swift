@@ -5,13 +5,15 @@
 //  Created by Ivan Voloshchuk on 23/01/25.
 //
 
+import ChassisUI
+import NavigatorUI
+import PitstopData
 import SwiftUI
 
 struct FuelReportView: View {
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
-    @EnvironmentObject private var navManager: NavigationManager
+    @Environment(\.navigator) private var navigator
     @Environment(AppState.self) var appState: AppState
-    @Environment(\.modelContext) private var modelContext
 
     @FocusState private var focusState: FuelInputFocusField?
     @State private var totalPrice: Decimal
@@ -32,43 +34,42 @@ struct FuelReportView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            ScrollView {
-                VStack(spacing: 14) {
-                    FuelInputTextField(
-                        title: "Total",
-                        placeholder: appState.currency.format(fuelExpense.totalCost),
-                        measurement: appState.currency.identifier,
-                        icon: .category,
-                        focusState: $focusState,
-                        focus: .totalPrice,
-                        value: $totalPrice,
-                        format: .number
-                    )
-                    FuelInputTextField(
-                        title: "Odometer",
-                        placeholder: "\(vehicleManager.currentVehicle.currentOdometer)",
-                        measurement: appState.measurementUnit.symbol,
-                        icon: .odometer,
-                        focusState: $focusState,
-                        focus: .odometer,
-                        value: $odometer,
-                        format: .number,
-                        keyboardType: .numberPad
-                    )
-                    FuelInputTextField(
-                        title: "Liters",
-                        placeholder: "\(fuelExpense.quantity)",
-                        measurement: appState.volumeUnit.symbol,
-                        icon: .liters,
-                        focusState: $focusState,
-                        focus: .quantity,
-                        value: $liters,
-                        format: .number
-                    )
-                }
+        ScrollView {
+            VStack(spacing: 14) {
+                FuelInputTextField(
+                    title: "Total",
+                    placeholder: appState.currency.format(fuelExpense.totalCost),
+                    measurement: appState.currency.identifier,
+                    icon: ChassisUIAsset.category,
+                    focusState: $focusState,
+                    focus: .totalPrice,
+                    value: $totalPrice,
+                    format: .number
+                )
+                FuelInputTextField(
+                    title: "Odometer",
+                    placeholder: "\(vehicleManager.currentVehicle.currentOdometer)",
+                    measurement: appState.measurementUnit.symbol,
+                    icon: ChassisUIAsset.odometer,
+                    focusState: $focusState,
+                    focus: .odometer,
+                    value: $odometer,
+                    format: .number,
+                    keyboardType: .numberPad
+                )
+                FuelInputTextField(
+                    title: "Liters",
+                    placeholder: "\(fuelExpense.quantity)",
+                    measurement: appState.volumeUnit.symbol,
+                    icon: ChassisUIAsset.liters,
+                    focusState: $focusState,
+                    focus: .quantity,
+                    value: $liters,
+                    format: .number
+                )
             }
-            Spacer()
+        }
+        .safeAreaInset(edge: .bottom) {
             Button(PitstopStrings.Localizable.Common.save) {
                 saveExpense()
             }
@@ -92,13 +93,14 @@ struct FuelReportView: View {
             .padding()
         }
         .navigationTitle("New report")
+        .navigationBarBackButtonHidden()
+        .navigationBarTitleDisplayMode(.inline)
         .alert(
             "Invalid Odometer",
             isPresented: Binding(get: { odometerError != nil }, set: { _ in odometerError = nil }),
             actions: { Button("OK") { odometerError = nil } },
             message: { Text(odometerError?.errorDescription ?? "") }
         )
-        .padding(.top, 50)
         .background(Palette.greyBackground.ignoresSafeArea(.all))
         .toolbar {
             navigationItems()
@@ -122,20 +124,14 @@ private extension FuelReportView {
             odometerError = error
             return
         }
-        updateFuelExpense()
-        vehicleManager.refreshStats(modelContext: modelContext)
-        navManager.pop()
-    }
-
-    func updateFuelExpense() {
         fuelExpense.totalCost = totalPrice
         fuelExpense.odometer = odometer
         fuelExpense.quantity = Float(liters)
         fuelExpense.fuelType = fuelType
         fuelExpense.date = selectedDate
-        modelContext.insert(fuelExpense)
         fuelExpense.vehicle = vehicleManager.currentVehicle
-        fuelExpense.save(context: modelContext)
+        vehicleManager.saveFuelExpense(fuelExpense)
+        navigator.back()
     }
 
     var areFieldsValid: Bool {
@@ -166,6 +162,15 @@ private extension FuelReportView {
 //                }
 //            }
 //        }
+        ToolbarItem(placement: .navigation) {
+            Button(action: {
+                navigator.dismiss()
+            }, label: {
+                Image(systemName: "xmark")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Palette.black)
+            })
+        }
         ToolbarItemGroup(placement: .topBarTrailing) {
             HStack {
                 Button(action: {
@@ -174,7 +179,7 @@ private extension FuelReportView {
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                 }, label: {
                     HStack {
-                        Image(.day)
+                        ChassisUIAsset.day.swiftUIImage
                             .resizable()
                             .frame(width: 16, height: 16)
                             .tint(Palette.black)
@@ -190,12 +195,10 @@ private extension FuelReportView {
 }
 
 #Preview {
-    @Previewable @State var navManager = NavigationManager()
-    NavigationStack(path: $navManager.routes) {
+    @Previewable @State var vehicleManager = PreviewSupport.vehicleManager
+    ManagedNavigationStack {
         FuelReportView(fuelExpense: FuelExpense.mock())
-            .environment(VehicleManager())
+            .environment(vehicleManager)
             .environment(AppState())
-            .environmentObject(NavigationManager())
-            .environment(SceneDelegate())
     }
 }

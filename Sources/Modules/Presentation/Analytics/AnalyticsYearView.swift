@@ -6,6 +6,8 @@
 //
 
 import Charts
+import ChassisUI
+import PitstopData
 import SwiftUI
 
 enum YearlyMetric: String, CaseIterable, Identifiable {
@@ -20,7 +22,6 @@ enum YearlyMetric: String, CaseIterable, Identifiable {
 struct AnalyticsYearView: View {
     @Environment(AppState.self) var appState: AppState
     @Environment(VehicleManager.self) var vehicleManager: VehicleManager
-    @Environment(\.modelContext) private var modelContext
 
     @State private var monthlyDataByMonth: [String: MonthlyFuelData] = [:]
     @State private var fullYearData: MonthlyFuelData = .init()
@@ -169,7 +170,7 @@ struct AnalyticsYearView: View {
     }
 
     private func loadData() {
-        let expenses = vehicleManager.fetchCurrentYear(modelContext: modelContext)
+        let expenses = vehicleManager.fetchCurrentYear()
         monthlyDataByMonth = vehicleManager.getMonthlyDataByMonth(expenses: expenses)
         fullYearData = vehicleManager.getMonthlyFuelData(expenses: expenses)
     }
@@ -189,9 +190,8 @@ struct AnalyticsYearView: View {
 }
 
 #Preview {
+    @Previewable @State var vehicleManager = PreviewSupport.vehicleManager
     AnalyticsYearView()
-        .environment(VehicleManager())
-        .environmentObject(NavigationManager())
+        .environment(vehicleManager)
         .environment(AppState())
-        .environment(SceneDelegate())
 }

@@ -5,10 +5,12 @@
 //  Created by Ivan Voloshchuk on 06/01/25.
 //
 
+import ChassisUI
+import PitstopData
 import SwiftUI
 
 // TODO: Fix cell opacity when tapping on it
-struct ConfirmationDialog<T>: View where
+public struct ConfirmationDialog<T>: View where
     T: Hashable & CaseIterable & RawRepresentable & Identifiable,
     T.RawValue == String {
     let items: [T]
@@ -16,7 +18,7 @@ struct ConfirmationDialog<T>: View where
     let onTap: (T) -> Void
     let onCancel: () -> Void
 
-    init(
+    public init(
         items: [T] = [],
         message: String,
         onTap: @escaping (T) -> Void,
@@ -32,7 +34,7 @@ struct ConfirmationDialog<T>: View where
         self.onCancel = onCancel
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 0) {
             Spacer()
             VStack(spacing: 0) {

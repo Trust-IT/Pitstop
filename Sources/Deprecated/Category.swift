@@ -4,6 +4,7 @@
 //
 //  Created by Ivan Voloshchuk on 31/01/25.
 //
+import ChassisUI
 import SwiftUI
 
 enum Category: Int, Hashable {
@@ -39,24 +40,16 @@ extension Category: CaseIterable {
         }
     }
 
-    var icon: ImageResource {
+    var icon: ChassisUIImages {
         switch self {
-        case .fuel:
-            .fuel
-        case .maintenance:
-            .wrench
-        case .insurance:
-            .insurance
-        case .roadTax:
-            .roadTax
-        case .tolls:
-            .tolls
-        case .fines:
-            .fines
-        case .parking:
-            .parking
-        case .other:
-            .other
+        case .fuel: ChassisUIAsset.fuel
+        case .maintenance: ChassisUIAsset.wrench
+        case .insurance: ChassisUIAsset.insurance
+        case .roadTax: ChassisUIAsset.roadTax
+        case .tolls: ChassisUIAsset.tolls
+        case .fines: ChassisUIAsset.fines
+        case .parking: ChassisUIAsset.parking
+        case .other: ChassisUIAsset.other
         }
     }
 

@@ -5,15 +5,16 @@
 //  Created by Ivan Voloshchuk on 23/05/23.
 //
 
+import ChassisUI
 import SwiftUI
 
-struct DeleteButton: View {
+public struct DeleteButton: View {
     let title: String
 
-    var body: some View {
+    public var body: some View {
         HStack {
             Spacer()
-            Image(.deleteIcon)
+            ChassisUIAsset.deleteIcon.swiftUIImage
                 .resizable()
                 .foregroundColor(Palette.white)
                 .frame(width: 14, height: 14)

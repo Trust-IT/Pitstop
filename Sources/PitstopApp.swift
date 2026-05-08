@@ -5,15 +5,17 @@
 //  Created by Asya Tealdi on 03/05/22.
 //
 
+import NavigatorUI
+import PitstopData
 import SwiftData
 import SwiftUI
 
 @main
 struct PitstopApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    @State var vehicleManager = VehicleManager()
-    @State var appState = AppState()
-    @StateObject var navigationManager = NavigationManager()
+    @State private var vehicleManager: VehicleManager
+    @State private var appState = AppState()
+    let navigator = Navigator(configuration: .init(verbosity: .info))
     let modelContainer: ModelContainer
 
     init() {
@@ -27,20 +29,23 @@ struct PitstopApp: App {
 
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
+        let container: ModelContainer
         do {
-            modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            container = try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
             fatalError("Could not find : \(error.localizedDescription)")
         }
+        modelContainer = container
+        _vehicleManager = State(initialValue: VehicleManager(modelContext: container.mainContext))
     }
 
     var body: some Scene {
         WindowGroup {
             EntryPointView()
                 .modelContainer(modelContainer)
-                .environmentObject(navigationManager)
                 .environment(vehicleManager)
                 .environment(appState)
+                .navigationRoot(navigator)
         }
     }
 }

@@ -3,6 +3,8 @@
 //  Pitstop-APP
 //
 
+import ChassisUI
+import PitstopData
 import SwiftUI
 
 enum VehicleInfoFocusField: Hashable {

@@ -5,26 +5,27 @@
 //  Created by Ivan Voloshchuk on 25/12/24.
 //
 
+import ChassisUI
 import SwiftUI
 
-struct ElementCellView: View {
+public struct ElementCellView: View {
     let title: String
     let subtitle: String?
-    let icon: ImageResource
+    let icon: ChassisUIImages
 
-    init(title: String, subtitle: String? = nil, icon: ImageResource) {
+    public init(title: String, subtitle: String? = nil, icon: ChassisUIImages) {
         self.title = title
         self.subtitle = subtitle
         self.icon = icon
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ZStack {
                 Circle()
                     .frame(width: 24, height: 24)
                     .foregroundColor(Palette.greyLight)
-                Image(icon)
+                icon.swiftUIImage
                     .resizable()
                     .frame(width: 14, height: 14)
                     .foregroundColor(Palette.black)
@@ -55,8 +56,8 @@ struct ElementCellView: View {
 
 #Preview {
     VStack {
-        ElementCellView(title: "Document", icon: .documents)
-        ElementCellView(title: "Contacts", subtitle: "39223012", icon: .wrench)
+        ElementCellView(title: "Document", icon: ChassisUIAsset.documents)
+        ElementCellView(title: "Contacts", subtitle: "39223012", icon: ChassisUIAsset.wrench)
     }
     .background(Color.red)
 }

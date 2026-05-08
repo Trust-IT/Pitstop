@@ -5,9 +5,10 @@
 //  Created by Ivan Voloshchuk on 09/02/25.
 //
 
+import ChassisUI
 import SwiftUI
 
-struct AlertInputView: View {
+public struct AlertInputView: View {
     @FocusState private var focusState: AlertInputFocus?
     @State private var input: String = ""
 
@@ -16,7 +17,7 @@ struct AlertInputView: View {
     @Binding var alert: AlertConfig
     let action: (String) -> Void
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 25) {
             HStack {
                 Spacer()
@@ -32,7 +33,7 @@ struct AlertInputView: View {
                         Circle()
                             .frame(width: 24, height: 24)
                             .foregroundColor(Palette.greyLight)
-                        Image(.ics)
+                        ChassisUIAsset.ics.swiftUIImage
                             .foregroundColor(Palette.black)
                     }
                     .padding(.trailing, 20)

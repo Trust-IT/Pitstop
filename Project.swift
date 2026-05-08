@@ -95,9 +95,9 @@ let project = Project(
                 )
             ],
             dependencies: [
-                /** Dependencies go here **/
-                /** .external(name: "Kingfisher") **/
-                /** .target(name: "OtherProjectTarget") **/
+                .external(name: "NavigatorUI"),
+                .project(target: "ChassisUI", path: "Modules/ChassisUI"),
+                .project(target: "PitstopData", path: "Modules/PitstopData")
             ],
             settings:
             .settings(

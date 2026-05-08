@@ -6,7 +6,7 @@
 //
 import Foundation
 
-enum FuelType: String, Codable, Identifiable, CaseIterable {
+public enum FuelType: String, Codable, Identifiable, CaseIterable {
     case diesel = "Diesel"
     case gasoline = "Gasoline"
     case propane = "LPG (Propane)"
@@ -16,5 +16,5 @@ enum FuelType: String, Codable, Identifiable, CaseIterable {
     case electric = "Electric"
     case none = "None"
 
-    var id: Self { self }
+    public var id: Self { self }
 }

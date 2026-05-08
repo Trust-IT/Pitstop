@@ -2,3 +2,4 @@
 --disable trailingCommas,wrapMultilineStatementBraces
 --acronyms
 --organizetypes
+--exclude Tuist,Derived

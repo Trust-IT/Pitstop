@@ -9,19 +9,21 @@ import Foundation
 import OSLog
 import SwiftData
 
-@Model
-final class Reminder: Identifiable {
-    @Attribute(.unique)
-    var uuid: UUID
+private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.pitstop", category: "persistence")
 
-    var title: String
-    var category: ServiceCategory
+@Model
+public final class Reminder: Identifiable {
+    @Attribute(.unique)
+    public var uuid: UUID
+
+    public var title: String
+    public var category: ServiceCategory
 //    var recurrence: Int16
-    var note: String
-    var date: Date
+    public var note: String
+    public var date: Date
 //    var distance: String?
 
-    init(
+    public init(
         uuid: UUID = UUID(),
         title: String = "",
         category: ServiceCategory,
@@ -39,17 +41,17 @@ final class Reminder: Identifiable {
 //        self.distance = distance
     }
 
-    static func mock() -> Reminder {
+    public static func mock() -> Reminder {
         .init(title: "", category: .maintenance, date: Date())
     }
 
-    func saveToModelContext(context: ModelContext) throws {
+    public func saveToModelContext(context: ModelContext) throws {
         context.insert(self)
         try context.save()
-        Logger.persistence.debug("Reminder saved successfully")
+        logger.debug("Reminder saved successfully")
     }
 
-    enum Typology: String, CaseIterable, Hashable {
+    public enum Typology: String, CaseIterable, Hashable {
         case date = "Date"
     }
 }

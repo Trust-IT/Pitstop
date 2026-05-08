@@ -9,24 +9,26 @@ import Foundation
 import OSLog
 import SwiftData
 
-@Model
-class FuelExpense: Identifiable {
-    var uuid: UUID
+private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.pitstop", category: "persistence")
 
-    var totalCost: Decimal
-    var quantity: Float
-    var odometer: Int
-    var fuelType: FuelType
-    var date: Date
-    var vehicle: Vehicle?
+@Model
+public class FuelExpense: Identifiable {
+    public var uuid: UUID
+
+    public var totalCost: Decimal
+    public var quantity: Float
+    public var odometer: Int
+    public var fuelType: FuelType
+    public var date: Date
+    public var vehicle: Vehicle?
 
     /// Derived from `totalCost / quantity`. Not stored — always in sync with inputs.
-    var pricePerUnit: Decimal {
+    public var pricePerUnit: Decimal {
         guard quantity > 0, totalCost > 0 else { return 0 }
         return totalCost / Decimal(Double(quantity))
     }
 
-    init(
+    public init(
         uuid: UUID = UUID(),
         totalCost: Decimal,
         quantity: Float,
@@ -44,7 +46,7 @@ class FuelExpense: Identifiable {
         self.vehicle = vehicle
     }
 
-    static func mock() -> FuelExpense {
+    public static func mock() -> FuelExpense {
         .init(
             totalCost: 0,
             quantity: 0,
@@ -57,23 +59,23 @@ class FuelExpense: Identifiable {
 
     // MARK: CRUD
 
-    func insert(context: ModelContext) {
+    public func insert(context: ModelContext) {
         context.insert(self)
         save(context: context)
     }
 
-    func save(context: ModelContext) {
+    public func save(context: ModelContext) {
         let cost = totalCost
         let name = vehicle?.displayName ?? "unknown"
         do {
             try context.save()
-            Logger.persistence.debug("FuelExpense \(cost) for \(name) saved successfully")
+            logger.debug("FuelExpense \(cost) for \(name) saved successfully")
         } catch {
-            Logger.persistence.error("Error saving FuelExpense \(cost) for \(name): \(error)")
+            logger.error("Error saving FuelExpense \(cost) for \(name): \(error)")
         }
     }
 
-    func delete(context: ModelContext) {
+    public func delete(context: ModelContext) {
         context.delete(self)
     }
 }

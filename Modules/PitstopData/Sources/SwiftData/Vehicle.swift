@@ -9,33 +9,35 @@ import Foundation
 import OSLog
 import SwiftData
 
-@Model
-final class Vehicle {
-    @Attribute(.unique)
-    var uuid: UUID
+private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.pitstop", category: "persistence")
 
-    var brand: String
-    var model: String
-    var mainFuelType: FuelType
-    var initialOdometer: Int
-    var plate: String? //
+@Model
+public final class Vehicle {
+    @Attribute(.unique)
+    public var uuid: UUID
+
+    public var brand: String
+    public var model: String
+    public var mainFuelType: FuelType
+    public var initialOdometer: Int
+    public var plate: String?
 
     // TODO: Replace with CNContact identifiers array
     @Relationship(deleteRule: .cascade, inverse: \Number.vehicle)
-    var numbers: [Number] = []
+    public var numbers: [Number] = []
 
     @Relationship(deleteRule: .cascade, inverse: \FuelExpense.vehicle)
-    var fuelExpenses: [FuelExpense] = []
+    public var fuelExpenses: [FuelExpense] = []
 
     /// The live odometer reading, derived from the most recent fuel expense.
     /// Falls back to `initialOdometer` when no expenses exist yet. O(n) single-pass.
-    var currentOdometer: Int {
+    public var currentOdometer: Int {
         fuelExpenses.max(by: { $0.date < $1.date })?.odometer ?? initialOdometer
     }
 
-    var displayName: String { "\(brand) \(model)" }
+    public var displayName: String { "\(brand) \(model)" }
 
-    init(
+    public init(
         uuid: UUID = UUID(),
         brand: String,
         model: String,
@@ -51,14 +53,14 @@ final class Vehicle {
         self.plate = plate
     }
 
-    func saveToModelContext(context: ModelContext) throws {
+    public func saveToModelContext(context: ModelContext) throws {
         let name = displayName
         context.insert(self)
         try context.save()
-        Logger.persistence.debug("Vehicle \(name) saved successfully")
+        logger.debug("Vehicle \(name) saved successfully")
     }
 
-    static func mock() -> Vehicle {
+    public static func mock() -> Vehicle {
         Vehicle(brand: "Brand", model: "XYZ", initialOdometer: 0)
     }
 }

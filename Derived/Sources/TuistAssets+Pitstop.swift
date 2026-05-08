@@ -4,80 +4,31 @@
 // swiftformat:disable all
 // Generated using tuist — https://github.com/tuist/tuist
 
-
-
 #if os(macOS)
-#if hasFeature(InternalImportsByDefault)
-public import AppKit
-#else
-import AppKit
+  import AppKit
+#elseif os(iOS)
+  import UIKit
+#elseif os(tvOS) || os(watchOS)
+  import UIKit
 #endif
-#else
-#if hasFeature(InternalImportsByDefault)
-public import UIKit
-#else
-import UIKit
-#endif
+#if canImport(SwiftUI)
+  import SwiftUI
 #endif
 
-#if canImport(SwiftUI)
-#if hasFeature(InternalImportsByDefault)
-public import SwiftUI
-#else
-import SwiftUI
-#endif
-#endif
+// swiftlint:disable superfluous_disable_command file_length implicit_return
 
 // MARK: - Asset Catalogs
 
+// swiftlint:disable identifier_name line_length nesting type_body_length type_name
 public enum PitstopAsset: Sendable {
   public enum Assets {
   public static let accentColor = PitstopColors(name: "AccentColor")
-    public static let time = PitstopImages(name: "Time")
-    public static let phone = PitstopImages(name: "phone")
-    public static let photo = PitstopImages(name: "photo")
-    public static let day = PitstopImages(name: "Day")
-    public static let fuel = PitstopImages(name: "Fuel")
-    public static let insurance = PitstopImages(name: "Insurance")
-    public static let liters = PitstopImages(name: "Liters")
-    public static let odometer = PitstopImages(name: "Odometer")
-    public static let other = PitstopImages(name: "Other")
-    public static let parking = PitstopImages(name: "Parking")
-    public static let carIcon = PitstopImages(name: "carIcon")
-    public static let chartIcon = PitstopImages(name: "chartIcon")
-    public static let plusIcon = PitstopImages(name: "plusIcon")
-    public static let settingsIcon = PitstopImages(name: "settingsIcon")
-    public static let tolls = PitstopImages(name: "Tolls")
-    public static let arrowAnalytics = PitstopImages(name: "arrowAnalytics")
-    public static let arrowDown = PitstopImages(name: "arrowDown")
-    public static let arrowLeft = PitstopImages(name: "arrowLeft")
-    public static let arrowRight = PitstopImages(name: "arrowRight")
-    public static let bell = PitstopImages(name: "bell")
-    public static let bellHome = PitstopImages(name: "bellHome")
-    public static let carSettings = PitstopImages(name: "car-settings")
-    public static let category = PitstopImages(name: "category")
-    public static let deleteIcon = PitstopImages(name: "deleteIcon")
-    public static let documents = PitstopImages(name: "documents")
-    public static let download = PitstopImages(name: "download")
-    public static let fines = PitstopImages(name: "fines")
-    public static let fuelType = PitstopImages(name: "fuelType")
-    public static let ics = PitstopImages(name: "ics")
-    public static let note = PitstopImages(name: "note")
-    public static let paperclip = PitstopImages(name: "paperclip")
-    public static let plus = PitstopImages(name: "plus")
-    public static let priceLiter = PitstopImages(name: "priceLiter")
-    public static let roadTax = PitstopImages(name: "roadTax")
-    public static let star = PitstopImages(name: "star")
-    public static let wrench = PitstopImages(name: "wrench")
-    public static let page1 = PitstopImages(name: "page1")
-    public static let page4 = PitstopImages(name: "page4")
-    public static let page5 = PitstopImages(name: "page5")
     public static let logo = PitstopImages(name: "logo")
-    public static let premium = PitstopImages(name: "premium")
   }
   public enum PreviewAssets {
   }
 }
+// swiftlint:enable identifier_name line_length nesting type_body_length type_name
 
 // MARK: - Implementation Details
 
@@ -186,5 +137,5 @@ public extension SwiftUI.Image {
 }
 #endif
 
-// swiftformat:enable all
 // swiftlint:enable all
+// swiftformat:enable all

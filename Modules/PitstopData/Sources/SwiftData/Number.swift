@@ -9,17 +9,19 @@ import Foundation
 import OSLog
 import SwiftData
 
+private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.pitstop", category: "persistence")
+
 @Model
-final class Number: Identifiable {
+public final class Number: Identifiable {
     @Attribute(.unique)
-    var uuid: UUID
+    public var uuid: UUID
 
-    var title: String
-    var telephone: String
+    public var title: String
+    public var telephone: String
 
-    var vehicle: Vehicle?
+    public var vehicle: Vehicle?
 
-    init(
+    public init(
         uuid: UUID = UUID(),
         title: String,
         telephone: String,
@@ -33,23 +35,23 @@ final class Number: Identifiable {
 
     // MARK: CRUD
 
-    func insert(context: ModelContext) {
+    public func insert(context: ModelContext) {
         context.insert(self)
         save(context: context)
     }
 
-    func save(context: ModelContext) {
+    public func save(context: ModelContext) {
         let phone = telephone
         let name = vehicle?.displayName ?? "unknown"
         do {
             try context.save()
-            Logger.persistence.debug("Number \(phone) for \(name) saved successfully")
+            logger.debug("Number \(phone) for \(name) saved successfully")
         } catch {
-            Logger.persistence.error("Error saving Number \(phone) for \(name): \(error)")
+            logger.error("Error saving Number \(phone) for \(name): \(error)")
         }
     }
 
-    func delete(context: ModelContext) {
+    public func delete(context: ModelContext) {
         context.delete(self)
     }
 }

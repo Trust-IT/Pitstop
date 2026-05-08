@@ -6,6 +6,7 @@
 //
 
 import PDFKit
+import PitstopData
 import SwiftUI
 
 extension PDFDocument: @retroactive Transferable {
@@ -38,7 +39,7 @@ public extension PDFDocument {
 }
 
 extension PDFDocument {
-    convenience init?(document: Document) {
+    convenience init?(document: PitstopData.Document) {
         self.init(data: document.data)
         documentAttributes![PDFDocumentAttribute.titleAttribute] = document.title
     }
